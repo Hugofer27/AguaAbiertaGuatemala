@@ -1,5 +1,10 @@
 # Historial de versiones
 
+## 1.0.1 — 2026-10-23
+
+- La frontera de Petén con México vuelve a seguir el paralelo 17°15′ N, el meridiano 90°59′ O y el paralelo 17°49′ N en la cuenca del Río San Pedro. Antes, una diagonal recortaba el noroeste del departamento.
+- Las menciones de una cuenca en el catálogo ya no confunden nombres genéricos; por ejemplo, "San Pedro La Laguna" (Atitlán) ya no cuenta como mención del Río San Pedro (Petén).
+
 ## 1.0.0 — 2026-10-23
 
 Primera versión que integra las tres búsquedas de datos en un solo portal.

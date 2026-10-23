@@ -1,5 +1,5 @@
 {
-  "version": "1.0.0",
+  "version": "1.0.1",
   "fecha_corte": "2026-10-22",
   "fuentes": 643,
   "conjuntos_de_datos": 260,
@@ -440,6 +440,9 @@
       "nombre": "Desembocadura 28800",
       "motivo": "Fuera de Guatemala (costa de Belice, Honduras, El Salvador o México)"
     }
+  ],
+  "correcciones_geometricas": [
+    "Río San Pedro: se restauraron 2 vértices de la frontera con México en el noroeste de Petén"
   ],
   "controles_de_calidad": 1,
   "temas": {

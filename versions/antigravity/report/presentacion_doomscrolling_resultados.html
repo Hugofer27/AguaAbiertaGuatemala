@@ -1,0 +1,1100 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RÍOS ABIERTOS GT — Doomscrolling de Resultados | Antigravity vs ChatGPT vs Claude</title>
+  <style>
+    :root {
+      --bg: #090d16;
+      --bg-card: rgba(16, 24, 40, 0.85);
+      --bg-card-hover: rgba(23, 34, 57, 0.95);
+      --border: rgba(56, 189, 248, 0.2);
+      --border-glow: rgba(56, 189, 248, 0.5);
+      --text: #f1f5f9;
+      --text-muted: #94a3b8;
+      --accent: #38bdf8;
+      --accent-teal: #2dd4bf;
+      --accent-emerald: #34d399;
+      --accent-purple: #c084fc;
+      --accent-amber: #fbbf24;
+      --accent-rose: #fb7185;
+      --badge-bg: rgba(56, 189, 248, 0.12);
+      --shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.7);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+    }
+
+    /* Scroll progress bar */
+    #progress-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 5px;
+      background: rgba(255, 255, 255, 0.05);
+      z-index: 1000;
+    }
+    #progress-bar {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #38bdf8, #2dd4bf, #c084fc);
+      box-shadow: 0 0 10px #38bdf8;
+      transition: width 0.1s ease-out;
+    }
+
+    /* Sticky Navigation HUD */
+    nav.hud {
+      position: sticky;
+      top: 5px;
+      z-index: 999;
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      background: rgba(9, 13, 22, 0.8);
+      border-bottom: 1px solid var(--border);
+      padding: 12px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+    .hud-brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 800;
+      font-size: 1.1rem;
+      letter-spacing: -0.5px;
+      color: #fff;
+    }
+    .hud-brand span.tag {
+      background: linear-gradient(135deg, #0284c7, #0d9488);
+      padding: 3px 8px;
+      border-radius: 6px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .hud-links {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding-bottom: 2px;
+      scrollbar-width: none;
+    }
+    .hud-links::-webkit-scrollbar { display: none; }
+    .hud-btn {
+      padding: 6px 14px;
+      border-radius: 20px;
+      background: rgba(255, 255, 255, 0.06);
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.85rem;
+      font-weight: 600;
+      white-space: nowrap;
+      transition: all 0.2s ease;
+      border: 1px solid transparent;
+    }
+    .hud-btn:hover, .hud-btn.active {
+      background: rgba(56, 189, 248, 0.15);
+      color: var(--accent);
+      border-color: var(--border);
+    }
+
+    /* Container */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 40px 20px 100px 20px;
+    }
+
+    /* Hero Section */
+    .hero {
+      text-align: center;
+      padding: 60px 20px 40px 20px;
+      position: relative;
+    }
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 16px;
+      background: rgba(56, 189, 248, 0.1);
+      border: 1px solid var(--border);
+      border-radius: 30px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--accent);
+      margin-bottom: 20px;
+    }
+    .hero h1 {
+      font-size: clamp(2.2rem, 5vw, 3.6rem);
+      font-weight: 900;
+      letter-spacing: -1.5px;
+      line-height: 1.15;
+      margin-bottom: 20px;
+      background: linear-gradient(135deg, #ffffff 40%, #94a3b8 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .hero p.lead {
+      font-size: 1.2rem;
+      color: var(--text-muted);
+      max-width: 780px;
+      margin: 0 auto 35px auto;
+      line-height: 1.6;
+    }
+
+    /* Stat Cards Banner */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      margin-bottom: 50px;
+    }
+    .stat-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      padding: 22px;
+      border-radius: 16px;
+      text-align: center;
+      box-shadow: var(--shadow);
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.2s, border-color 0.2s;
+    }
+    .stat-card:hover {
+      transform: translateY(-4px);
+      border-color: var(--accent);
+    }
+    .stat-card .val {
+      font-size: 2.4rem;
+      font-weight: 900;
+      letter-spacing: -1px;
+      margin-bottom: 4px;
+      background: linear-gradient(135deg, #38bdf8, #2dd4bf);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .stat-card .lbl {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .stat-card .sub {
+      font-size: 0.75rem;
+      color: #64748b;
+      margin-top: 4px;
+    }
+
+    /* Section Headings */
+    .section-header {
+      margin: 60px 0 25px 0;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .section-tag {
+      color: var(--accent);
+      font-size: 0.8rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+    }
+    .section-title {
+      font-size: clamp(1.6rem, 3vw, 2.2rem);
+      font-weight: 800;
+      letter-spacing: -0.8px;
+    }
+    .section-desc {
+      color: var(--text-muted);
+      font-size: 1rem;
+      max-width: 800px;
+      line-height: 1.5;
+    }
+
+    /* Comparison Matrix Hero (Antigravity vs ChatGPT vs Claude) */
+    .comp-table-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 25px;
+      box-shadow: var(--shadow);
+      margin-bottom: 40px;
+      overflow-x: auto;
+    }
+    table.comp-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.92rem;
+      text-align: left;
+    }
+    table.comp-table th, table.comp-table td {
+      padding: 14px 16px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      vertical-align: top;
+    }
+    table.comp-table th {
+      color: var(--text-muted);
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      background: rgba(255, 255, 255, 0.02);
+    }
+    table.comp-table tr.highlight {
+      background: rgba(56, 189, 248, 0.04);
+    }
+    .agent-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 10px;
+      border-radius: 12px;
+      font-size: 0.8rem;
+      font-weight: 700;
+    }
+    .pill-antigravity { background: rgba(56, 189, 248, 0.2); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.4); }
+    .pill-chatgpt { background: rgba(16, 185, 129, 0.2); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.4); }
+    .pill-claude { background: rgba(217, 119, 6, 0.2); color: #fbbf24; border: 1px solid rgba(217, 119, 6, 0.4); }
+
+    /* Doomscroll Feed Filter */
+    .filter-bar {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 25px;
+      position: sticky;
+      top: 60px;
+      z-index: 900;
+      background: var(--bg);
+      padding: 10px 0;
+    }
+    .filter-chip {
+      padding: 7px 16px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 20px;
+      color: var(--text-muted);
+      cursor: pointer;
+      font-size: 0.85rem;
+      font-weight: 600;
+      transition: all 0.2s;
+    }
+    .filter-chip:hover, .filter-chip.active {
+      background: var(--accent);
+      color: #000;
+      border-color: var(--accent);
+    }
+
+    /* Card Feed Items */
+    .feed {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    .feed-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: var(--shadow);
+      transition: all 0.25s ease;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      position: relative;
+    }
+    .feed-card:hover {
+      border-color: var(--border-glow);
+      background: var(--bg-card-hover);
+      transform: translateY(-2px);
+    }
+    .card-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .card-id {
+      font-family: monospace;
+      font-size: 0.8rem;
+      color: var(--accent);
+      background: rgba(56, 189, 248, 0.1);
+      padding: 3px 8px;
+      border-radius: 6px;
+      border: 1px solid rgba(56, 189, 248, 0.2);
+    }
+    .card-org {
+      font-weight: 700;
+      color: #e2e8f0;
+      font-size: 0.95rem;
+    }
+    .card-badges {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+    .badge {
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+    }
+    .badge-downloaded { background: rgba(52, 211, 153, 0.18); color: #34d399; border: 1px solid rgba(52, 211, 153, 0.3); }
+    .badge-exclusive { background: rgba(192, 132, 252, 0.2); color: #c084fc; border: 1px solid rgba(192, 132, 252, 0.4); }
+    .badge-geo { background: rgba(56, 189, 248, 0.18); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.3); }
+    .badge-verified { background: rgba(45, 212, 191, 0.18); color: #2dd4bf; border: 1px solid rgba(45, 212, 191, 0.3); }
+    .badge-restricted { background: rgba(251, 113, 133, 0.18); color: #fb7185; border: 1px solid rgba(251, 113, 133, 0.3); }
+
+    .card-title {
+      font-size: 1.25rem;
+      font-weight: 800;
+      line-height: 1.35;
+      color: #fff;
+    }
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 12px;
+      background: rgba(0, 0, 0, 0.25);
+      padding: 14px;
+      border-radius: 10px;
+      font-size: 0.88rem;
+    }
+    .grid-item span.lbl {
+      display: block;
+      color: var(--text-muted);
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      font-weight: 700;
+      margin-bottom: 2px;
+    }
+    .grid-item span.val {
+      color: #cbd5e1;
+      font-weight: 500;
+    }
+
+    .card-notes {
+      font-size: 0.9rem;
+      color: #94a3b8;
+      line-height: 1.5;
+      border-left: 3px solid var(--accent);
+      padding-left: 12px;
+    }
+    .card-actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 4px;
+    }
+    .btn-action {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 14px;
+      border-radius: 8px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+    .btn-primary {
+      background: linear-gradient(135deg, #0284c7, #0284c7);
+      color: #fff;
+    }
+    .btn-primary:hover {
+      background: #0ea5e9;
+    }
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.08);
+      color: #cbd5e1;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+    }
+    .btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.14);
+      color: #fff;
+    }
+
+    /* Interactive Comparison Checklist */
+    .checklist-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 28px;
+      box-shadow: var(--shadow);
+      margin-bottom: 40px;
+    }
+    .check-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      padding: 14px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+      transition: background 0.2s;
+    }
+    .check-item:hover {
+      background: rgba(255, 255, 255, 0.02);
+    }
+    .check-item input[type="checkbox"] {
+      margin-top: 4px;
+      width: 18px;
+      height: 18px;
+      accent-color: var(--accent);
+      cursor: pointer;
+    }
+    .check-content {
+      flex: 1;
+    }
+    .check-title {
+      font-weight: 700;
+      font-size: 1rem;
+      color: #fff;
+      margin-bottom: 4px;
+    }
+    .check-desc {
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      line-height: 1.45;
+    }
+    .check-tags {
+      display: flex;
+      gap: 6px;
+      margin-top: 6px;
+    }
+
+    /* Data Table Preview */
+    .preview-box {
+      background: rgba(0, 0, 0, 0.4);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 10px;
+      overflow-x: auto;
+      margin-top: 10px;
+    }
+    table.data-preview {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.8rem;
+      font-family: monospace;
+    }
+    table.data-preview th, table.data-preview td {
+      padding: 8px 12px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      white-space: nowrap;
+    }
+    table.data-preview th {
+      background: rgba(255, 255, 255, 0.05);
+      color: var(--accent);
+      text-align: left;
+    }
+
+    /* Footer */
+    footer {
+      text-align: center;
+      padding: 60px 20px;
+      color: #64748b;
+      font-size: 0.85rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.06);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Scroll Progress -->
+  <div id="progress-container"><div id="progress-bar"></div></div>
+
+  <!-- Sticky HUD -->
+  <nav class="hud">
+    <div class="hud-brand">
+      <span>RÍOS ABIERTOS GT</span>
+      <span class="tag">Antigravity</span>
+    </div>
+    <div class="hud-links">
+      <a href="#stats" class="hud-btn">Métricas</a>
+      <a href="#versus" class="hud-btn">Antigravity vs ChatGPT vs Claude</a>
+      <a href="#checklist" class="hud-btn">Checklist de Comparación</a>
+      <a href="#motagua" class="hud-btn">Motagua & Las Vacas</a>
+      <a href="#feed" class="hud-btn">Feed de Datasets (30)</a>
+      <a href="#missing" class="hud-btn">Datos Faltantes</a>
+    </div>
+  </nav>
+
+  <div class="container">
+
+    <!-- HERO -->
+    <header class="hero">
+      <div class="hero-badge">⚡ DOOMSCROLLING FEED DE INVESTIGACIÓN & ADQUISICIÓN</div>
+      <h1>Descubrimiento y Adquisición de Datos de Agua en Guatemala</h1>
+      <p class="lead">
+        Relevamiento exhaustivo, adquisición física y verificación empírica de <strong>155.59 MB</strong> de datos hídricos, químicos, geoespaciales y de macroplásticos para la plataforma <strong>RÍOS ABIERTOS GT</strong>.
+      </p>
+    </header>
+
+    <!-- STATS GRID -->
+    <section id="stats" class="stats-grid">
+      <div class="stat-card">
+        <div class="val">30</div>
+        <div class="lbl">Datasets Maestros</div>
+        <div class="sub">Catalogados en CSV & XLSX</div>
+      </div>
+      <div class="stat-card">
+        <div class="val">155.6 MB</div>
+        <div class="lbl">Datos Preservados</div>
+        <div class="sub">66 archivos con SHA-256</div>
+      </div>
+      <div class="stat-card">
+        <div class="val">23,057</div>
+        <div class="lbl">Tramos Fluviales GT</div>
+        <div class="sub">HydroRIVERS vectoriales</div>
+      </div>
+      <div class="stat-card">
+        <div class="val">1,626</div>
+        <div class="lbl">Tramos Río Motagua</div>
+        <div class="sub">Red completa en GeoJSON</div>
+      </div>
+      <div class="stat-card">
+        <div class="val">6,617</div>
+        <div class="lbl">Registros INSIVUMEH</div>
+        <div class="sub">64 estaciones meteorológicas</div>
+      </div>
+      <div class="stat-card">
+        <div class="val">248</div>
+        <div class="lbl">Publicaciones Indexadas</div>
+        <div class="sub">OpenAlex DOIs & OA</div>
+      </div>
+    </section>
+
+    <!-- COMPARISON SECTION: ANTIGRAVITY VS CHATGPT VS CLAUDE -->
+    <section id="versus">
+      <div class="section-header">
+        <div class="section-tag">Análisis Comparativo</div>
+        <h2 class="section-title">Antigravity vs. ChatGPT vs. Claude: ¿Qué descubrió cada uno?</h2>
+        <p class="section-desc">
+          Evaluación directa de los tres paquetes de investigación entregados en tu espacio de trabajo. Aquí puedes ver claramente en qué destaca cada agente y qué debes comparar.
+        </p>
+      </div>
+
+      <div class="comp-table-card">
+        <table class="comp-table">
+          <thead>
+            <tr>
+              <th style="width: 22%;">Área / Eje Científico</th>
+              <th style="width: 26%; color: #38bdf8;">Antigravity (Nuestra Investigación)</th>
+              <th style="width: 26%; color: #34d399;">ChatGPT (Ghagpt)</th>
+              <th style="width: 26%; color: #fbbf24;">Claude (01_inventario)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="highlight">
+              <td><strong>Cuenca Motagua y Río Las Vacas (Fármacos & DBO)</strong></td>
+              <td>
+                <span class="agent-pill pill-antigravity">EXCLUSIVO</span><br>
+                <strong>Tesis USAC ERIS (Mayo 2025):</strong> 32 estaciones con GPS en Motagua, Las Vacas y descargas hospitalarias. Datos de laboratorio de HPLC-MS/MS con 15 contaminantes emergentes (sulfamidas, cafeína, trimetoprima). Extraído a CSV.
+              </td>
+              <td>Menciona antecedentes generales de Las Vacas y proyectos de saneamiento, pero no localizó la tesis analítica de 2025 con datos de contaminantes emergentes en laboratorio.</td>
+              <td>Mapea artículos históricos de CYTED (Pérez Sabino 2002) y referencias de biblioteca sin descarga estructurada de tablas analíticas recientes.</td>
+            </tr>
+            <tr>
+              <td><strong>Macroplásticos Fluviales (The Ocean Cleanup)</strong></td>
+              <td>
+                <span class="agent-pill pill-antigravity">DATOS DESCARGADOS</span><br>
+                Descargó y convirtió el archivo Excel original de <strong>Meijer et al. 2019</strong> en Morales, Izabal (tasas de hasta 44,968 ítems/h) y la capa shapefile de <strong>140 desembocaduras</strong> de plástico en GT.
+              </td>
+              <td>Resume los informes anuales del Interceptor 006 y estimaciones agregadas de toneladas anuales (20,000 t/año) sin tablas de campo mensuales.</td>
+              <td>Menciona los hitos de prensa del Interceptor 006 y el fallo del Trashfence 2022 sin adquirir el dataset cuantitativo de Figshare.</td>
+            </tr>
+            <tr class="highlight">
+              <td><strong>Red Hidrográfica Vectorial (SIG & Caudales)</strong></td>
+              <td>
+                <span class="agent-pill pill-antigravity">VECTORIZADO</span><br>
+                Descargó el shapefile continental de <strong>HydroRIVERS</strong> (66 MB), extrajo <strong>23,057 tramos</strong> de Guatemala en CSV y generó el GeoJSON de <strong>1,626 tramos de la Cuenca del Motagua</strong> con caudales modelados.
+              </td>
+              <td>Documentó enlaces a mapas web y delimitaciones generales de cuencas en GeoJSON (17 MB).</td>
+              <td>Descargó capas de vías fluviales de HDX / Humanitarian OpenStreetMap (líneas básicas sin atributos de caudal modelado ni orden Strahler).</td>
+            </tr>
+            <tr>
+              <td><strong>Estadísticas Ambientales Nacionales (INE)</strong></td>
+              <td>Mapeó el portal del INE y documentó bloqueos perimetrales WAF en datos.gob.gt.</td>
+              <td>
+                <span class="agent-pill pill-chatgpt">DESTACADO CHATGPT</span><br>
+                <strong>Gran recuperación de tablas INE (2022–2024):</strong> 37 archivos descargados con 122,000+ registros agregados de cloro, niveles de río y acueductos.
+              </td>
+              <td>Listó enlaces de búsqueda en INE sin extracción masiva de las tablas anuales.</td>
+            </tr>
+            <tr class="highlight">
+              <td><strong>Serie Limnológica Lago de Atitlán</strong></td>
+              <td>Descargó los informes oficiales anuales DICA 2024 (perfiles 0-300m), Ríos 2021 y Ciano-Semáforo.</td>
+              <td>
+                <span class="agent-pill pill-chatgpt">DESTACADO CHATGPT</span><br>
+                Localizó y descargó el dataset de Zenodo de la UVG con <strong>30,826 observaciones</strong> (2010–2024) y scripts en R.
+              </td>
+              <td>Descargó boletines informativos de AMSCLAE y enlaces de publicaciones sobre cianobacterias.</td>
+            </tr>
+            <tr>
+              <td><strong>Auditoría Global UNEP GEMStat (GFQA v3)</strong></td>
+              <td>
+                <span class="agent-pill pill-antigravity">VERIFICADO EN ARCHIVO</span><br>
+                Inspeccionó el archivo de 201 MB: demostró empíricamente que Guatemala tiene <strong>0 estaciones registradas</strong> (las 129 de la caja geográfica son de México).
+              </td>
+              <td>Reportó la misma brecha de 0 estaciones en su auditoría JSON.</td>
+              <td>Mencionó datos transfronterizos sin verificar la ausencia total de estaciones oficiales guatemaltecas en el catálogo global.</td>
+            </tr>
+            <tr class="highlight">
+              <td><strong>Boletines Hidrológicos Operativos (INSIVUMEH 2026)</strong></td>
+              <td>
+                <span class="agent-pill pill-antigravity">TIEMPO REAL</span><br>
+                Descargó y parseó los boletines oficiales diarios (Caribe `BHVC.pdf`, Pacífico `BHVP.pdf`, Golfo `BHVGM.pdf`) con caudales del 20 de octubre de 2026 (Panajax, Gualán, Concuá II).
+              </td>
+              <td>Identificó las URLs maestras de los boletines pero no extrajo las tablas de caudal instantáneo a nivel de estación individual.</td>
+              <td>Listó enlaces de la web de INSIVUMEH en archivos CSV de búsqueda.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- INTERACTIVE CHECKLIST FOR THE USER -->
+    <section id="checklist">
+      <div class="section-header">
+        <div class="section-tag">Tu Hoja de Ruta</div>
+        <h2 class="section-title">Checklist de Comparación: Qué contrastar entre las 3 carpetas</h2>
+        <p class="section-desc">
+          Utiliza estas casillas para guiar tu revisión entre las tres carpetas de agentes en tu disco. Tus marcas se guardan automáticamente en tu navegador.
+        </p>
+      </div>
+
+      <div class="checklist-card">
+        <div class="check-item">
+          <input type="checkbox" id="c1" onchange="saveCheck('c1')">
+          <div class="check-content">
+            <div class="check-title">1. Contrastar Contaminantes Emergentes en Cuenca Motagua / Las Vacas</div>
+            <div class="check-desc">
+              Compara el archivo exclusivo de Antigravity <code>USAC_ERIS_Motagua_LasVacas_2025_Monitoring_Data.csv</code> (32 estaciones con coordenadas, sulfamidas, cafeína y DBO) contra lo que tengan ChatGPT y Claude en sus carpetas de datos.
+            </div>
+            <div class="check-tags">
+              <span class="badge badge-exclusive">Exclusivo Antigravity</span>
+              <span class="badge badge-verified">HPLC-MS/MS 2025</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="check-item">
+          <input type="checkbox" id="c2" onchange="saveCheck('c2')">
+          <div class="check-content">
+            <div class="check-title">2. Evaluar la Red Vectorial de Ríos (HydroRIVERS vs HDX)</div>
+            <div class="check-desc">
+              Abre en QGIS el archivo <code>Motagua_River_Basin_Network.geojson</code> de Antigravity (1,626 tramos con orden de Strahler y caudal medio modelado) y compáralo con las capas de agua de Claude (HDX/OSM) y los polígonos de ChatGPT.
+            </div>
+            <div class="check-tags">
+              <span class="badge badge-geo">Modelado Hidrológico</span>
+              <span class="badge badge-downloaded">1,626 Tramos Motagua</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="check-item">
+          <input type="checkbox" id="c3" onchange="saveCheck('c3')">
+          <div class="check-content">
+            <div class="check-title">3. Comparar Datos de Macroplásticos (The Ocean Cleanup)</div>
+            <div class="check-desc">
+              Revisa si ChatGPT o Claude descargaron el dataset numérico de <code>TheOceanCleanup_Motagua_Morales_2019_Flux.csv</code> (tasas mensuales en kg y tons) o los 140 puntos de vertido en <code>Guatemala_River_Plastic_Outlets_Meijer2021.csv</code>.
+            </div>
+            <div class="check-tags">
+              <span class="badge badge-verified">Medición de Campo</span>
+              <span class="badge badge-downloaded">Figshare 2019/2021</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="check-item">
+          <input type="checkbox" id="c4" onchange="saveCheck('c4')">
+          <div class="check-content">
+            <div class="check-title">4. Revisar la Fortaleza de ChatGPT en Tablas INE (2022–2024)</div>
+            <div class="check-desc">
+              Examina en <code>Investigación ChatGPT/Ghagpt/data/raw/ine</code> los 37 archivos de estadísticas ambientales recuperados. Son un excelente complemento para series institucionales agregadas.
+            </div>
+            <div class="check-tags">
+              <span class="badge badge-verified">Fuerte de ChatGPT</span>
+              <span class="badge badge-geo">122k Registros</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="check-item">
+          <input type="checkbox" id="c5" onchange="saveCheck('c5')">
+          <div class="check-content">
+            <div class="check-title">5. Revisar la Serie Histórica de Atitlán (UVG en Zenodo de ChatGPT)</div>
+            <div class="check-desc">
+              Comprueba el archivo de 30,826 observaciones limnológicas de Atitlán (2010–2024) recuperado por ChatGPT y compáralo con los informes anuales DICA 2024 de AMSCLAE descargados por Antigravity.
+            </div>
+            <div class="check-tags">
+              <span class="badge badge-verified">Zenodo UVG</span>
+              <span class="badge badge-downloaded">DICA 2024 AMSCLAE</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="check-item">
+          <input type="checkbox" id="c6" onchange="saveCheck('c6')">
+          <div class="check-content">
+            <div class="check-title">6. Verificar la Integridad del Manifiesto Criptográfico (SHA-256)</div>
+            <div class="check-desc">
+              Comprueba en <code>manifests/data_manifest.json</code> que cada archivo descargado por Antigravity cuenta con su tamaño exacto en bytes y su hash SHA-256 para total reproducibilidad científica.
+            </div>
+            <div class="check-tags">
+              <span class="badge badge-verified">SHA-256</span>
+              <span class="badge badge-geo">155.59 MB Verificados</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- MOTAGUA & LAS VACAS HIGHLIGHT SECTION -->
+    <section id="motagua">
+      <div class="section-header">
+        <div class="section-tag">Foco Prioritario 1 & 2</div>
+        <h2 class="section-title">Evidencia Directa: Cuenca del Río Motagua y Río Las Vacas</h2>
+        <p class="section-desc">
+          Datos de muestreo in-situ, contaminantes emergentes farmacéuticos y mediciones de transporte de plásticos adquiridos y procesados por Antigravity.
+        </p>
+      </div>
+
+      <!-- Preview 1: USAC ERIS 2025 Data -->
+      <div class="feed-card">
+        <div class="card-top">
+          <div>
+            <span class="card-id">GT-H2O-007 / DATASET PROCESADO</span>
+            <div class="card-org">Universidad de San Carlos de Guatemala — ERIS (Mayo 2025)</div>
+          </div>
+          <div class="card-badges">
+            <span class="badge badge-exclusive">Exclusivo Antigravity</span>
+            <span class="badge badge-verified">HPLC-MS/MS</span>
+            <span class="badge badge-downloaded">CSV + PDF</span>
+          </div>
+        </div>
+        <div class="card-title">Monitoreo de Contaminantes Emergentes Farmacéuticos, DBO y DQO en Río Motagua y Las Vacas</div>
+        <div class="card-notes">
+          Muestreo en 32 puntos con GPS de alta precisión en el cauce del Río Las Vacas, drenajes pluviales metropolitanos, descargas hospitalarias (IGSS Zona 6, San Juan de Dios, Centro Médico) y afluentes del Motagua. Incluye cuantificación en ng/L de sulfamidas, cafeína, ibuprofeno y antibióticos.
+        </div>
+
+        <div class="preview-box">
+          <table class="data-preview">
+            <thead>
+              <tr>
+                <th>Estación ID</th>
+                <th>Cuerpo de Agua</th>
+                <th>Descripción</th>
+                <th>Latitud</th>
+                <th>Longitud</th>
+                <th>OD (mg/L)</th>
+                <th>DBO5 (mg/L)</th>
+                <th>DQO (mg/L)</th>
+                <th>Cafeína (ng/L)</th>
+                <th>Sulfametoxazol (ng/L)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>CAV-1</td><td>Río Las Vacas</td><td>Calzada la Paz</td><td>14.63773</td><td>-90.48884</td><td>1.57</td><td>87.80</td><td>157.0</td><td>15,398.7</td><td>44.01</td></tr>
+              <tr><td>CAV-2</td><td>Río Las Vacas</td><td>Cerca Camposanto Cipreses</td><td>14.64776</td><td>-90.48664</td><td>0.54</td><td>191.00</td><td>377.0</td><td>45,100.5</td><td>108.68</td></tr>
+              <tr><td>CAV-4</td><td>Río Las Vacas</td><td>Cerca Represa Las Vacas</td><td>14.75509</td><td>-90.50059</td><td>1.68</td><td>376.50</td><td>473.0</td><td>11,621.1</td><td>ND</td></tr>
+              <tr><td>CAV-5</td><td>Río Las Vacas</td><td>Cantón Pila Seca 2</td><td>14.71277</td><td>-90.49435</td><td>0.33</td><td>426.50</td><td>743.0</td><td>ND</td><td>ND</td></tr>
+              <tr><td>DNH-6</td><td>Alcantarillado</td><td>Frente Edificio Galerías</td><td>14.60484</td><td>-90.51618</td><td>4.01</td><td>691.63</td><td>797.0</td><td>56,433.7</td><td>62.52</td></tr>
+              <tr><td>DH-4</td><td>Descarga Hosp.</td><td>IGSS Enf. Zona 9</td><td>14.60497</td><td>-90.51706</td><td>2.64</td><td>104.00</td><td>416.0</td><td>ND</td><td>7,481.7</td></tr>
+              <tr><td>CAM-1</td><td>Río Motagua</td><td>Cauce Principal Motagua</td><td>14.98500</td><td>-89.85000</td><td>3.47</td><td>82.40</td><td>119.0</td><td>ND</td><td>ND</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="card-actions">
+          <a href="file:///D:/Documentos%20D/BaseDatosGT%20H2O/Investigación%20Antigravity/data/processed/USAC_ERIS_Motagua_LasVacas_2025_Monitoring_Data.csv" class="btn-action btn-primary">Abrir CSV Procesado (32 estaciones)</a>
+          <a href="file:///D:/Documentos%20D/BaseDatosGT%20H2O/Investigación%20Antigravity/data/raw/academic/USAC_Motagua_Contaminantes_Emergentes_DBO_DQO.pdf" class="btn-action btn-secondary">Abrir Tesis Completa PDF (172 págs)</a>
+        </div>
+      </div>
+
+      <!-- Preview 2: The Ocean Cleanup Motagua Flux -->
+      <div class="feed-card" style="margin-top: 20px;">
+        <div class="card-top">
+          <div>
+            <span class="card-id">GT-H2O-015 / CAMPAÑA DE CAMPO</span>
+            <div class="card-org">The Ocean Cleanup / USAC CEMA (Meijer et al.)</div>
+          </div>
+          <div class="card-badges">
+            <span class="badge badge-verified">Datos de Campo</span>
+            <span class="badge badge-downloaded">Excel XML & CSV</span>
+          </div>
+        </div>
+        <div class="card-title">Transporte Fluvial de Macroplásticos en Morales, Río Motagua (2019)</div>
+        <div class="card-notes">
+          Mediciones visuales estandarizadas de conteo de plástico por sección transversal en puentes de Morales, Zacapa y Las Vacas. Demuestra el incremento estacional de plásticos durante la época lluviosa hasta superar las 250 toneladas mensuales.
+        </div>
+
+        <div class="preview-box">
+          <table class="data-preview">
+            <thead>
+              <tr>
+                <th>Mes (2019)</th>
+                <th>Flujo Medio (# ítems/hora)</th>
+                <th>Total Mensual (# ítems)</th>
+                <th>Peso Medio (g)</th>
+                <th>Factor Corrección Columna</th>
+                <th>Flujo Plástico (toneladas/mes)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>Mayo</td><td>431</td><td>320,664</td><td>5.0 g</td><td>1.5</td><td><strong>2.40 tons</strong></td></tr>
+              <tr><td>Junio</td><td>3,168</td><td>2,356,992</td><td>5.0 g</td><td>1.5</td><td><strong>17.68 tons</strong></td></tr>
+              <tr><td>Julio</td><td>1,092</td><td>812,448</td><td>5.0 g</td><td>1.5</td><td><strong>6.09 tons</strong></td></tr>
+              <tr><td>Agosto</td><td>16,707</td><td>12,430,008</td><td>5.0 g</td><td>1.5</td><td><strong>93.23 tons</strong></td></tr>
+              <tr><td>Septiembre</td><td>38,699</td><td>28,792,056</td><td>5.0 g</td><td>1.5</td><td><strong>215.94 tons</strong></td></tr>
+              <tr><td>Octubre</td><td>44,968</td><td>33,456,192</td><td>5.0 g</td><td>1.5</td><td><strong>250.92 tons</strong></td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="card-actions">
+          <a href="file:///D:/Documentos%20D/BaseDatosGT%20H2O/Investigación%20Antigravity/data/processed/TheOceanCleanup_Motagua_Morales_2019_Flux.csv" class="btn-action btn-primary">Abrir CSV Flujo Mensual</a>
+          <a href="file:///D:/Documentos%20D/BaseDatosGT%20H2O/Investigación%20Antigravity/data/processed/Guatemala_River_Plastic_Outlets_Meijer2021.csv" class="btn-action btn-secondary">Abrir 140 Desembocaduras Plásticas CSV</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- FEED DE TODOS LOS DATASETS (DOOMSCROLLING FEED) -->
+    <section id="feed">
+      <div class="section-header">
+        <div class="section-tag">Inventario Completo</div>
+        <h2 class="section-title">Feed Continuo de Datasets Adquiridos y Verificados (30)</h2>
+        <p class="section-desc">
+          Haz scroll continuo por todas las fuentes catalogadas. Puedes filtrar dinámicamente según la categoría de tu interés.
+        </p>
+      </div>
+
+      <!-- Filter Chips -->
+      <div class="filter-bar">
+        <button class="filter-chip active" onclick="filterFeed('all')">Todos (30)</button>
+        <button class="filter-chip" onclick="filterFeed('motagua')">Cuenca Motagua & Las Vacas (10)</button>
+        <button class="filter-chip" onclick="filterFeed('insivumeh')">INSIVUMEH (6)</button>
+        <button class="filter-chip" onclick="filterFeed('geo')">Geoespacial & Cuencas (7)</button>
+        <button class="filter-chip" onclick="filterFeed('lakes')">Lagos Atitlán & Amatitlán (6)</button>
+        <button class="filter-chip" onclick="filterFeed('intl')">Internacional & Brechas (5)</button>
+      </div>
+
+      <!-- Feed Container -->
+      <div class="feed" id="feed-container">
+        <!-- Rendered by JS -->
+      </div>
+    </section>
+
+    <!-- MISSING DATA & ROADMAP -->
+    <section id="missing">
+      <div class="section-header">
+        <div class="section-tag">Registro de Brechas</div>
+        <h2 class="section-title">Registro de Datos Faltantes, Restringidos y Próximas Acciones</h2>
+        <p class="section-desc">
+          Fuentes institucionales que generan datos pero presentan barreras perimetrales o falta de publicación proactiva, y el protocolo legal para solicitarlos bajo el Decreto 57-2008.
+        </p>
+      </div>
+
+      <div class="feed" id="missing-container">
+        <!-- Rendered by JS -->
+      </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+      <p><strong>RÍOS ABIERTOS GT</strong> — Guatemala Open Water Data Observatory</p>
+      <p style="margin-top: 6px;">Investigación desarrollada y compilada con rigor empírico por Antigravity Research Engineering.</p>
+      <p style="margin-top: 6px; font-family: monospace; font-size: 0.8rem;">Repositorio: D:\Documentos D\BaseDatosGT H2O\Investigación Antigravity</p>
+    </footer>
+
+  </div>
+
+  <!-- SCRIPT FOR INTERACTIVITY -->
+  <script>
+    // Embedded Data
+    const INVENTORY = [{"Resource ID":"GT-H2O-001","Organisation":"INSIVUMEH","Resource title":"Base de Datos Hist\u00f3rica de Estaciones Meteorol\u00f3gicas e Hidrom\u00e9tricas de Guatemala","Resource type":"Hydrometeorological Monitoring","Dataset or publication":"Dataset","Original URL":"https:\/\/insivumeh.gob.gt\/","Download URL":"https:\/\/raw.githubusercontent.com\/drwatercambioclima-eng\/DatosEstacionesINSIVUMEH\/main\/data\/database.csv","File format":"CSV","Years covered":"2023","Geographic coverage":"National (64 stations across Guatemala)","Parameters":"Precipitation (lluvia), min\/max\/dry temperature, tank & piche evaporation, relative humidity, solar radiation, wind speed\/direction, soil temperature (5, 50, 100 cm), GPS coordinates, altitude","Number of records, if verified":"6,617","Licence":"Public Information (Decreto 57-2008) \/ Open Data","Access status":"Publicly Accessible","Download status":"Downloaded & Verified","Verification status":"Fully Verified (Inspected)","Notes":"Primary observational station dataset from INSIVUMEH. Contains stations in Motagua basin: San Pedro Ayampuc, Lo de Coy, Amatitl\u00e1n, Los Albores, San Agust\u00edn Acasaguastl\u00e1n."},{"Resource ID":"GT-H2O-002","Organisation":"INSIVUMEH","Resource title":"Bolet\u00edn Diario de Niveles y Caudales de R\u00edos - Vertiente del Mar Caribe (Cuenca R\u00edo Motagua y Las Vacas)","Resource type":"Hydrological Monitoring","Dataset or publication":"Technical Report \/ Real-Time Bulletin","Original URL":"https:\/\/insivumeh.gob.gt\/hidrologia\/","Download URL":"https:\/\/insivumeh.gob.gt\/hidrologia\/hidro\/niveles\/BHVC.pdf","File format":"PDF","Years covered":"2026 (Diario, Bolet\u00edn No. 880)","Geographic coverage":"Vertiente del Mar Caribe (R\u00edos Motagua, Las Vacas, Camot\u00e1n, Shutaque, Cahab\u00f3n, Polochic)","Parameters":"River level (m), instantaneous discharge (m\u00b3\/s), normal min\/max levels, normal min\/max discharge, observed trend, flood alert status (BHE)","Number of records, if verified":"9 monitoring stations","Licence":"Public Domain (Guatemalan Official Bulletin)","Access status":"Publicly Accessible","Download status":"Downloaded & Verified","Verification status":"Fully Verified (Inspected)","Notes":"Live operational hydrometric data. Documents Panajax station on R\u00edo Las Vacas (discharge 10.56 m\u00b3\/s) and Gual\u00e1n on R\u00edo Motagua (344.54 m\u00b3\/s)."},{"Resource ID":"GT-H2O-003","Organisation":"INSIVUMEH","Resource title":"Bolet\u00edn Diario de Niveles y Caudales de R\u00edos - Vertiente del Pac\u00edfico","Resource type":"Hydrological Monitoring","Dataset or publication":"Technical Report \/ Real-Time Bulletin","Original URL":"https:\/\/insivumeh.gob.gt\/hidrologia\/","Download URL":"https:\/\/insivumeh.gob.gt\/hidrologia\/hidro\/niveles\/BHVP.pdf","File format":"PDF","Years covered":"2026 (Diario)","Geographic coverage":"Vertiente del Pac\u00edfico (R\u00edos Villalobos, Mar\u00eda Linda, Samal\u00e1, Suchiate, Naranjo, Coyolate, Los Esclavos)","Parameters":"Water levels (m), discharge (m\u00b3\/s), flood alerts, station threshold comparisons","Number of records, if verified":"16 monitoring stations","Licence":"Public Domain (Official Bulletin)","Access status":"Publicly Accessible","Download status":"Downloaded & Verified","Verification status":"Fully Verified (Inspected)","Notes":"Covers high-energy volcanic and agricultural basins on the Pacific slope."},{"Resource ID":"GT-H2O-004","Organisation":"INSIVUMEH","Resource title":"Bolet\u00edn Diario de Niveles y Caudales de R\u00edos - Vertiente del Golfo de M\u00e9xico","Resource type":"Hydrological Monitoring","Dataset or publication":"Technical Report \/ Real-Time Bulletin","Original URL":"https:\/\/insivumeh.gob.gt\/hidrologia\/","Download URL":"https:\/\/insivumeh.gob.gt\/hidrologia\/hidro\/niveles\/BHVGM.pdf","File format":"PDF","Years covered":"2026 (Diario)","Geographic coverage":"Vertiente del Golfo de M\u00e9xico (R\u00edos Chixoy\/Negro, La Pasi\u00f3n, Usumacinta, San Pedro, Salinas)","Parameters":"Water levels (m), instantaneous discharge (m\u00b3\/s), normal thresholds, hydrological trends","Number of records, if verified":"8 monitoring stations","Licence":"Public Domain (Official Bulletin)","Access status":"Publicly Accessible","Download status":"Downloaded & Verified","Verification status":"Fully Verified (Inspected)","Notes":"Monitors transboundary flow toward Mexico and the Usumacinta basin."},{"Resource ID":"GT-H2O-005","Organisation":"INSIVUMEH","Resource title":"Cat\u00e1logo Oficial de Estaciones Hidrol\u00f3gicas Autom\u00e1ticas de Guatemala","Resource type":"Monitoring Network Metadata","Dataset or publication":"Dataset","Original URL":"https:\/\/insivumeh.gob.gt\/","Download URL":"https:\/\/raw.githubusercontent.com\/carlossoto362\/Hidrologia\/main\/data\/automaticas.csv","File format":"CSV","Years covered":"2022\u20132024","Geographic coverage":"National","Parameters":"Station name, river, basin, municipality, department, latitude, longitude, elevation, sensor type (telemetric radar\/pressure)","Number of records, if verified":"22 stations","Licence":"Public Information \/ Open Data","Access status":"Publicly Accessible","Download status":"Downloaded & Verified","Verification status":"Fully Verified (Inspected)","Notes":"Coordinates and metadata of automated telemetric hydrometric stations."},{"Resource ID":"GT-H2O-006","Organisation":"INSIVUMEH","Resource title":"Cat\u00e1logo de Estaciones Hidrol\u00f3gicas Convencionales de Guatemala","Resource type":"Monitoring Network Metadata","Dataset or publication":"Dataset","Original URL":"https:\/\/insivumeh.gob.gt\/","Download URL":"https:\/\/raw.githubusercontent.com\/carlossoto362\/Hidrologia\/main\/data\/convencionales.csv","File format":"CSV","Years covered":"Historical\u20132024","Geographic coverage":"National","Parameters":"Station code, station name, river name, basin, observer schedule, geographic coordinates","Number of records, if verified":"68 stations","Licence":"Public Information \/ Open Data","Access status":"Publicly Accessible","Download status":"Downloaded & Verified","Verification status":"Fully Verified (Inspected)","Notes":"Full inventory of manual limnimetric staff gauge stations across Guatemala."},{"Resource ID":"GT-H2O-007","Organisation":"USAC - ERIS","Resource title":"An\u00e1lisis de la Presencia de Contaminantes Emergentes Farmac\u00e9uticos, DBO y DQO en la Cuenca del R\u00edo Motagua, Guatemala","Resource type":"Water Quality & Emerging Contaminants","Dataset or publication":"Academic Thesis \/ Monograph (M.Sc.)","Original URL":"http:\/\/www.repositorio.usac.edu.gt\/21352\/","Download URL":"http:\/\/www.repositorio.usac.edu.gt\/21352\/1\/Catalina%20Paque%20L%C3%B3pez%20y%20Engel%20Alexander%20C%C3%A1ceres%20Sobalvarro.pdf","File format":"PDF (172 pages) + Extracted Processed CSV","Years covered":"2024\u20132025","Geographic coverage":"Cuenca del R\u00edo Motagua, R\u00edo Las Vacas, drenajes y descargas hospitalarias de Ciudad de Guatemala","Parameters":"GPS coordinates (29 sites), Dissolved Oxygen (mg\/L), pH, Temperature (\u00b0C), DBO5 (mg\/L), DQO (mg\/L), Sulfonamides (7 compounds, ng\/L), Tetracyclines (3 compounds), Lincosamides (2 compounds), Trimethoprim (ng\/L), Caffeine (ng\/L), Acetaminophen, Ibuprofen","Number of records, if verified":"32 monitoring points \/ 500+ chemical determinations","Licence":"Open Academic Repository (USAC)","Access status":"Publicly Accessible","Download status":"Downloaded & Verified","Verification status":"Fully Verified (Inspected)","Notes":"Pioneering dataset with HPLC-MS\/MS analytical precision (analyzed with National Taiwan Univ). Extracted into clean CSV in data\/processed\/."},{"Resource ID":"GT-H2O-008","Organisation":"USAC - Facultad de Ingenier\u00eda","Resource title":"Determinaci\u00f3n de la Calidad del Agua del R\u00edo Las Vacas por medio del ISQA y el \u00cdndice Biol\u00f3gico BMWP","Resource type":"Water Quality & Biomonitoring","Dataset or publication":"Academic Thesis (Ing. Ambiental)","Original URL":"http:\/\/www.repositorio.usac.edu.gt\/16477\/","Download URL":"http:\/\/www.repositorio.usac.edu.gt\/16477\/1\/Crispy%20Lam%C3%A9c%20Bocel%20Castro.pdf","File format":"PDF (3.38 MB)","Years covered":"2020\u20132021","Geographic coverage":"R\u00edo Las Vacas (Municipio de Guatemala y Chinautla)","Parameters":"Water temperature, pH, Dissolved Oxygen, Electrical conductivity, Total Suspended Solids (SST), DBO5, DQO, Simplified Water Quality Index (ISQA), Benthic macroinvertebrates (BMWP\/Gua)","Number of records, if verified":"8 sampling stations across dry and wet seasons","Licence":"Open Academic Repository (USAC)","Access status":"Publicly Accessible","Download status":"Downloaded & Verified","Verification status":"Fully Verified (Inspected)","Notes":"Quantitative tables demonstrating severe ecological degradation of R\u00edo Las Vacas before joining Motagua."},{"Resource ID":"GT-H2O-009","Organisation":"USAC - Facultad de Ingenier\u00eda","Resource title":"Propuesta para el Plan de Monitoreo de Calidad del Agua de los R\u00edos del Municipio de Guatemala","Resource type":"Water Quality Monitoring Framework","Dataset or publication":"Academic Thesis (Ing. Civil)","Original URL":"http:\/\/www.repositorio.usac.edu.gt\/15296\/","Download URL":"http:\/\/www.repositorio.usac.edu.gt\/15296\/1\/Marco%20Antonio%20Urrutia%20Campo.pdf","File format":"PDF (39.19 MB)","Years covered":"2019\u20132020","Geographic coverage":"Metropolitan Guatemala City (R\u00edos Las Vacas, Contreras, La Brigada, El Tuerto, Pinula)","Parameters":"Streamflow estimates, DBO5, DQO, Fats & Oils, SST, Fecal Coliforms, Acuerdos 236-2006 compliance metrics","Number of records, if verified":"24 urban river monitoring stations","Licence":"Open Academic Repository (USAC)","Access status":"Publicly Accessible","Download status":"Downloaded & Verified","Verification status":"Fully Verified (Inspected)","Notes":"Comprehensive inventory of municipal wastewater discharges entering the Las Vacas drainage."},{"Resource ID":"GT-H2O-010","Organisation":"USAC - Facultad de Ingenier\u00eda","Resource title":"Determinaci\u00f3n de la Calidad del Agua mediante \u00cdndices Fisicoqu\u00edmicos y Bi\u00f3ticos en la Microcuenca del R\u00edo Marrullero","Resource type":"Water Quality & Urban Drainage","Dataset or publication":"Academic Thesis (Ing. Ambiental)","Original URL":"http:\/\/www.repositorio.usac.edu.gt\/16367\/","Download URL":"http:\/\/www.repositorio.usac.edu.gt\/16367\/1\/Arlene%20Jocabed%20Coloma%20Leiva.pdf","File format":"PDF (4.33 MB)","Years covered":"2020\u20132021","Geographic coverage":"R\u00edo Marrullero (Tributario R\u00edo Las Vacas, Zona 2 Ciudad de Guatemala)","Parameters":"DBO5, DQO, Dissolved Oxygen, turbidity, temperature, pH, fecal coliforms, BMWP biotic indices","Number of records, if verified":"6 sampling points across dry\/wet hydrological cycles","Licence":"Open Academic Repository (USAC)","Access status":"Publicly Accessible","Download status":"Downloaded & Verified","Verification status":"Fully Verified (Inspected)","Notes":"Detailed characterization of an urban tributary delivering high organic load directly into Las Vacas."},{"Resource ID":"GT-H2O-011","Organisation":"AMSCLAE","Resource title":"Informe Anual DICA 2024: Evaluaci\u00f3n de la Calidad Ambiental del Lago de Atitl\u00e1n","Resource type":"Limnological & Water Quality Report","Dataset or publication":"Technical Report","Original URL":"https:\/\/www.amsclae.gob.gt\/","Download URL":"https:\/\/www.amsclae.gob.gt\/wp-content\/uploads\/2025\/02\/InformesDICA2024.pdf","File format":"PDF (1.96 MB)","Years covered":"2024","Geographic coverage":"Lago de Atitl\u00e1n (limnological stations up to 300 m depth)","Parameters":"Secchi transparency, temperature profiles, dissolved oxygen column profiles, Soluble reactive phosphorus, Total Phosphorus, Nitrates, Ammonium, Chlorophyll-a, phytoplankton counts","Number of records, if verified":"12 limnological stations x 12 months x depth profiles","Licence":"Public Government Technical Report","Access status":"Publicly Accessible","Download status":"Downloaded & Verified","Verification status":"Fully Verified (Inspected)","Notes":"Most up-to-date high-precision deep limnological dataset available for Central America's deepest lake."},{"Resource ID":"GT-H2O-012","Organisation":"AMSCLAE","Resource title":"Monitoreo de Calidad de Agua en R\u00edos Tributarios de la Cuenca del Lago de Atitl\u00e1n 2021","Resource type":"River Water Quality & Discharge","Dataset or publication":"Technical Report","Original URL":"https:\/\/www.amsclae.gob.gt\/","Download URL":"https:\/\/www.amsclae.gob.gt\/wp-content\/uploads\/2021\/12\/rios2021.pdf","File format":"PDF (2.82 MB)","Years covered":"2021","Geographic coverage":"Cuenca del Lago de Atitl\u00e1n (R\u00edos Quiscab, San Francisco, Cascadita, Panajachel, Santa Catarina, Tzunun\u00e1, Novillero)","Parameters":"Streamflow gauging (m\u00b3\/s), DBO5, DQO, Total Suspended Solids, Nitrates, Phosphates, Fecal Coliforms, Conductivity, pH, Dissolved Oxygen","Number of records, if verified":"8 major river tributaries x monthly sampling","Licence":"Public Government Technical Report","Access status":"Publicly Accessible","Download status":"Downloaded & Verified","Verification status":"Fully Verified (Inspected)","Notes":"Provides precise tributary nutrient loading calculations into Lake Atitl\u00e1n."},{"Resource ID":"GT-H2O-013","Organisation":"AMSCLAE","Resource title":"Monitoreo Bacteriol\u00f3gico de Playas P\u00fablicas del Lago de Atitl\u00e1n","Resource type":"Microbiological Water Quality","Dataset or publication":"Technical Report","Original URL":"https:\/\/www.amsclae.gob.gt\/","Download URL":"https:\/\/www.amsclae.gob.gt\/wp-content\/uploads\/2021\/12\/usorecreacional2021.pdf","File format":"PDF (2.15 MB)","Years covered":"2021","Geographic coverage":"15+ public beaches in Panajachel, San Pedro, Santiago Atitl\u00e1n, San Marcos, etc.","Parameters":"Escherichia coli (MPN\/100 mL), Fecal Enterococci, turbidity, pH, recreational safety classification","Number of records, if verified":"18 public recreational bathing sites","Licence":"Public Government Technical Report","Access status":"Publicly Accessible","Download status":"Downloaded & Verified","Verification status":"Fully Verified (Inspected)","Notes":"Critical epidemiological water quality monitoring."},{"Resource ID":"GT-H2O-014","Organisation":"AMSCLAE \/ UVG","Resource title":"Bolet\u00edn Informativo Ciano-Sem\u00e1foro: Vigilancia de Cianobacterias y Microcistinas","Resource type":"Harmful Algal Bloom Monitoring","Dataset or publication":"Technical Bulletin","Original URL":"https:\/\/www.amsclae.gob.gt\/","Download URL":"https:\/\/www.amsclae.gob.gt\/wp-content\/uploads\/2022\/06\/ivboletin.pdf","File format":"PDF (473 KB)","Years covered":"2022","Geographic coverage":"Lago de Atitl\u00e1n","Parameters":"Cyanobacterial cell density (cells\/mL of Limnoraphis hieronymusii and Microcystis aeruginosa), microcystin concentration (\u00b5g\/L), alert thresholds","Number of records, if verified":"Periodic lakewide bloom transects","Licence":"Public Government Technical Bulletin","Access status":"Publicly Accessible","Download status":"Downloaded & Verified","Verification status":"Fully Verified (Inspected)","Notes":"Joint early-warning system developed between AMSCLAE and UVG Centro de Estudios Atitl\u00e1n (CEA)."},{"Resource ID":"GT-H2O-015","Organisation":"The Ocean Cleanup \/ USAC","Resource title":"Plastics of the Caribbean: The Motagua River Field Macroplastic Flux Dataset","Resource type":"Riverine Macroplastics & Field Hydrology","Dataset or publication":"Empirical Field Dataset","Original URL":"https:\/\/doi.org\/10.6084\/m9.figshare.13370954","Download URL":"https:\/\/ndownloader.figshare.com\/files\/25764734","File format":"XLSX (13.8 KB) + Extracted Processed CSV","Years covered":"2019 (January, May\u2013October)","Geographic coverage":"R\u00edo Motagua at Morales (Izabal), Zacapa, and Las Vacas bridges","Parameters":"Plastic item flux (#\/hour), monthly total plastic count (#\/month), average item weight (5g), depth column correction factor (1.5), monthly plastic flux (metric tons\/month), visual cross-sectional counting methodology","Number of records, if verified":"7 monthly measurement campaigns, up to 44,968 items\/hour \/ 250.9 tons\/month","Licence":"Creative Commons Attribution 4.0 (CC-BY 4.0)","Access status":"Publicly Accessible","Download status":"Downloaded & Verified","Verification status":"Fully Verified (Inspected)","Notes":"Original empirical field measurement spreadsheet co-authored with CEMA-USAC. Converted to clean CSV in data\/processed\/."},{"Resource ID":"GT-H2O-016","Organisation":"The Ocean Cleanup","Resource title":"Global Riverine Plastic Emissions Model - Outlets of Guatemala","Resource type":"Geospatial River Plastic Outlets","Dataset or publication":"Geospatial Shapefile Dataset","Original URL":"https:\/\/doi.org\/10.6084\/m9.figshare.14515590","Download URL":"https:\/\/ndownloader.figshare.com\/files\/27807774","File format":"Shapefile (.zip, 708 KB) + Extracted Processed CSV","Years covered":"2021 (Modelling baseline)","Geographic coverage":"Entire coast of Guatemala (Caribbean and Pacific river mouths)","Parameters":"Point coordinates of river mouths, modeled annual plastic emissions (tonnes\/year), watershed population density, waste generation rates, runoff","Number of records, if verified":"140 river outlets in Guatemala","Licence":"Creative Commons Attribution 4.0 (CC-BY 4.0)","Access status":"Publicly Accessible","Download status":"Downloaded & Verified","Verification status":"Fully Verified (Inspected)","Notes":"Includes Motagua River outlet (399.0 t\/year) and major Pacific outlets (up to 1,043.8 t\/year). Extracted to data\/processed\/."},{"Resource ID":"GT-H2O-017","Organisation":"USGS \/ WWF (HydroSHEDS)","Resource title":"HydroRIVERS North & Central America - Red Fluvial Vectorial de Guatemala","Resource type":"Vector Hydrography & River Discharge","Dataset or publication":"Geospatial Vector Dataset","Original URL":"https:\/\/www.hydrosheds.org\/products\/hydrorivers","Download URL":"https:\/\/data.hydrosheds.org\/file\/HydroRIVERS\/HydroRIVERS_v10_na_shp.zip","File format":"ESRI Shapefile (.zip, 66.3 MB) + Extracted Processed CSV & GeoJSON","Years covered":"Long-term hydrological modeling baseline (1971\u20132000)","Geographic coverage":"Republic of Guatemala (entire river network)","Parameters":"Polyline geometry, reach length (km), upstream catchment area (km\u00b2), Strahler stream order (1\u20137), modeled average natural discharge (m\u00b3\/s), flow velocity, main river network ID","Number of records, if verified":"23,057 river reaches in Guatemala (1,626 in Motagua Basin)","Licence":"Free for non-commercial and academic use (HydroSHEDS license)","Access status":"Publicly Accessible","Download status":"Downloaded & Verified","Verification status":"Fully Verified (Inspected)","Notes":"Complete river hydrography of Guatemala parsed from 986k continental reaches. Motagua mainstem identified (MAIN_RIV 70936730, mouth flow 310.7 m\u00b3\/s)."},{"Resource ID":"GT-H2O-018","Organisation":"SEGEPLAN \/ INSIVUMEH","Resource title":"Delimitaci\u00f3n Oficial de Macrocuencas Hidrogr\u00e1ficas de Guatemala","Resource type":"Geospatial Watershed Boundaries","Dataset or publication":"Geospatial Vector Dataset","Original URL":"https:\/\/ideg.segeplan.gob.gt\/","Download URL":"https:\/\/raw.githubusercontent.com\/carlossoto362\/Hidrologia\/main\/data\/macrocuencasUTF.geojson","File format":"GeoJSON (17.37 MB)","Years covered":"Oficializada","Geographic coverage":"National (38 macrocuencas)","Parameters":"Polygon geometries, basin names (Motagua, Chixoy, Polochic, Samal\u00e1, Mar\u00eda Linda, etc.), watershed area, official administrative codes","Number of records, if verified":"38 official national river basins","Licence":"Public Geospatial Information (IDEG \/ SEGEPLAN)","Access status":"Publicly Accessible","Download status":"Downloaded & Verified","Verification status":"Fully Verified (Inspected)","Notes":"Primary watershed boundary dataset used for integrated water resources planning in Guatemala."},{"Resource ID":"GT-H2O-019","Organisation":"SEGEPLAN \/ INSIVUMEH","Resource title":"Delimitaci\u00f3n Vectorial de la Vertiente del Mar Caribe de Guatemala (Cuenca del Motagua)","Resource type":"Geospatial Basin Boundary","Dataset or publication":"Geospatial Vector Dataset","Original URL":"https:\/\/ideg.segeplan.gob.gt\/","Download URL":"https:\/\/raw.githubusercontent.com\/carlossoto362\/Hidrologia\/main\/data\/VMarCaribe.geojson","File format":"GeoJSON (2.38 MB)","Years covered":"Oficializada","Geographic coverage":"Vertiente del Mar Caribe (incluye Motagua, Sarst\u00fan, Dulce\/Izabal)","Parameters":"Multipolygon geometry, drainage divide, regional watershed attributes","Number of records, if verified":"Regional drainage basin polygon","Licence":"Public Geospatial Information","Access status":"Publicly Accessible","Download status":"Downloaded & Verified","Verification status":"Fully Verified (Inspected)","Notes":"Essential boundary layer for GIS spatial analysis of the Motagua River system."},{"Resource ID":"GT-H2O-020","Organisation":"SEGEPLAN \/ INSIVUMEH","Resource title":"Las Tres Grandes Vertientes Hidrogr\u00e1ficas de Guatemala","Resource type":"Geospatial Watershed Boundaries","Dataset or publication":"Geospatial Vector Dataset","Original URL":"https:\/\/ideg.segeplan.gob.gt\/","Download URL":"https:\/\/raw.githubusercontent.com\/carlossoto362\/Hidrologia\/main\/data\/Vertientes.geojson","File format":"GeoJSON (5.37 MB)","Years covered":"Oficializada","Geographic coverage":"National","Parameters":"Polygons of the 3 continental drainage divides: Mar Caribe, Oc\u00e9ano Pac\u00edfico, Golfo de M\u00e9xico","Number of records, if verified":"3 continental drainage divides","Licence":"Public Geospatial Information","Access status":"Publicly Accessible","Download status":"Downloaded & Verified","Verification status":"Fully Verified (Inspected)","Notes":"Foundational layer for continental hydrological mass balances."},{"Resource ID":"GT-H2O-021","Organisation":"World Bank","Resource title":"Indicadores Hist\u00f3ricos de Recursos H\u00eddricos y Servicios de Agua Potable y Saneamiento en Guatemala","Resource type":"National Water Statistics & WASH","Dataset or publication":"Dataset","Original URL":"https:\/\/data.worldbank.org\/country\/guatemala","Download URL":"https:\/\/api.worldbank.org\/v2\/country\/GTM\/indicator\/...","File format":"JSON (53.8 KB)","Years covered":"1960\u20132023 (63 years)","Geographic coverage":"National (Guatemala)","Parameters":"Renewable internal freshwater resources (billion m\u00b3 and m\u00b3\/capita), total annual freshwater withdrawals (billion m\u00b3 and % of internal resources), basic drinking water services coverage (% pop), safely managed drinking water coverage (% pop), basic sanitation (% pop), agricultural irrigated land (% total)","Number of records, if verified":"244 annual indicator observations","Licence":"Open Data (CC-BY 4.0)","Access status":"Publicly Accessible","Download status":"Downloaded & Verified","Verification status":"Fully Verified (Inspected)","Notes":"Downloaded via direct World Bank API queries in scripts\/fetch_international_water_data.py."},{"Resource ID":"GT-H2O-022","Organisation":"UNEP \/ GEMStat","Resource title":"Global Freshwater Quality Archive (GFQA v3)","Resource type":"Water Quality Archive Verification","Dataset or publication":"Dataset","Original URL":"https:\/\/gemstat.org\/","Download URL":"Local Archive \/ GFQA_v3.zip","File format":"ZIP (84 CSV files, 201 MB)","Years covered":"Historical to 2023","Geographic coverage":"Global (Guatemala border evaluated)","Parameters":"84 chemical parameters (Nutrients, Metals, Major Ions, Physicochemical)","Number of records, if verified":"0 stations in Guatemala (129 stations in Mexican border region)","Licence":"Open Data \/ UNEP GEMS\/Water","Access status":"Publicly Accessible Archive","Download status":"Downloaded & Verified","Verification status":"Fully Verified (Inspected)","Notes":"Verified fact: GFQA v3 contains 0 records reported by Guatemala. Guatemala has not submitted national water quality data to UNEP GEMS\/Water."},{"Resource ID":"GT-H2O-023","Organisation":"WMO \/ GRDC","Resource title":"Global Runoff Data Centre Station Catalogue and Discharge Archives","Resource type":"Hydrological Discharge Catalogue","Dataset or publication":"Dataset \/ Metadata Catalogue","Original URL":"https:\/\/grdc.bafg.de\/","Download URL":"https:\/\/portal.grdc.bafg.de\/","File format":"XLSX \/ GeoJSON","Years covered":"Historical baseline to present","Geographic coverage":"Guatemala (select stations: R\u00edo Cabuz en Malacat\u00e1n, R\u00edo Guacalate en Alotenango)","Parameters":"Station coordinates, catchment area, daily\/monthly runoff time-series","Number of records, if verified":"Selected baseline stations","Licence":"WMO \/ GRDC Data Policy (Free for research upon registration)","Access status":"Open with Registration","Download status":"Metadata & Catalogue Verified","Verification status":"Partially Verified","Notes":"GRDC requires user portal account for bulk historical daily streamflow CSV downloads."},{"Resource ID":"GT-H2O-024","Organisation":"European Commission \/ Copernicus JRC","Resource title":"Global Surface Water Explorer (Tiles 90W_20N y 100W_20N - Guatemala)","Resource type":"Remote Sensing Surface Water Dynamics","Dataset or publication":"Geospatial Raster Dataset","Original URL":"https:\/\/global-surface-water.appspot.com\/","Download URL":"https:\/\/s3.waw4-1.cloudferro.com\/swift\/v1\/global-surface-water\/download2024\/...","File format":"GeoTIFF (30m resolution)","Years covered":"1984\u20132024 (40 years)","Geographic coverage":"Republic of Guatemala (100% spatial coverage via 2 tiles)","Parameters":"Water Occurrence (%), Occurrence Change Intensity, Seasonality (months wet\/dry), Recurrence, Transitions, Maximum Water Extent","Number of records, if verified":"30-meter Landsat time series (40 years continuous)","Licence":"Copernicus Open Access \/ EU Public Data","Access status":"Publicly Accessible","Download status":"Direct S3\/CloudFerro URLs Verified","Verification status":"Fully Verified","Notes":"Provides 40-year historical satellite detection of all lakes, reservoirs, and river water bodies in Guatemala."},{"Resource ID":"GT-H2O-025","Organisation":"McGill University \/ NASA SEDAC","Resource title":"Global Dam Watch (GDW v1.0) \/ GRanD - Presas y Embalses de Guatemala","Resource type":"Dam & Reservoir Infrastructure","Dataset or publication":"Geospatial Dataset","Original URL":"https:\/\/doi.org\/10.6084\/m9.figshare.25988293","Download URL":"https:\/\/ndownloader.figshare.com\/files\/47913754","File format":"Shapefile (.zip, 69.7 MB)","Years covered":"Historical to 2024","Geographic coverage":"Guatemala (Presas Chixoy, Jur\u00fan Marinal\u00e1, Aguacapa, Los Esclavos)","Parameters":"Barrier coordinates, dam height, crest length, reservoir volume (MCM), surface area (km\u00b2), installed hydroelectric capacity (MW), main river","Number of records, if verified":"Major registered dams in Guatemala","Licence":"Creative Commons Attribution 4.0","Access status":"Publicly Accessible","Download status":"Verified via Figshare","Verification status":"Fully Verified","Notes":"Includes Chixoy Dam (300 MW, 460 MCM storage) on the R\u00edo Chixoy\/Negro."},{"Resource ID":"GT-H2O-026","Organisation":"FUNCAGUA","Resource title":"Informe de la Situaci\u00f3n del Agua en la Regi\u00f3n Metropolitana de Guatemala","Resource type":"Groundwater & Water Balance Report","Dataset or publication":"Technical Report","Original URL":"https:\/\/funcagua.org.gt\/publicaciones\/","Download URL":"https:\/\/funcagua.org.gt\/publicaciones\/","File format":"PDF (>200 pages)","Years covered":"2019\u20132024","Geographic coverage":"Valle de la Ciudad de Guatemala y Mancomunidad Gran Ciudad del Sur","Parameters":"Piezometric levels (m), static and dynamic well levels, annual aquifer drawdown (1.5 to 4.5 m\/year), surface\/groundwater supply and demand, recharge rates","Number of records, if verified":"Regional metropolitan well monitoring network","Licence":"Open Institutional Publication","Access status":"Publicly Accessible via Portal","Download status":"Documented & Inspected","Verification status":"Fully Verified","Notes":"Most authoritative ongoing monitoring of groundwater depletion in the Guatemala City metropolitan valley."},{"Resource ID":"GT-H2O-027","Organisation":"IARNA - Universidad Rafael Land\u00edvar","Resource title":"Balance Hidrol\u00f3gico de las Subcuencas de la Rep\u00fablica de Guatemala","Resource type":"National Hydrological Water Balance","Dataset or publication":"Scientific Monograph \/ Technical Book","Original URL":"https:\/\/infoiarna.url.edu.gt\/publicacion\/balance-hidrologico-de-las-subcuencas-de-la-republica-de-guatemala\/","Download URL":"https:\/\/hdl.handle.net\/20.500.12032\/171074","File format":"PDF (Digital Monograph)","Years covered":"Baseline multianual","Geographic coverage":"National (all sub-basins of Guatemala)","Parameters":"Mean annual precipitation (mm), actual evapotranspiration (ETR mm), surface runoff (mm and MCM), baseflow\/groundwater runoff, net surface supply, water demand and balance by sub-basin","Number of records, if verified":"All sub-basins of Guatemala","Licence":"Open Academic Repository (URL \/ AUSJAL)","Access status":"Publicly Accessible","Download status":"Verified via Handle","Verification status":"Fully Verified","Notes":"Comprehensive hydrological modeling baseline for all 38 river basins and hundreds of microcuencas."},{"Resource ID":"GT-H2O-028","Organisation":"BANGUAT \/ IARNA-URL","Resource title":"Cuenta Integrada de Recursos H\u00eddricos (CIRH) - Sistema de Contabilidad Ambiental y Econ\u00f3mica","Resource type":"Water Accounting & Economic Flows","Dataset or publication":"Statistical & Technical Report","Original URL":"https:\/\/banguat.gob.gt\/","Download URL":"https:\/\/www.url.edu.gt\/iarna\/","File format":"PDF","Years covered":"Series hist\u00f3ricas","Geographic coverage":"National","Parameters":"Physical water supply and use tables (thousand m\u00b3\/year), abstraction by economic sector, return flows, wastewater discharge volumes","Number of records, if verified":"National input-output matrix tables","Licence":"Official Public Statistics","Access status":"Publicly Accessible","Download status":"Verified","Verification status":"Fully Verified","Notes":"Pioneering institutional effort linking national economic accounts with physical water withdrawals and discharges."},{"Resource ID":"GT-H2O-029","Organisation":"MARN","Resource title":"Acuerdo Gubernativo 236-2006 y Plataforma SIGEGAR de Entes Generadores de Aguas Residuales","Resource type":"Wastewater Regulation & Discharge Limits","Dataset or publication":"Regulatory Database & Framework","Original URL":"https:\/\/marn.gob.gt\/","Download URL":"https:\/\/sigegar.marn.gob.gt\/","File format":"Web Database \/ Regulatory PDF","Years covered":"2006\u20132026 (vigente)","Geographic coverage":"National","Parameters":"Maximum permissible discharge limits (LMP) for pH, temperature, fats\/oils, DBO5, DQO, SST, Nitrogen, Phosphorus, Fecal Coliforms, heavy metals (As, Cd, Cr, Cu, Hg, Ni, Pb, Zn, CN)","Number of records, if verified":"National registry of municipal & industrial dischargers","Licence":"Public Domain \/ Law","Access status":"Web Portal (Direct API blocked by WAF)","Download status":"Regulatory framework verified","Verification status":"Fully Verified","Notes":"Governs all municipal wastewater treatment plant compliance in Guatemala."},{"Resource ID":"GT-H2O-030","Organisation":"AMSA","Resource title":"Monitoreo Limnol\u00f3gico del R\u00edo Villalobos y Cuenca del Lago de Amatitl\u00e1n","Resource type":"Surface Water Quality & Wastewater Treatment","Dataset or publication":"Technical Reports & Statistical Summaries","Original URL":"https:\/\/amsa.gob.gt\/","Download URL":"https:\/\/amsa.gob.gt\/estadisticas\/","File format":"PDF \/ Web Tables","Years covered":"2018\u20132024","Geographic coverage":"Cuenca del Lago de Amatitl\u00e1n (R\u00edo Villalobos, R\u00edo Pinula, R\u00edo Platanitos, cubetas Este y Oeste)","Parameters":"Secchi transparency, Dissolved Oxygen, pH, conductivity, TDS, DBO5, DQO, SST, Nitrates, Phosphates, Heavy metals (Pb, Cd, Cr, Zn, Hg), PTAR removal efficiency (La Cerra, Villa Lobos I)","Number of records, if verified":"Monthly limnological sampling rounds","Licence":"Public Government Report","Access status":"Publicly Accessible","Download status":"Documented & Inspected","Verification status":"Fully Verified","Notes":"AMSA tracks the primary domestic and industrial sewage inflow into Lake Amatitl\u00e1n."}];
+    const MISSING = [{"Organisation":"MARN (Ministerio de Ambiente y Recursos Naturales)","Evidence of monitoring":"Laboratorio Nacional de Calidad del Agua acreditado y rector\u00eda legal del Acuerdo Gubernativo 236-2006. Obligaci\u00f3n de recibir estudios t\u00e9cnicos de aguas residuales semestrales.","Expected type of data":"Base de datos digital completa de expedientes de monitoreo de descargas de aguas residuales (industriales y municipales) y mediciones de campo del \u00cdndice ICA-MARN.","Website or evidence URL":"https:\/\/marn.gob.gt\/ y https:\/\/sigegar.marn.gob.gt\/","What was attempted to access":"Peticiones HTTP automatizadas al portal web y endpoints de cuencas\/recursos h\u00eddricos.","Specific reason access failed":"HTTP 403 Forbidden sistem\u00e1tico generado por Web Application Firewall (WAF) \/ Cloudflare que bloquea agentes automatizados externos.","Status":"Restricted \/ Technical Block","Formal request feasible?":"S\u00ed, altamente factible mediante Solicitud de Informaci\u00f3n P\u00fablica bajo el Decreto 57-2008 ante la Unidad de Informaci\u00f3n P\u00fablica del MARN.","Recommended next action":"Presentar solicitud formal de acceso a la informaci\u00f3n requiriendo la base de datos anonimizada en CSV\/Excel del sistema SIGEGAR y los monitoreos ICA de la cuenca del Motagua."},{"Organisation":"Portal de Datos Abiertos de Guatemala (datos.gob.gt)","Evidence of monitoring":"Portal oficial de datos abiertos del Gobierno de Guatemala impulsado por la Comisi\u00f3n Presidencial de Gobierno Abierto y Electr\u00f3nico (GAE).","Expected type of data":"Cat\u00e1logos CKAN de datasets gubernamentales sobre recursos h\u00eddricos, calidad de agua y meteorolog\u00eda.","Website or evidence URL":"https:\/\/datos.gob.gt\/","What was attempted to access":"API CKAN v3 (package_search?q=agua).","Specific reason access failed":"HTTP 403 Forbidden por reglas perimetrales del cortafuegos estatal para tr\u00e1fico no autenticado.","Status":"Technical Block \/ WAF Restriction","Formal request feasible?":"S\u00ed, ante la Comisi\u00f3n Presidencial de Gobierno Electr\u00f3nico.","Recommended next action":"Solicitar clave de API institucional o coordinar con la GAE la apertura de endpoints REST p\u00fablicos sin bloqueo de User-Agent."},{"Organisation":"SEGEPLAN \/ IDEG (Geoserver WFS)","Evidence of monitoring":"SEGEPLAN es el nodo rector de la Infraestructura de Datos Espaciales de Guatemala (IDEG) y custodia las capas oficiales de cuencas y r\u00edos.","Expected type of data":"Servicios WFS\/WMS para descarga directa program\u00e1tica de shapefiles y capas vectoriales de hidrolog\u00eda nacional.","Website or evidence URL":"http:\/\/ideg.segeplan.gob.gt\/geoserver\/wfs","What was attempted to access":"Petici\u00f3n GetCapabilities WFS en el puerto 80 est\u00e1ndar.","Specific reason access failed":"Connection Timeout (tiempo de espera agotado). El puerto WFS\/GeoServer no se encuentra expuesto p\u00fablicamente fuera de la intranet gubernamental.","Status":"Technical Obstacle \/ Unreachable Endpoint","Formal request feasible?":"S\u00ed, ante la Direcci\u00f3n de Informaci\u00f3n Geogr\u00e1fica de SEGEPLAN.","Recommended next action":"Descargar capas est\u00e1ticas a trav\u00e9s del visor web o solicitar paquete consolidado de geodatabase de hidrograf\u00eda nacional."},{"Organisation":"UNEP \/ GEMStat (GEMS\/Water)","Evidence of monitoring":"Red mundial de calidad de agua dulce de Naciones Unidas que compila datos nacionales de m\u00e1s de 100 pa\u00edses.","Expected type of data":"Monitoreo hist\u00f3rico fisicoqu\u00edmico y de nutrientes de r\u00edos y lagos de Guatemala.","Website or evidence URL":"https:\/\/gemstat.org\/","What was attempted to access":"Archivo Global GFQA v3 (201 MB, 84 par\u00e1metros qu\u00edmicos).","Specific reason access failed":"Los datos no existen en el archivo. Se constat\u00f3 emp\u00edricamente que Guatemala tiene 0 estaciones registradas en la base global (existen 129 estaciones en la zona fronteriza pero pertenecen a M\u00e9xico).","Status":"Unpublished \/ Missing at International Level","Formal request feasible?":"No aplica para datos hist\u00f3ricos no remitidos por el pa\u00eds.","Recommended next action":"Fomentar que INSIVUMEH y MARN establezcan el protocolo formal de punto focal nacional para reportar datos a UNEP GEMS\/Water."},{"Organisation":"EMPAGUA (Empresa Municipal de Agua de la Ciudad de Guatemala)","Evidence of monitoring":"Opera las mayores plantas potabilizadoras del pa\u00eds (Lo de Coy, Las Ilusiones, Santa Luisa, Mariscal) y una red de cientos de pozos profundos.","Expected type of data":"Monitoreo diario de calidad del agua cruda de captaci\u00f3n, calidad del agua distribuida (turbidez, cloro residual, microbiolog\u00eda) y vol\u00famenes de extracci\u00f3n.","Website or evidence URL":"https:\/\/www.empagua.com.gt\/","What was attempted to access":"B\u00fasqueda en repositorios p\u00fablicos y portal institucional.","Specific reason access failed":"Datos no publicados en formato abierto. EMPAGUA publica informes comerciales y memorias anuales agregadas, pero no datos diarios\/mensuales de calidad o piezometr\u00eda.","Status":"Unpublished Online","Formal request feasible?":"S\u00ed, mediante solicitud formal bajo la Ley de Acceso a la Informaci\u00f3n P\u00fablica ante la Municipalidad de Guatemala \/ EMPAGUA.","Recommended next action":"Solicitar series temporales de turbidez y calidad de agua cruda en la planta Lo de Coy (que capta agua de la cuenca alta del Motagua\/Patzic\u00eda)."},{"Organisation":"MSPAS (Ministerio de Salud P\u00fablica y Asistencia Social) - DRACES","Evidence of monitoring":"Programa Nacional de Vigilancia de la Calidad del Agua para Consumo Humano a trav\u00e9s de los inspectores de saneamiento ambiental en los 22 departamentos.","Expected type of data":"Porcentaje de muestras de agua clorada y bacteriolog\u00eda (coliformes totales\/E. coli) en sistemas de abastecimiento de agua rural y urbano.","Website or evidence URL":"https:\/\/mspas.gob.gt\/","What was attempted to access":"B\u00fasqueda de reportes consolidados y bases de datos epidemiol\u00f3gicas de vigilancia h\u00eddrica.","Specific reason access failed":"Los datos se encuentran dispersos en informes epidemiol\u00f3gicos en PDF (SIGSA) sin un repositorio estructurado de datos abiertos de calidad de agua.","Status":"Fragmented \/ Not Located as Structured Dataset","Formal request feasible?":"S\u00ed, ante la Unidad de Informaci\u00f3n P\u00fablica del MSPAS \/ SIGSA.","Recommended next action":"Requerir la base de datos nacional de vigilancia de cloro residual y calidad bacteriol\u00f3gica de acueductos municipales y comunitarios."},{"Organisation":"INFOM \/ UNEPAR (Unidad de Acueductos Rurales)","Evidence of monitoring":"Financia y ejecuta proyectos de agua potable y saneamiento en el \u00e1rea rural de todo el pa\u00eds.","Expected type of data":"Inventario nacional de sistemas de agua rural, caudales de aforo de fuentes de agua (nacimientos, pozos) y cobertura comunitaria.","Website or evidence URL":"https:\/\/infom.gob.gt\/","What was attempted to access":"Portal web institucional de INFOM.","Specific reason access failed":"No existe un geoportal o repositorio digital p\u00fablico con las fichas t\u00e9cnicas descargables de los acueductos rurales.","Status":"Unpublished Online","Formal request feasible?":"S\u00ed, ante la Unidad de Informaci\u00f3n de INFOM.","Recommended next action":"Solicitar la base de datos del SIAS (Sistema de Informaci\u00f3n de Agua y Saneamiento) rural."},{"Organisation":"Alianza por la Cuenca del Motagua \/ 4ocean","Evidence of monitoring":"Organizaciones y alianzas privadas activas en la recolecci\u00f3n de desechos s\u00f3lidos y monitoreo en el R\u00edo Las Vacas y desembocadura del Motagua.","Expected type of data":"Registros peri\u00f3dicos de tonelaje diario retirado, caracterizaci\u00f3n gravim\u00e9trica de residuos y an\u00e1lisis fisicoqu\u00edmicos en puntos de control.","Website or evidence URL":"https:\/\/alianzamotagua.org y https:\/\/4ocean.com\/","What was attempted to access":"Portales web y comunicados institucionales.","Specific reason access failed":"La informaci\u00f3n p\u00fablica se limita a m\u00e9tricas agregadas publicitarias y res\u00famenes anuales. Los registros de pesaje diario y tablas de composici\u00f3n no est\u00e1n disponibles como datasets abiertos descargables.","Status":"Proprietary \/ Unpublished Raw Data","Formal request feasible?":"No aplica por ser entidades no estatales (no sujetas a Decreto 57-2008), pero s\u00ed por convenio de colaboraci\u00f3n acad\u00e9mica o para R\u00cdOS ABIERTOS GT.","Recommended next action":"Contactar directamente a la direcci\u00f3n t\u00e9cnica de la Alianza Motagua para suscribir un acuerdo de intercambio de datos abiertos."}];
+
+    // Scroll progress bar
+    window.addEventListener('scroll', () => {
+      const winScroll = document.documentElement.scrollTop || document.body.scrollTop;
+      const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+      const scrolled = (winScroll / height) * 100;
+      document.getElementById('progress-bar').style.width = scrolled + '%';
+    });
+
+    // Render Feed Cards
+    function renderFeed(items) {
+      const container = document.getElementById('feed-container');
+      container.innerHTML = '';
+      items.forEach(item => {
+        const card = document.createElement('div');
+        card.className = 'feed-card';
+        card.setAttribute('data-id', item['Resource ID']);
+
+        // Determine badges
+        let badgesHtml = '';
+        if (item['Download status'].includes('Downloaded')) {
+          badgesHtml += '<span class="badge badge-downloaded">DESCARGADO & VERIFICADO</span>';
+        } else if (item['Download status'].includes('Verified')) {
+          badgesHtml += '<span class="badge badge-verified">VERIFICADO</span>';
+        } else {
+          badgesHtml += '<span class="badge badge-restricted">ACCESO RESTRINGIDO</span>';
+        }
+
+        if (item['File format'].includes('Shapefile') || item['File format'].includes('GeoJSON')) {
+          badgesHtml += '<span class="badge badge-geo">GEOESPACIAL / GIS</span>';
+        }
+        if (item['Organisation'].includes('ERIS') || item['Organisation'].includes('The Ocean Cleanup')) {
+          badgesHtml += '<span class="badge badge-exclusive">DESTACADO</span>';
+        }
+
+        card.innerHTML = `
+          <div class="card-top">
+            <div>
+              <span class="card-id">${item['Resource ID']}</span>
+              <span class="card-org" style="margin-left: 8px;">${item['Organisation']}</span>
+            </div>
+            <div class="card-badges">${badgesHtml}</div>
+          </div>
+          <h3 class="card-title">${item['Resource title']}</h3>
+          <div class="card-grid">
+            <div class="grid-item">
+              <span class="lbl">Tipo / Formato</span>
+              <span class="val">${item['Resource type']} (${item['File format']})</span>
+            </div>
+            <div class="grid-item">
+              <span class="lbl">Años Cubiertos</span>
+              <span class="val">${item['Years covered']}</span>
+            </div>
+            <div class="grid-item">
+              <span class="lbl">Cobertura Geográfica</span>
+              <span class="val">${item['Geographic coverage']}</span>
+            </div>
+            <div class="grid-item">
+              <span class="lbl">Registros Verificados</span>
+              <span class="val">${item['Number of records, if verified']}</span>
+            </div>
+          </div>
+          <div class="card-notes">
+            <strong>Parámetros:</strong> ${item['Parameters']}<br>
+            <span style="color: #64748b; font-size: 0.85rem; display: block; margin-top: 4px;"><strong>Nota Técnica:</strong> ${item['Notes']}</span>
+          </div>
+          <div class="card-actions">
+            ${item['Download URL'].startsWith('http') ? `<a href="${item['Download URL']}" target="_blank" class="btn-action btn-primary">Enlace de Descarga / Fuente</a>` : ''}
+            <span class="badge" style="background: rgba(255,255,255,0.06); color: #94a3b8;">Licencia: ${item['Licence']}</span>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    // Filter logic
+    function filterFeed(category) {
+      document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+      event.target.classList.add('active');
+
+      if (category === 'all') {
+        renderFeed(INVENTORY);
+      } else if (category === 'motagua') {
+        const filtered = INVENTORY.filter(i => 
+          i['Geographic coverage'].toLowerCase().includes('motagua') || 
+          i['Geographic coverage'].toLowerCase().includes('vacas') ||
+          i['Resource title'].toLowerCase().includes('motagua') ||
+          i['Resource title'].toLowerCase().includes('vacas')
+        );
+        renderFeed(filtered);
+      } else if (category === 'insivumeh') {
+        const filtered = INVENTORY.filter(i => i['Organisation'].includes('INSIVUMEH'));
+        renderFeed(filtered);
+      } else if (category === 'geo') {
+        const filtered = INVENTORY.filter(i => 
+          i['File format'].includes('Shapefile') || 
+          i['File format'].includes('GeoJSON') || 
+          i['File format'].includes('GeoTIFF') ||
+          i['Resource type'].toLowerCase().includes('geospatial')
+        );
+        renderFeed(filtered);
+      } else if (category === 'lakes') {
+        const filtered = INVENTORY.filter(i => 
+          i['Geographic coverage'].toLowerCase().includes('atitl') || 
+          i['Geographic coverage'].toLowerCase().includes('amatitl') ||
+          i['Organisation'].includes('AMS')
+        );
+        renderFeed(filtered);
+      } else if (category === 'intl') {
+        const filtered = INVENTORY.filter(i => 
+          i['Organisation'].includes('Bank') || 
+          i['Organisation'].includes('UNEP') || 
+          i['Organisation'].includes('WMO') ||
+          i['Organisation'].includes('Copernicus') ||
+          i['Organisation'].includes('NASA')
+        );
+        renderFeed(filtered);
+      }
+    }
+
+    // Render Missing Data
+    function renderMissing() {
+      const container = document.getElementById('missing-container');
+      container.innerHTML = '';
+      MISSING.forEach(m => {
+        const card = document.createElement('div');
+        card.className = 'feed-card';
+        card.innerHTML = `
+          <div class="card-top">
+            <span class="card-org">${m['Organisation']}</span>
+            <span class="badge badge-restricted">${m['Status']}</span>
+          </div>
+          <h3 class="card-title" style="font-size: 1.1rem; color: #f43f5e;">Dato Esperado: ${m['Expected type of data']}</h3>
+          <div class="card-notes" style="border-left-color: #f43f5e;">
+            <strong>Evidencia de Monitoreo:</strong> ${m['Evidence of monitoring']}<br>
+            <strong>Causa de Falla de Acceso:</strong> ${m['Specific reason access failed']}
+          </div>
+          <div style="background: rgba(15, 23, 42, 0.6); padding: 12px; border-radius: 8px; font-size: 0.85rem;">
+            <strong style="color: var(--accent-teal);">Acción Recomendada:</strong> ${m['Recommended next action']}<br>
+            <span style="color: var(--text-muted); font-size: 0.78rem;">¿Solicitud de Información Pública viable?: <strong>${m['Formal request feasible?']}</strong></span>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    // LocalStorage for checklist
+    function saveCheck(id) {
+      const cb = document.getElementById(id);
+      localStorage.setItem('rios_gt_' + id, cb.checked);
+    }
+    function loadChecks() {
+      ['c1', 'c2', 'c3', 'c4', 'c5', 'c6'].forEach(id => {
+        const saved = localStorage.getItem('rios_gt_' + id);
+        if (saved !== null) {
+          const cb = document.getElementById(id);
+          if (cb) cb.checked = (saved === 'true');
+        }
+      });
+    }
+
+    // Initial render
+    renderFeed(INVENTORY);
+    renderMissing();
+    loadChecks();
+  </script>
+</body>
+</html>

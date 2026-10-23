@@ -1,0 +1,569 @@
+{
+  "project": "R\u00cdOS ABIERTOS GT - Guatemala Open Water Data Observatory",
+  "generated_at": "2026-10-21T21:26:25.059121",
+  "total_files": 80,
+  "total_size_bytes": 171618593,
+  "total_size_mb": 163.67,
+  "files": [
+    {
+      "path": "README.md",
+      "category": "Other",
+      "size_bytes": 4618,
+      "sha256": "a782a59e8403bc26a2e5854996dc045ca83cc436b82a00ce0d1b9f01749aefa2",
+      "verified_at": "2026-10-21"
+    },
+    {
+      "path": "index.html",
+      "category": "Other",
+      "size_bytes": 87004,
+      "sha256": "e51b49ff41ef813ab58d888a224de94fda78d671f72a2942e955990d308f85ad",
+      "verified_at": "2026-10-21"
+    },
+    {
+      "path": "mapa_interactivo_rios_abiertos.html",
+      "category": "Other",
+      "size_bytes": 2513029,
+      "sha256": "8c7a5da54a4506918d66bacebd255b89693f32fa18343d135a5e0cca7cf77603",
+      "verified_at": "2026-10-21"
+    },
+    {
+      "path": "data/processed/Guatemala_HydroRIVERS_Reaches.csv",
+      "category": "Harmonized Processed Data",
+      "size_bytes": 1799881,
+      "sha256": "fa1addbbb662df4939f7a58c719303f9cbb219f4a3f872a26e2211d17e7d6fce",
+      "verified_at": "2026-10-21"
+    },
+    {
+      "path": "data/processed/Guatemala_River_Plastic_Outlets_Meijer2021.csv",
+      "category": "Harmonized Processed Data",
+      "size_bytes": 15000,
+      "sha256": "854fdd0ede0a52eb9af63b56a4570b129649515ec568a279e06994e2ba266e80",
+      "verified_at": "2026-10-21"
+    },
+    {
+      "path": "data/processed/Motagua_River_Basin_Network.geojson",
+      "category": "Harmonized Processed Data",
+      "size_bytes": 483248,
+      "sha256": "f3b6be398064adf15169031186b69337ab045617214d06d673a43b711516c9cd",
+      "verified_at": "2026-10-21"
+    },
+    {
+      "path": "data/processed/TheOceanCleanup_Motagua_Morales_2019_Flux.csv",
+      "category": "Harmonized Processed Data",
+      "size_bytes": 3395,
+      "sha256": "ba8cb04b00baaf32e22ec9325a5f2c28c49f94483bc75282b733f3b6d348dc0e",
+      "verified_at": "2026-10-21"
+    },
+    {
+      "path": "data/processed/USAC_ERIS_Motagua_LasVacas_2025_Monitoring_Data.csv",
+      "category": "Harmonized Processed Data",
+      "size_bytes": 7511,
+      "sha256": "e3d1bdb8a66371f54d9041a572c08a69f2d3fdc8c86b3c482efe285c8149ef38",
+      "verified_at": "2026-10-21"
+    },
+    {
+      "path": "data/processed/dashboard_data_bundle.json",
+      "category": "Harmonized Processed Data",
+      "size_bytes": 506926,
+      "sha256": "40f06d2b753d6737dae6c748699454126730a175b0dbd276d75266812dfc4ada",
+      "verified_at": "2026-10-21"
+    },
+    {
+      "path": "data/processed/dashboard_national_data_bundle.json",
+      "category": "Harmonized Processed Data",
+      "size_bytes": 2417251,
+      "sha256": "2f906e8d6d7c17bc1da8ea5244086f7eaa621ff0a2c79387e1a5b85985c71c87",
+      "verified_at": "2026-10-21"
+    },
+    {
+      "path": "data/raw/academic/USAC_LasVacas_Bocel_Castro_2021_info.html",
+      "category": "Raw Academic / Theses",
+      "size_bytes": 21731,
+      "sha256": "7cf8a5d375343ee6f6bfccaed1644ed5422f6bc1ab9c9e1107a59527180b5687",
+      "verified_at": "2026-10-21"
+    },
+    {
+      "path": "data/raw/academic/USAC_LasVacas_ISQA_BMWP_BocelCastro_2021.pdf",
+      "category": "Raw Academic / Theses",
+      "size_bytes": 3377723,
+      "sha256": "e60bb64730da35afbb0ee1c148cb4cbe8ea11af052b2539e72ad3176d7adcbe3",
+      "verified_at": "2026-10-21"
+    },
+    {
+      "path": "data/raw/academic/USAC_Monitoreo_Rios_MuniGuate_Urrutia_2020.pdf",
+      "category": "Raw Academic / Theses",
+      "size_bytes": 39189943,
+      "sha256": "9b15fe49518ca045ae99f887c88ee3c1e5648a77bd6a96a7d937bc665e567404",
+      "verified_at": "2026-10-21"
+    },
+    {
+      "path": "data/raw/academic/USAC_Motagua_Contaminantes_Emergentes_DBO_DQO.pdf",
+      "category": "Raw Academic / Theses",
+      "size_bytes": 7643731,
+      "sha256": "23e79464bafca1c627c5437f8d053e8fb76ae980afaac3bdc2bdff14fe8c004c",
+      "verified_at": "2026-10-21"
+    },
+    {
+      "path": "data/raw/academic/USAC_Rio_Marrullero_LasVacas_Coloma_2021.pdf",
+      "category": "Raw Academic / Theses",
+      "size_bytes": 4333268,
+      "sha256": "8b7e72567a4e516bb7887ff7ac93dd98cdfb36bc3582b09a884c433c47175a43",
+      "verified_at": "2026-10-21"
+    },
+    {
+      "path": "data/raw/geospatial/Guatemala_Macrocuencas_Hidrograficas.geojson",
+      "category": "Raw Geospatial Data",
+      "size_bytes": 17368363,
+      "sha256": "36c75f6d9d0a36147c32e82b7475f18101876ca72d833ac1790f7acb79b33cc2",
+      "verified_at": "2026-10-21"
+    },
+    {
+      "path": "data/raw/geospatial/Guatemala_Tres_Grandes_Vertientes.geojson",
+      "category": "Raw Geospatial Data",
+      "size_bytes": 5367388,
+      "sha256": "0aff619c4f91fcf6b6b9bc64dc2ac82534b35219570a14630c32adcfe79cb52c",
+      "verified_at": "2026-10-21"
+    },
+    {
+      "path": "data/raw/geospatial/Guatemala_Vertiente_Golfo_Mexico.geojson",
+      "category": "Raw Geospatial Data",
+      "size_bytes": 1849429,
+      "sha256": "6a2832fa90770bb779261ddd2df68d13c01efff14289ce57b0848b1ab70663f5",
+      "verified_at": "2026-10-21"
+    },
+    {
+      "path": "data/raw/geospatial/Guatemala_Vertiente_Mar_Caribe_Motagua.geojson",
+      "category": "Raw Geospatial Data",
+      "size_bytes": 2379733,
+      "sha256": "833bb4559d320d19a57100cac210c499ecca3390b4dc20d90de6ea5f633e980d",
+      "verified_at": "2026-10-21"
+    },
+    {
+      "path": "data/raw/geospatial/Guatemala_Vertiente_Pacifico.geojson",
+      "category": "Raw Geospatial Data",
+      "size_bytes": 1138496,
+      "sha256": "5bf631e309054a9dac9b9304520212c639415fadecc97810c64ed87c835bfed4",
+      "verified_at": "2026-10-21"
+    },
+    {
+      "path": "data/raw/geospatial/HydroRIVERS_v10_na_shp.zip",
+      "category": "Raw Geospatial Data",
+      "size_bytes": 66335898,
+      "sha256": "47c2e30041b1a6e07ba3c1d82f07c70f2bfdd376a263153699902cf96ea006ea",
+      "verified_at": "2026-10-21"
+    },
+    {
+      "path": "data/raw/government/AMSCLAE_Boletin_Calidad_Agua_IV.pdf",
+      "category": "Raw Government Data",
+      "size_bytes": 473098,
+      "sha256": "a2626b0fdad55ddccaa687ecc27bddf01bbf479aa1dd32fbfc4b1147c39e72af",
+      "verified_at": "2026-10-21"
+    },
+    {
+      "path": "data/raw/government/AMSCLAE_Cianosemaforo_Atitlan.pdf",
+      "category": "Raw Government Data",
+      "size_bytes": 620797,
+      "sha256": "2783fc2c69a6f6a61dcb70656435891a2d36b89ed40d533ec2190a5ba9a385ed",
+      "verified_at": "2026-10-21"
+    },
+    {
+      "path": "data/raw/government/AMSCLAE_Informe_DICA_2024.pdf",
+      "category": "Raw Government Data",
+      "size_bytes": 1963573,
+      "sha256": "fe54198360380b3792ef000051271730f13a2fe2fc915a0d02c574316346a77a",
+      "verified_at": "2026-10-21"
+    },
+    {
+      "path": "data/raw/government/AMSCLAE_Monitoreo_Rios_2021.pdf",
+      "category": "Raw Government Data",
+      "size_bytes": 2815366,
+      "sha256": "2b6d300a9897f3035133658ad367525e54fdb43ecfad6ff5ae68307dc76cb6fd",
+      "verified_at": "2026-10-21"
+    },
+    {
+      "path": "data/raw/government/AMSCLAE_Uso_Recreacional_Playas_2021.pdf",
+      "category": "Raw Government Data",
+      "size_bytes": 2151541,
+      "sha256": "407d1a2a75031b54aca9f8525a912b09c353bad6566782f539a70503de8d7662",
+      "verified_at": "2026-10-21"
+    },
+    {
+      "path": "data/raw/government/INSIVUMEH_Boletin_Caribe_Motagua.pdf",
+      "category": "Raw Government Data",
+      "size_bytes": 304347,
+      "sha256": "db10172f4a60244a1798d28a05ac09399630fce15ca6a4e3502d61e011f502d7",
+      "verified_at": "2026-10-21"
+    },
+    {
+      "path": "data/raw/government/INSIVUMEH_Boletin_GolfoMexico.pdf",
+      "category": "Raw Government Data",
+      "size_bytes": 306134,
+      "sha256": "4ddc8d39adc15d300937125753fdad29c0d0c97a9324c2402e4edccfbff73383",
+      "verified_at": "2026-10-21"
+    },
+    {
+      "path": "data/raw/government/INSIVUMEH_Boletin_Pacifico.pdf",
+      "category": "Raw Government Data",
+      "size_bytes": 613769,
+      "sha256": "19345109b9ac1a80bfc9070a7bc9fab84f7f6aa8d08b7edb3dc299fda01f9900",
+      "verified_at": "2026-10-21"
+    },
+    {
+      "path": "data/raw/government/INSIVUMEH_Estaciones_Automaticas.csv",
+      "category": "Raw Government Data",
+      "size_bytes": 1430,
+      "sha256": "cdb82960b30e95129ab1d81bce50540369aa0ac861c5400e35ab9e656c451b32",
+      "verified_at": "2026-10-21"
+    },
+    {
+      "path": "data/raw/government/INSIVUMEH_Estaciones_Convencionales.csv",
+      "category": "Raw Government Data",
+      "size_bytes": 4252,
+      "sha256": "ca77944c3dddc540839836fbe40e81930c43aa9a93f760253fbecba96581c76b",
+      "verified_at": "2026-10-21"
+    },
+    {
+      "path": "data/raw/government/INSIVUMEH_Estaciones_Database.csv",
+      "category": "Raw Government Data",
+      "size_bytes": 1023131,
+      "sha256": "c5fd4dd8c1ee8f404fcdc06ac5473aa20fe80047a57d552c5524371c9e6141e5",
+      "verified_at": "2026-10-21"
+    },
+    {
+      "path": "data/raw/government/INSIVUMEH_Estaciones_Sinopticas.csv",
+      "category": "Raw Government Data",
+      "size_bytes": 1308,
+      "sha256": "ad3a74f28dda2c28f8be5dcc2e44064d7740a7c1fa05b594691282277ae4a292",
+      "verified_at": "2026-10-21"
+    },
+    {
+      "path": "data/raw/government/probe_results.json",
+      "category": "Raw Government Data",
+      "size_bytes": 2754,
+      "sha256": "d5a2b48e60f22f27ee1c59f6ae04d2dc6336f27a3a04230721dbb956eed2040a",
+      "verified_at": "2026-10-21"
+    },
+    {
+      "path": "data/raw/international/GRDC_Catalogue.xlsx",
+      "category": "Raw International Data",
+      "size_bytes": 42088,
+      "sha256": "e7abbd1b291d4f414281aa94f0ab4ba98c4aeb1167b77c42f4f8009f6a7465b7",
+      "verified_at": "2026-10-21"
+    },
+    {
+      "path": "data/raw/international/WorldBank_Guatemala_Water_Indicators.json",
+      "category": "Raw International Data",
+      "size_bytes": 53770,
+      "sha256": "f51381e4fa23f6c8abc9ebb43b93fdba68ea55534da3fefbc6cd67669952a1de",
+      "verified_at": "2026-10-21"
+    },
+    {
+      "path": "data/raw/ngos_cleanup/TheOceanCleanup_Meijer2021_Emissions_Shapefile.zip",
+      "category": "Raw NGOs / Solid Waste",
+      "size_bytes": 707627,
+      "sha256": "26863ef86ecfe3082d52bc6aaeb569e9c09811904c2357b90e67d5d06db98b40",
+      "verified_at": "2026-10-21"
+    },
+    {
+      "path": "data/raw/ngos_cleanup/TheOceanCleanup_Motagua_Field_Data_2019.xlsx",
+      "category": "Raw NGOs / Solid Waste",
+      "size_bytes": 13805,
+      "sha256": "86f6354fbbb29e9b603dc8b389c110f8b57229028ee545ecac2851e1691b9270",
+      "verified_at": "2026-10-21"
+    },
+    {
+      "path": "data/raw/publications/github_repositories.json",
+      "category": "Raw Bibliographic Metadata",
+      "size_bytes": 328182,
+      "sha256": "4e4cb7bdf4b7e65e0af48f1480623b83989c6e35726a3c938fa8f247ab9e3831",
+      "verified_at": "2026-10-21"
+    },
+    {
+      "path": "data/raw/publications/openalex_relevant_works.json",
+      "category": "Raw Bibliographic Metadata",
+      "size_bytes": 186580,
+      "sha256": "2cd85891550aa11031377a4141a2b02cfc34a1982915bf6825003b9a04020c82",
+      "verified_at": "2026-10-21"
+    },
+    {
+      "path": "data/raw/publications/zenodo_water_records.json",
+      "category": "Raw Bibliographic Metadata",
+      "size_bytes": 2,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "verified_at": "2026-10-21"
+    },
+    {
+      "path": "inventories/master_data_inventory.csv",
+      "category": "Research Inventory Deliverable",
+      "size_bytes": 22821,
+      "sha256": "108990d4bf0ed75e84c9a22b0401d824027f12d299ed4a0b81d0976e8aee8880",
+      "verified_at": "2026-10-21"
+    },
+    {
+      "path": "inventories/master_data_inventory.xlsx",
+      "category": "Research Inventory Deliverable",
+      "size_bytes": 17893,
+      "sha256": "02ad90816c22e3cdba66cd82097b1b3d5a52cf463429db454304f5d84330f887",
+      "verified_at": "2026-10-21"
+    },
+    {
+      "path": "inventories/missing_data_register.csv",
+      "category": "Research Inventory Deliverable",
+      "size_bytes": 6745,
+      "sha256": "b18f1131d84900d49cbc58cb7933d62ad3c511719c583804654f34b71d35126b",
+      "verified_at": "2026-10-21"
+    },
+    {
+      "path": "inventories/missing_data_register.xlsx",
+      "category": "Research Inventory Deliverable",
+      "size_bytes": 9495,
+      "sha256": "d5b863215364b31ec384c74d2583b1eb2af66ddf497aa508145d8f762f03edba",
+      "verified_at": "2026-10-21"
+    },
+    {
+      "path": "inventories/source_summary.csv",
+      "category": "Research Inventory Deliverable",
+      "size_bytes": 3733,
+      "sha256": "297e7aa784935461d8724b50e414b441e8b267ed1712bca02aa0fcbb2329427f",
+      "verified_at": "2026-10-21"
+    },
+    {
+      "path": "inventories/source_summary.xlsx",
+      "category": "Research Inventory Deliverable",
+      "size_bytes": 7772,
+      "sha256": "d4a2d4307046944dfc6dc04ea7fe500defea8c0cf261b8252fe915493a740b3d",
+      "verified_at": "2026-10-21"
+    },
+    {
+      "path": "manifests/data_manifest.json",
+      "category": "Other",
+      "size_bytes": 21772,
+      "sha256": "db4b9ecc54b25fe465455e5623e9f9df25be3767c602c40d094ea188bfc20e30",
+      "verified_at": "2026-10-21"
+    },
+    {
+      "path": "manifests/download_status.json",
+      "category": "Other",
+      "size_bytes": 1271,
+      "sha256": "9e9b927cf672df4e3b0b763792526f4a5a679e8d2f04810ca8be5a7a8cd46ff6",
+      "verified_at": "2026-10-21"
+    },
+    {
+      "path": "report/INFORME_EJECUTIVO_RIOS_ABIERTOS_GT.html",
+      "category": "Executive Research Report",
+      "size_bytes": 43426,
+      "sha256": "1b389daa7683944ab30ef8e559ddd5ba7d55d898c1a04bc7cfa4be61b7948a3e",
+      "verified_at": "2026-10-21"
+    },
+    {
+      "path": "report/INFORME_EJECUTIVO_RIOS_ABIERTOS_GT.md",
+      "category": "Executive Research Report",
+      "size_bytes": 12313,
+      "sha256": "2c87d4d655152ce7449a7ab87e690dd2c9c2076d243370e7ece8c893b7f7c09a",
+      "verified_at": "2026-10-21"
+    },
+    {
+      "path": "report/mapa_interactivo_rios_abiertos.html",
+      "category": "Executive Research Report",
+      "size_bytes": 2513029,
+      "sha256": "8c7a5da54a4506918d66bacebd255b89693f32fa18343d135a5e0cca7cf77603",
+      "verified_at": "2026-10-21"
+    },
+    {
+      "path": "report/presentacion_doomscrolling_resultados.html",
+      "category": "Executive Research Report",
+      "size_bytes": 86779,
+      "sha256": "a9a7f230bd1c135d3cf30c2358987e763920c17e95db87400529f24332bca069",
+      "verified_at": "2026-10-21"
+    },
+    {
+      "path": "scripts/build_all_deliverables.py",
+      "category": "Extraction Script",
+      "size_bytes": 57893,
+      "sha256": "efe0962ed50d3584c4f3a6b80337cfc3548fe5505f4ceb20d7f33dfa7eec030d",
+      "verified_at": "2026-10-21"
+    },
+    {
+      "path": "scripts/build_interactive_map_dashboard.py",
+      "category": "Extraction Script",
+      "size_bytes": 43742,
+      "sha256": "6f7f797dddc31928882bffed837c5b85f0e9b3279cb23cbfcc16d042b3fc460c",
+      "verified_at": "2026-10-21"
+    },
+    {
+      "path": "scripts/build_national_map_dashboard.py",
+      "category": "Extraction Script",
+      "size_bytes": 95818,
+      "sha256": "2911aafdede62b12df0bb7184f28f592d66d77e7c157adc0f438b13745fad666",
+      "verified_at": "2026-10-21"
+    },
+    {
+      "path": "scripts/check_subagents_findings.py",
+      "category": "Extraction Script",
+      "size_bytes": 1909,
+      "sha256": "8acead3dcc0edaac05d4214d3dbbd751128ae46dfcbea8d08f550453564be8ed",
+      "verified_at": "2026-10-21"
+    },
+    {
+      "path": "scripts/convert_motagua_xlsx.py",
+      "category": "Extraction Script",
+      "size_bytes": 2168,
+      "sha256": "4aca2c10c3d1f515c74391fd0d763993bb63458a5f076ac3b1b10933a9bb8ce1",
+      "verified_at": "2026-10-21"
+    },
+    {
+      "path": "scripts/download_carlossoto_hidrologia.py",
+      "category": "Extraction Script",
+      "size_bytes": 1673,
+      "sha256": "aaebf36f7f8c7233d99ff4cf396723c9442866a0b5dc9b6df63d4bad42710c93",
+      "verified_at": "2026-10-21"
+    },
+    {
+      "path": "scripts/download_hydrorivers.py",
+      "category": "Extraction Script",
+      "size_bytes": 783,
+      "sha256": "9f183998b6161a8f26b90dc2a5f60a8931c78926d612df5cc69b38235ab108d8",
+      "verified_at": "2026-10-21"
+    },
+    {
+      "path": "scripts/download_ocean_cleanup_data.py",
+      "category": "Extraction Script",
+      "size_bytes": 1109,
+      "sha256": "955a68ffd0111bb443d8cd1ab92f2dc50616b814af772249326a400968c2bbed",
+      "verified_at": "2026-10-21"
+    },
+    {
+      "path": "scripts/download_priority_datasets.py",
+      "category": "Extraction Script",
+      "size_bytes": 4558,
+      "sha256": "656f4506f276f01c7628cd02d0bef27f6b58f0f6e18f3b4c9b61afdd3a6803d9",
+      "verified_at": "2026-10-21"
+    },
+    {
+      "path": "scripts/download_subagent_discoveries.py",
+      "category": "Extraction Script",
+      "size_bytes": 1132,
+      "sha256": "c649509190be7f4cdd8789da214d8a71843e0a2f2b34e3cd904b14de37078014",
+      "verified_at": "2026-10-21"
+    },
+    {
+      "path": "scripts/download_wave2.py",
+      "category": "Extraction Script",
+      "size_bytes": 2864,
+      "sha256": "14fbebfa8731c90cb5181a36b74aa270aa2f4e25a87add47a7fac080ce3e1bd3",
+      "verified_at": "2026-10-21"
+    },
+    {
+      "path": "scripts/export_ocean_cleanup_outlets.py",
+      "category": "Extraction Script",
+      "size_bytes": 1768,
+      "sha256": "efec3933ec243551b2787c7beeae7ab6dbafb42ebdcdbd0db5313ccd2373243b",
+      "verified_at": "2026-10-21"
+    },
+    {
+      "path": "scripts/extract_guatemala_rivers.py",
+      "category": "Extraction Script",
+      "size_bytes": 6988,
+      "sha256": "608e999ae56cba8d68612e3e69ce1d16b8a2791c1187fcc566d48240a6d6439c",
+      "verified_at": "2026-10-21"
+    },
+    {
+      "path": "scripts/extract_usac_motagua_data.py",
+      "category": "Extraction Script",
+      "size_bytes": 13530,
+      "sha256": "22cbc5c8b2b0522bfce56b68b7dc058f755a99f2f7a6e073a52c2005e8070026",
+      "verified_at": "2026-10-21"
+    },
+    {
+      "path": "scripts/fetch_international_water_data.py",
+      "category": "Extraction Script",
+      "size_bytes": 4368,
+      "sha256": "154f29046fbc9f097de421dc1464ef7bb8d5ed76283e5287b54ed2ae375bb775",
+      "verified_at": "2026-10-21"
+    },
+    {
+      "path": "scripts/generate_doomscroll_presentation.py",
+      "category": "Extraction Script",
+      "size_bytes": 45543,
+      "sha256": "be407979d5100fbf1197f90b3551b38f10cea59812f8bef88360ede1d435a04f",
+      "verified_at": "2026-10-21"
+    },
+    {
+      "path": "scripts/inspect_github_repos.py",
+      "category": "Extraction Script",
+      "size_bytes": 1099,
+      "sha256": "c406e15f4b657fddd6e686aec99c388d4db24a2281d37e3df7f83cdcd121c3fb",
+      "verified_at": "2026-10-21"
+    },
+    {
+      "path": "scripts/inspect_hydrosheds.py",
+      "category": "Extraction Script",
+      "size_bytes": 468,
+      "sha256": "402883b44e2182c0d5ae3cb51d95cab4f220b05afd3b1274068de65be48b2bac",
+      "verified_at": "2026-10-21"
+    },
+    {
+      "path": "scripts/prepare_dashboard_data.py",
+      "category": "Extraction Script",
+      "size_bytes": 10632,
+      "sha256": "07fb4e9909aebd37d07bd421a145e5e7e323b4ae6e218b75250b541b772d488a",
+      "verified_at": "2026-10-21"
+    },
+    {
+      "path": "scripts/prepare_national_dashboard.py",
+      "category": "Extraction Script",
+      "size_bytes": 19136,
+      "sha256": "e4d311093dbdb0dd8ea882fc9a499aa614c0d8567c034317a9f92a4ce51bc2a6",
+      "verified_at": "2026-10-21"
+    },
+    {
+      "path": "scripts/probe_guatemala_portals.py",
+      "category": "Extraction Script",
+      "size_bytes": 2905,
+      "sha256": "9b38ecfcae4010add00088ce7dce3c6071b0ade300d651d858dd18e02242a079",
+      "verified_at": "2026-10-21"
+    },
+    {
+      "path": "scripts/search_github_data.py",
+      "category": "Extraction Script",
+      "size_bytes": 1579,
+      "sha256": "48e2ffebf8ffe9d0c417adc02128c723384bbde67cb0f26be83c8e59089f6e37",
+      "verified_at": "2026-10-21"
+    },
+    {
+      "path": "scripts/search_openalex.py",
+      "category": "Extraction Script",
+      "size_bytes": 3348,
+      "sha256": "79c7fc5f98097c8d6efd244dfd9dce4e2340393ac0dbf360ee019b8fcd5631ca",
+      "verified_at": "2026-10-21"
+    },
+    {
+      "path": "scripts/search_zenodo_files.py",
+      "category": "Extraction Script",
+      "size_bytes": 2081,
+      "sha256": "05e64f900d8aec44d2dc31a3bc96f07bcc113f3c7f990c42cb3065c0fbe6ac63",
+      "verified_at": "2026-10-21"
+    },
+    {
+      "path": "scripts/test_washdata.py",
+      "category": "Extraction Script",
+      "size_bytes": 817,
+      "sha256": "312bfd469fe7cd4c4d12b87c009bfd2ac6ea59f67ec2f7d22e77a8475a47da7c",
+      "verified_at": "2026-10-21"
+    },
+    {
+      "path": "scripts/update_dashboard_with_river_animation.py",
+      "category": "Extraction Script",
+      "size_bytes": 85711,
+      "sha256": "ff89c5e2e7ccc9b051fd61ede7c1146926172ff801e6546cbc00bce335e4b847",
+      "verified_at": "2026-10-21"
+    },
+    {
+      "path": "scripts/update_index_link.py",
+      "category": "Extraction Script",
+      "size_bytes": 802,
+      "sha256": "eb5776f64e6aac92e0b1044a5919d6f12a616ed3da01710b830a7ef157a8b8fc",
+      "verified_at": "2026-10-21"
+    }
+  ]
+}

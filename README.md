@@ -2,6 +2,14 @@
 
 Versión 0.1.0 de un portal local para explorar recursos hídricos y fuentes públicas de agua de Guatemala. La aplicación usa React, TypeScript, Vite y MapLibre. No necesita claves privadas ni un backend.
 
+## Versiones de investigación incluidas
+
+- `src/` contiene la aplicación integrada de Agua Abierta Guatemala.
+- `versions/claude/` conserva los informes, inventarios, scripts, manifiestos, registros de búsqueda y datos procesados producidos por Claude.
+- `versions/antigravity/` conserva los prototipos HTML, informes, inventarios, scripts, manifiestos y datos procesados producidos por Antigravity.
+
+Consulte [`versions/README.md`](versions/README.md) para conocer la procedencia y las exclusiones por tamaño.
+
 ## Qué incluye
 
 - Mapa MapLibre con 155 ubicaciones derivadas únicamente de coordenadas publicadas.

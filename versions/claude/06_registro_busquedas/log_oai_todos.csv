@@ -1,0 +1,4 @@
+repositorio,endpoint,registros_revisados,relevantes_agua,estado
+usac_eprints,http://www.repositorio.usac.edu.gt/cgi/oai2,6882,623,"interrumpido: not well-formed (invalid token): line 139, column 78"
+uvg_dspace,https://repositorio.uvg.edu.gt/oai/request,6165,481,completo
+revistas_usac_ojs,https://revistas.usac.edu.gt/index.php/index/oai,818,185,completo

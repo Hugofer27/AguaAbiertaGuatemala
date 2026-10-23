@@ -1,0 +1,756 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Gaceta de hallazgos · RÍOS ABIERTOS GT</title>
+<meta name="description" content="Hallazgos de la investigación de datos de agua de Guatemala de Claude, comparados con las entregas de Codex y Antigravity.">
+<style>
+@font-face { font-family: "Barlow Condensed"; src: url("fonts/BarlowCondensed-Medium.woff2") format("woff2"); font-weight: 500; font-display: swap; }
+@font-face { font-family: "Barlow Condensed"; src: url("fonts/BarlowCondensed-SemiBold.woff2") format("woff2"); font-weight: 600; font-display: swap; }
+@font-face { font-family: "Barlow Condensed"; src: url("fonts/BarlowCondensed-Bold.woff2") format("woff2"); font-weight: 700; font-display: swap; }
+@font-face { font-family: "Barlow Condensed"; src: url("fonts/BarlowCondensed-ExtraBold.woff2") format("woff2"); font-weight: 800; font-display: swap; }
+@font-face { font-family: "PT Serif"; src: url("fonts/PT_Serif-Web-Regular.woff2") format("woff2"); font-weight: 400; font-display: swap; }
+@font-face { font-family: "PT Serif"; src: url("fonts/PT_Serif-Web-Bold.woff2") format("woff2"); font-weight: 700; font-display: swap; }
+@font-face { font-family: "PT Serif"; src: url("fonts/PT_Serif-Web-Italic.woff2") format("woff2"); font-weight: 400; font-style: italic; font-display: swap; }
+@font-face { font-family: "PT Mono"; src: url("fonts/PTM55FT.woff2") format("woff2"); font-weight: 400; font-display: swap; }
+
+:root {
+  --papel: #e4e7ea;
+  --papel-hondo: #d8dce0;
+  --tinta: #151515;
+  --tinta-2: #383936;
+  --atenuada: #62635d;
+  --anil: #1d3a94;
+  --anil-velo: #d3d8e6;
+  --filete: #151515;
+  --grueso: 5px;
+  --fino: 1px;
+  --titular: "Barlow Condensed", "Arial Narrow", sans-serif;
+  --texto: "PT Serif", Georgia, serif;
+  --dato: "PT Mono", Consolas, monospace;
+  --margen: clamp(1.25rem, 3.2vw, 3rem);
+  --col: 62ch;
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; height: 100%; }
+/* En modo lámina todo escala con el viewport, como una página impresa proyectada */
+@media (min-width: 821px) and (min-height: 521px) {
+  html:not(.lectura) { font-size: clamp(14px, min(1.38vw, 2.1vh), 26px); }
+}
+body {
+  background: var(--papel);
+  color: var(--tinta);
+  font-family: var(--texto);
+  font-size: 1rem;
+  line-height: 1.5;
+  font-variant-numeric: lining-nums;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  caret-color: var(--anil);
+  scrollbar-color: var(--tinta-2) var(--papel-hondo);
+}
+::selection { background: var(--anil); color: var(--papel); }
+a { color: var(--anil); text-decoration-thickness: 1px; text-underline-offset: 0.18em; }
+a:hover { text-decoration-thickness: 2px; }
+:focus-visible { outline: 2px solid var(--anil); outline-offset: 3px; }
+
+/* ---------- Gaceta: estructura de lámina ---------- */
+.gaceta { height: 100%; }
+.lamina {
+  position: absolute; inset: 0;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  padding: clamp(0.9rem, 2.2vh, 1.6rem) var(--margen) clamp(0.7rem, 1.8vh, 1.2rem);
+  background: var(--papel);
+  visibility: hidden;
+}
+.lamina.activa { visibility: visible; }
+
+.cabezal {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: end;
+  gap: 1rem;
+  padding-bottom: 0.45rem;
+  border-bottom: var(--grueso) solid var(--filete);
+  box-shadow: 0 4px 0 -2px var(--papel), 0 5px 0 -2px var(--filete);
+  margin-bottom: clamp(0.9rem, 2.4vh, 1.6rem);
+  font-family: var(--titular);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.cabezal .nombre { font-weight: 800; font-size: clamp(1.05rem, 1.6vw, 1.35rem); letter-spacing: 0.06em; }
+.cabezal .edicion { font-weight: 600; font-size: 0.92rem; color: var(--tinta-2); text-align: center; }
+.cabezal .fecha { font-weight: 600; font-size: 0.92rem; text-align: right; font-variant-numeric: tabular-nums; }
+
+.cuerpo { min-height: 0; overflow: auto; display: grid; gap: clamp(0.9rem, 1.7vw, 2rem); align-content: start; }
+
+.pie {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 1rem;
+  align-items: center;
+  border-top: var(--fino) solid var(--filete);
+  padding-top: 0.5rem;
+  margin-top: clamp(0.6rem, 1.6vh, 1rem);
+}
+.procedencia { font-size: 0.86rem; color: var(--tinta-2); line-height: 1.4; margin: 0; }
+.pie-texto { display: grid; gap: 0.3rem; min-width: 0; }
+.firma { margin: 0; font-family: var(--titular); font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; font-size: 0.86rem; color: var(--tinta); }
+.procedencia b { font-family: var(--titular); font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; font-size: 0.86rem; color: var(--tinta); }
+.navegacion { display: flex; gap: 0.25rem; }
+.navegacion button {
+  font-family: var(--titular); font-weight: 700; font-size: 0.95rem; text-transform: uppercase; letter-spacing: 0.05em;
+  background: transparent; color: var(--tinta); border: var(--fino) solid var(--tinta);
+  padding: 0.3rem 0.75rem; cursor: pointer; min-height: 2.25rem;
+}
+.navegacion button:hover { background: var(--tinta); color: var(--papel); }
+.navegacion button:disabled { color: var(--atenuada); border-color: var(--atenuada); background: transparent; cursor: default; }
+
+/* ---------- Tipografía de gaceta ---------- */
+h1, h2, h3 { font-family: var(--titular); text-transform: uppercase; margin: 0; text-wrap: balance; }
+h1 { font-weight: 800; font-size: 4.3rem; line-height: 0.92; letter-spacing: -0.01em; }
+h2 { font-weight: 800; font-size: 2.75rem; line-height: 0.95; letter-spacing: -0.005em; }
+h3 { font-weight: 700; font-size: 1.25rem; line-height: 1.1; letter-spacing: 0.02em; }
+p { margin: 0 0 0.8em; max-width: var(--col); }
+.sumario { font-size: 1.22rem; line-height: 1.45; max-width: 58ch; }
+.sumario em { font-style: italic; }
+.nota-sola { font-size: 0.88rem; color: var(--tinta-2); max-width: 70ch; }
+.anil { color: var(--anil); }
+sup.ref { font-family: var(--titular); font-weight: 700; font-size: 0.68em; color: var(--anil); padding-left: 0.08em; }
+
+/* Considerandos y resolución */
+.considerando { margin: 0; padding: 0; list-style: none; max-width: var(--col); }
+.considerando > li { line-height: inherit; padding: 0.55rem 0; border-top: var(--fino) solid color-mix(in srgb, var(--tinta) 28%, transparent); }
+.considerando > li:first-child { border-top: 0; padding-top: 0; }
+.rotulo {
+  display: block; font-family: var(--titular); font-weight: 800; text-transform: uppercase;
+  letter-spacing: 0.08em; color: var(--anil); font-size: 1rem; margin-bottom: 0.35rem;
+}
+.portanto {
+  border-top: var(--grueso) solid var(--tinta);
+  padding-top: 0.6rem; max-width: var(--col);
+}
+.portanto p { font-weight: 700; margin: 0; }
+
+.notas {
+  font-size: 0.86rem; line-height: 1.4; color: var(--tinta-2);
+  columns: 2 22rem; column-gap: 2rem; margin: 0; padding: 0; list-style: none;
+}
+.notas li { break-inside: avoid; margin-bottom: 0.25rem; }
+.notas li::before { content: attr(data-n) " "; font-family: var(--titular); font-weight: 700; color: var(--anil); }
+.dato { font-family: var(--dato); font-size: 0.92em; color: var(--tinta-2); overflow-wrap: anywhere; }
+
+/* ---------- Composiciones ---------- */
+.portada { grid-template-columns: minmax(0, 1.65fr) minmax(16rem, 1fr); grid-template-rows: auto 1fr; align-items: start; }
+.portada h1 { margin-bottom: 1.1rem; }
+.despacho {
+  grid-column: 1 / -1; align-self: end;
+  display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0 2rem;
+  border-top: var(--grueso) solid var(--tinta); padding-top: 0.7rem;
+}
+.despacho .linea { font-family: var(--titular); font-weight: 700; font-size: 1.4rem; line-height: 1.05; margin: 0 0 0.35rem; text-transform: none; letter-spacing: 0.005em; font-variant-numeric: tabular-nums; }
+.despacho .linea .nombre-agente { color: var(--anil); text-transform: uppercase; font-weight: 800; letter-spacing: 0.04em; }
+.despacho p { font-size: 0.94rem; line-height: 1.4; margin: 0; }
+.despacho > div + div { border-left: var(--fino) solid color-mix(in srgb, var(--tinta) 30%, transparent); padding-left: 2rem; margin-left: -2rem; }
+.matriz-lam { grid-template-columns: minmax(0, 0.72fr) minmax(0, 2fr); align-items: start; }
+.matriz-lam .lateral .leyenda { flex-direction: column; gap: 0.45rem; margin-top: 1.4rem; }
+.matriz-lam .lateral .nota-sola { margin-top: 1.4rem; }
+.h-menor { font-weight: 700; font-size: 1.25rem; line-height: 1.1; letter-spacing: 0.02em; }
+.indice .h-menor { padding-bottom: 0.35rem; border-bottom: var(--grueso) solid var(--tinta); margin-bottom: 0.2rem; }
+.indice ol { list-style: none; margin: 0; padding: 0; }
+.indice li a {
+  display: grid; grid-template-columns: 1fr auto; gap: 0.75rem; align-items: baseline;
+  padding: 0.22rem 0; border-bottom: var(--fino) solid color-mix(in srgb, var(--tinta) 25%, transparent);
+  color: var(--tinta); text-decoration: none; font-size: 0.9rem;
+}
+.indice li a:hover { color: var(--anil); }
+.indice li a span:last-child { font-family: var(--titular); font-weight: 700; font-variant-numeric: tabular-nums; }
+
+.dos-col { grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); align-items: start; }
+.dos-col > .titular-ancho + * + * { border-left: var(--fino) solid color-mix(in srgb, var(--tinta) 30%, transparent); padding-left: clamp(0.9rem, 1.7vw, 2rem); }
+/* Láminas con poco texto: el cuerpo sube de cuerpo para llenar la hoja */
+@media (min-width: 821px) and (min-height: 521px) {
+  html:not(.lectura) .holgada .cuerpo { align-content: stretch; }
+  html:not(.lectura) .holgada .considerando { font-size: 1.2rem; line-height: 1.5; max-width: 64ch; }
+  html:not(.lectura) .holgada table { font-size: 1.1rem; line-height: 1.45; }
+  html:not(.lectura) .holgada .articulos p { font-size: 1.1rem; line-height: 1.45; }
+  html:not(.lectura) .holgada .portanto p { font-size: 1.12rem; line-height: 1.45; }
+  html:not(.lectura) .holgada .dos-col, html:not(.lectura) .holgada .pila { grid-template-rows: auto auto 1fr; }
+  html:not(.lectura) .holgada .agente { grid-template-rows: 1fr; }
+  html:not(.lectura) .holgada .agente > .lateral { align-self: stretch; display: flex; flex-direction: column; }
+  html:not(.lectura) .holgada .agente > .lateral .portanto { margin-top: auto; }
+  html:not(.lectura) .pie-acto p { font-size: 1.2rem; line-height: 1.45; }
+  html:not(.lectura) #l2 .considerando, html:not(.lectura) #l8 .considerando, html:not(.lectura) #l9 .considerando { font-size: 1.12rem; line-height: 1.5; }
+  html:not(.lectura) #l11 .pila { grid-template-rows: auto 1fr auto; }
+  html:not(.lectura) #l11 .tabla-ancha { align-self: stretch; }
+  html:not(.lectura) #l11 .tabla-ancha table { height: 100%; }
+  html:not(.lectura) .tabla-cifras tbody th, html:not(.lectura) .tabla-cifras tbody td { padding-top: 0.24rem; padding-bottom: 0.24rem; }
+  html:not(.lectura) .tabla-cifras td small { font-size: 0.8rem; }
+}
+/* Hojas 16:10: la fe de erratas pide un punto menos para cerrar sobre la resolución */
+@media (min-width: 821px) and (min-height: 521px) and (max-aspect-ratio: 17/10) {
+  html:not(.lectura) #l9 .considerando { font-size: 1.06rem; line-height: 1.46; }
+  html:not(.lectura) .tabla-cifras tbody th, html:not(.lectura) .tabla-cifras tbody td { padding-top: 0.17rem; padding-bottom: 0.17rem; }
+}
+.lateral .portanto { margin-top: 1rem; }
+.pie-acto { grid-column: 1 / -1; align-self: end; max-width: none; }
+.pie-acto p { max-width: 72ch; }
+.cumplimiento { margin-top: 0.8rem; padding-top: 0.6rem; border-top: var(--fino) solid color-mix(in srgb, var(--tinta) 30%, transparent); }
+.portanto .cumplimiento p { font-weight: 400; font-size: 0.86rem; line-height: 1.4; max-width: 60ch; }
+.cumplimiento .id { white-space: nowrap; }
+@media (min-width: 821px) and (min-height: 521px) {
+  html:not(.lectura) .pie-acto.con-nota { display: grid; grid-template-columns: auto minmax(16rem, 1fr); column-gap: clamp(0.9rem, 1.7vw, 2rem); align-items: start; }
+  html:not(.lectura) .pie-acto .cumplimiento { margin-top: 0; padding-top: 0; border-top: 0; border-left: var(--fino) solid color-mix(in srgb, var(--tinta) 30%, transparent); padding-left: clamp(0.9rem, 1.7vw, 2rem); }
+  html:not(.lectura) .pie-acto .cumplimiento p { font-size: 0.86rem; }
+}
+.titular-ancho { grid-column: 1 / -1; }
+.agente { grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.25fr); align-items: start; }
+.agente .lateral p { max-width: 40ch; }
+
+/* Tablas de gaceta con valores atenuados (el que lidera, en tinta plena) */
+table { border-collapse: collapse; width: 100%; font-variant-numeric: tabular-nums lining-nums; }
+caption { text-align: left; }
+.oculto { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+thead th {
+  font-family: var(--titular); font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em;
+  font-size: 1rem; text-align: left; padding: 0.35rem 0.6rem 0.35rem 0;
+  border-bottom: var(--grueso) solid var(--tinta);
+}
+tbody th { text-align: left; font-weight: 400; padding: 0.32rem 0.8rem 0.32rem 0; vertical-align: top; }
+tbody td { padding: 0.32rem 0.6rem 0.32rem 0; vertical-align: top; color: var(--atenuada); }
+tbody tr { border-bottom: var(--fino) solid color-mix(in srgb, var(--tinta) 22%, transparent); }
+td.lidera { color: var(--tinta); font-weight: 700; }
+td .cifra { font-family: var(--titular); font-weight: 700; font-size: 1.2em; letter-spacing: 0.01em; display: block; line-height: 1.05; }
+td.lidera .cifra { font-weight: 800; }
+td small { display: block; font-size: 0.86rem; line-height: 1.35; }
+.tabla-cifras tbody th { width: 30%; }
+
+/* Matriz de fuentes con marcas */
+.matriz thead th:not(:first-child), .matriz tbody td { text-align: center; width: 12%; }
+.matriz tbody th { padding-top: 0.16rem; padding-bottom: 0.16rem; font-size: 0.9rem; }
+.matriz tbody td { padding-top: 0.16rem; padding-bottom: 0.16rem; color: var(--tinta); }
+.marca { width: 1.05rem; height: 1.05rem; vertical-align: -0.16rem; color: var(--tinta); }
+.marca.anil { color: var(--anil); }
+.glosario .marca { margin-right: 0.45rem; }
+.erratas .dice { font-family: var(--titular); font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; font-size: 0.9em; color: var(--tinta-2); }
+.erratas .errata { display: block; margin-top: 0.15rem; }
+.leyenda { display: flex; flex-wrap: wrap; gap: 0.4rem 1.4rem; font-size: 0.86rem; color: var(--tinta-2); margin: 0.2rem 0 0; padding: 0; list-style: none; }
+.leyenda li { display: flex; align-items: center; gap: 0.4rem; }
+.matriz .grupo th {
+  font-family: var(--titular); font-weight: 800; text-transform: uppercase; letter-spacing: 0.06em;
+  color: var(--anil); font-size: 0.82rem; padding-top: 0.45rem; border-bottom: var(--fino) solid var(--anil);
+}
+/* El momento de la matriz: las marcas se imprimen fila por fila, sin transición */
+.lamina[data-golpe] .matriz tbody td svg { opacity: 0.16; }
+.lamina[data-golpe].impresa .matriz tbody td svg { opacity: 1; }
+
+/* Cronología */
+.cronologia { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); grid-template-rows: repeat(4, auto); grid-auto-flow: column; gap: 0 2rem; }
+.cronologia li { display: grid; grid-template-columns: 4.2rem 1fr; gap: 0.7rem; padding: 0.5rem 0; border-top: var(--fino) solid color-mix(in srgb, var(--tinta) 28%, transparent); }
+.cronologia .anio { font-family: var(--titular); font-weight: 800; font-size: 1.55rem; line-height: 1; font-variant-numeric: tabular-nums; }
+.cronologia p { margin: 0; font-size: 0.95rem; line-height: 1.38; }
+.cronologia .quien { font-family: var(--titular); font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; font-size: 1.04em; color: var(--anil); }
+.cronologia .quien::after { content: ". "; }
+.cronologia .dato { display: block; margin-top: 0.15rem; font-size: 0.86rem; }
+.cronologia li.falta .anio, .cronologia li.falta p { color: var(--atenuada); }
+
+/* Resolución con artículos */
+.articulos { list-style: none; margin: 0; padding: 0; counter-reset: art; display: grid; grid-template-columns: repeat(auto-fit, minmax(19rem, 1fr)); gap: 0.2rem 2.2rem; }
+.articulos li { counter-increment: art; padding: 0.6rem 0; border-top: var(--fino) solid color-mix(in srgb, var(--tinta) 28%, transparent); }
+.articulos li::before {
+  content: "Artículo " counter(art) "."; display: block;
+  font-family: var(--titular); font-weight: 800; text-transform: uppercase; letter-spacing: 0.06em; color: var(--anil); font-size: 1rem;
+}
+.articulos p { margin: 0.15rem 0 0; font-size: 0.98rem; }
+
+/* Botón fijo al sumario, solo en lectura continua */
+.ir-sumario {
+  display: none; position: fixed; left: 0; right: 0; bottom: 0; z-index: 5; width: 100%;
+  justify-content: space-between; align-items: center; gap: 1rem;
+  font-family: var(--titular); font-weight: 700; font-size: 1rem; text-transform: uppercase; letter-spacing: 0.05em;
+  background: var(--papel); color: var(--tinta); border: 0; border-top: var(--grueso) solid var(--tinta);
+  padding: 0.55rem 1rem calc(0.55rem + env(safe-area-inset-bottom, 0px)); min-height: 2.75rem; cursor: pointer; text-align: left;
+}
+.ir-sumario .ir-donde { font-weight: 600; color: var(--tinta-2); }
+.ir-sumario:hover { background: var(--tinta); color: var(--papel); }
+.ir-sumario:hover .ir-donde { color: var(--papel); }
+.lectura .ir-sumario { display: flex; }
+.lectura .gaceta { padding-bottom: 3.5rem; }
+
+/* Panel de sumario (navegación) */
+.panel-sumario {
+  position: fixed; inset: 0 0 0 auto; width: min(26rem, 92vw); z-index: 10;
+  background: var(--papel); border-left: var(--grueso) solid var(--tinta);
+  padding: 1.4rem 1.6rem; overflow: auto; box-shadow: -8px 0 24px rgba(21,21,21,0.18);
+}
+.panel-sumario[hidden] { display: none; }
+.panel-sumario h3 { margin-bottom: 0.6rem; }
+.panel-sumario .cerrar { margin-top: 1rem; }
+.panel-sumario .navegacion.cerrar { display: flex; }
+
+/* ---------- Lectura continua: pantallas angostas, ?modo=lectura e impresión ---------- */
+@media (max-width: 820px), (max-height: 520px) {
+  html { font-size: 106.25%; }
+  h1 { font-size: clamp(2.3rem, 9.5vw, 3.6rem); }
+  h2 { font-size: clamp(1.8rem, 7.4vw, 2.6rem); }
+  .sumario { font-size: 1.08rem; }
+  .gaceta .lamina { position: relative; visibility: visible; min-height: auto; padding-bottom: 2.2rem; }
+  .gaceta .lamina + .lamina { border-top: var(--grueso) solid var(--tinta); }
+  .portada, .dos-col, .agente, .matriz-lam { grid-template-columns: 1fr; }
+  .despacho { grid-template-columns: 1fr; gap: 1rem; }
+  .despacho > div + div { border-left: 0; padding-left: 0; margin-left: 0; border-top: var(--fino) solid color-mix(in srgb, var(--tinta) 30%, transparent); padding-top: 0.8rem; }
+  .matriz-lam .lateral .leyenda { flex-direction: row; }
+  .notas { columns: 1; }
+  .cronologia { grid-template-columns: 1fr; grid-template-rows: none; grid-auto-flow: row; }
+  .tabla-ancha table.matriz { min-width: 0; }
+  .matriz thead th:not(:first-child), .matriz tbody td { width: 3.4rem; }
+  .matriz thead th { font-size: 0.78rem; letter-spacing: 0.02em; }
+  .cuerpo > *, .pie > * { min-width: 0; }
+  .cabezal { grid-template-columns: 1fr auto; }
+  .cabezal .edicion { grid-column: 1 / -1; grid-row: 2; text-align: left; }
+  .ir-sumario { display: flex; }
+  .gaceta { padding-bottom: 3.5rem; }
+  .dos-col > .titular-ancho + * + * { border-left: 0; padding-left: 0; }
+  .navegacion { display: none; }
+  .pie { grid-template-columns: 1fr; }
+  .cuerpo { overflow: visible; }
+  .tabla-ancha { overflow-x: auto; }
+  .tabla-ancha table { min-width: 34rem; }
+  .lamina[data-golpe] .matriz tbody td svg { opacity: 1; }
+}
+.lectura .lamina { position: relative; visibility: visible; }
+.lectura .lamina + .lamina { border-top: var(--grueso) solid var(--tinta); }
+.lectura .navegacion { display: none; }
+
+@media print {
+  @page { size: A4 landscape; margin: 10mm; }
+  body { background: #fff; }
+  .lamina { position: relative; visibility: visible; break-after: page; padding: 0; min-height: 0; background: #fff; }
+  .cuerpo { overflow: visible; }
+  .navegacion, .panel-sumario, .ir-sumario { display: none !important; }
+  .lamina[data-golpe] .matriz tbody td svg { opacity: 1; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .lamina[data-golpe] .matriz tbody td svg { opacity: 1; }
+}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <defs>
+    <symbol id="m-desc" viewBox="0 0 16 16"><rect x="2" y="2" width="12" height="12" fill="currentColor"/></symbol>
+    <symbol id="m-loc" viewBox="0 0 16 16"><rect x="2.75" y="2.75" width="10.5" height="10.5" fill="none" stroke="currentColor" stroke-width="1.5"/></symbol>
+    <symbol id="m-parc" viewBox="0 0 16 16"><rect x="2.75" y="2.75" width="10.5" height="10.5" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M2.75 13.25 L13.25 2.75 L13.25 13.25 Z" fill="currentColor"/></symbol>
+    <symbol id="m-bloq" viewBox="0 0 16 16"><rect x="2.75" y="2.75" width="10.5" height="10.5" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M3 3 L13 13 M13 3 L3 13" stroke="currentColor" stroke-width="1.5"/></symbol>
+    <symbol id="m-no" viewBox="0 0 16 16"><path d="M3 8 H13" stroke="currentColor" stroke-width="1.6"/></symbol>
+  </defs>
+</svg>
+
+<main class="gaceta" id="gaceta">
+
+<!-- 1 · Portada -->
+<section class="lamina" id="l1" aria-label="Portada">
+  <header class="cabezal"><span class="nombre">Ríos Abiertos GT</span><span class="edicion">Gaceta de hallazgos · edición de evaluación</span><span class="fecha">Jueves 22 oct. 2026 · corte 08:18</span></header>
+  <div class="cuerpo portada">
+    <div>
+      <h1>Guatemala mide su agua. Casi nada de eso es abierto.</h1>
+      <p class="sumario">Tres agentes recibieron el mismo encargo: encontrar y descargar los datos públicos de agua del país, con prioridad en el Motagua y el Río Las Vacas. Ninguno lo encontró todo. <strong>Codex</strong> halló las bases oficiales del INE, <strong>Antigravity</strong> extrajo los datos del Motagua y <strong>Claude</strong> armó el inventario más amplio y trazable.</p>
+      <p class="nota-sola">Esta gaceta resume los hallazgos de Claude y los compara con las carpetas <span class="dato">Investigación ChatGPT</span> (Codex) e <span class="dato">Investigación Antigravity</span>, leídas sin modificarlas. Las otras dos carpetas seguían en trabajo a la hora de corte.</p>
+    </div>
+    <nav class="indice" aria-label="Sumario">
+      <h2 class="h-menor">Sumario</h2>
+      <ol id="indice-portada"></ol>
+    </nav>
+    <div class="despacho" aria-label="Veredicto por agente">
+      <div><h2 class="linea"><span class="nombre-agente">Claude.</span> 2 116 recursos, 300 archivos</h2><p>El inventario más amplio y trazable, con la base cruda de AMSA y 20 capas oficiales.</p></div>
+      <div><h2 class="linea"><span class="nombre-agente">Codex.</span> 37 archivos oficiales del INE</h2><p>Las bases 2022-2024 del MSPAS, el INSIVUMEH, AMSA y EMPAGUA que nadie más halló.</p></div>
+      <div><h2 class="linea"><span class="nombre-agente">Antigravity.</span> 32 puntos en el Motagua</h2><p>La tesis ERIS 2025, la campaña de The Ocean Cleanup y HydroRIVERS, ya extraídos.</p></div>
+    </div>
+  </div>
+  <footer class="pie"><p class="procedencia"><b>Procedencia.</b> <span class="dato">Investigación Claude/01_inventario/</span> y los inventarios de las carpetas hermanas. Redactó: Claude (Opus 5.5), 21-oct-2026; actualizada el 22-oct-2026 con las bases del INE (láminas 1, 3, 7, 9, 10 y 12).</p><nav class="navegacion" aria-label="Láminas"></nav></footer>
+</section>
+
+<!-- 2 · Método -->
+<section class="lamina holgada" id="l2" aria-label="Cómo se comparó">
+  <header class="cabezal"><span class="nombre">Ríos Abiertos GT</span><span class="edicion">Cómo se comparó</span><span class="fecha"></span></header>
+  <div class="cuerpo dos-col">
+    <h2 class="titular-ancho">Los conteos no miden lo mismo. Los hallazgos únicos, sí.</h2>
+    <ol class="considerando">
+      <li><span class="rotulo">Considerando</span>que los tres agentes recibieron el mismo prompt el 21 de octubre de 2026 y guardaron su trabajo en carpetas hermanas;</li>
+      <li>que un "recurso" significa cosas distintas en cada entrega: Claude cuenta cada informe, tesis y capa; Codex cuenta archivos y portales; Antigravity cuenta 30 conjuntos maestros y guarda 248 obras de OpenAlex en un archivo aparte<sup class="ref">1</sup>;</li>
+      <li>que las cifras de los otros agentes se tomaron de sus propios inventarios y se comprobaron abriendo sus archivos de datos<sup class="ref">2</sup>;</li>
+      <li>que el volumen descargado depende de pocos archivos grandes (GFQA, HydroRIVERS, capas SIG) y no de la calidad del hallazgo.</li>
+    </ol>
+    <ol class="considerando glosario">
+      <li><span class="rotulo">Glosario de marcas</span><svg class="marca" aria-hidden="true"><use href="#m-desc"/></svg><b>Descargado:</b> el archivo de datos está en la carpeta del agente.</li>
+      <li><svg class="marca" aria-hidden="true"><use href="#m-parc"/></svg><b>Parcial:</b> solo una parte o un derivado, como cortes anuales o boletines en PDF.</li>
+      <li><svg class="marca" aria-hidden="true"><use href="#m-loc"/></svg><b>Localizado:</b> registrada con URL o metadatos, sin descarga.</li>
+      <li><svg class="marca" aria-hidden="true"><use href="#m-bloq"/></svg><b>Bloqueado:</b> la fuente existe, pero su servidor rechaza el acceso automático.</li>
+      <li><svg class="marca" aria-hidden="true"><use href="#m-no"/></svg><b>No hallado:</b> la fuente no aparece en el inventario de ese agente.</li>
+    </ol>
+    <div class="portanto pie-acto"><span class="rotulo">Por tanto</span><p>La comparación se hace por fuente: qué encontró cada agente, quién lo descargó, qué es único y qué falta a los tres.</p></div>
+  </div>
+  <footer class="pie"><div class="pie-texto"><ol class="notas"><li data-n="1">Antigravity: <span class="dato">inventories/master_data_inventory.csv</span> (30 filas) y <span class="dato">data/raw/publications/openalex_relevant_works.json</span> (248 obras).</li><li data-n="2">Codex: <span class="dato">Ghagpt/data/processed/resource_profiles.csv</span>; Antigravity: <span class="dato">data/processed/*.csv</span>. Corte: 21-oct-2026, 21:30.</li></ol><p class="firma">Firmado: Claude (Opus 5.5) · 21-oct-2026, 21:30</p></div><nav class="navegacion" aria-label="Láminas"></nav></footer>
+</section>
+
+<!-- 3 · Cifras -->
+<section class="lamina" id="l3" aria-label="Cifras de cada entrega">
+  <header class="cabezal"><span class="nombre">Ríos Abiertos GT</span><span class="edicion">Cifras de cada entrega</span><span class="fecha"></span></header>
+  <div class="cuerpo">
+    <h2>Claude reunió más; los otros dos fueron más hondo en menos fuentes.</h2>
+    <div class="tabla-ancha">
+    <table class="tabla-cifras">
+      <caption class="oculto">Cifras de cada entrega; en cada fila, el valor más alto va en tinta plena.</caption>
+      <thead><tr><th scope="col">Indicador</th><th scope="col">Claude</th><th scope="col">Codex</th><th scope="col">Antigravity</th></tr></thead>
+      <tbody>
+        <tr><th scope="row">Recursos en el inventario principal</th><td class="lidera"><span class="cifra">2 116</span><small>tras quitar 347 duplicados</small></td><td><span class="cifra">113</span><small>75 descargados</small></td><td><span class="cifra">30</span><small>conjuntos maestros</small></td></tr>
+        <tr><th scope="row">Publicaciones con metadatos</th><td class="lidera"><span class="cifra">1 494</span><small>769 tesis</small></td><td><span class="cifra">10</span><small>clave, en tabla aparte</small></td><td><span class="cifra">254</span><small>248 de OpenAlex y 6 tesis</small></td></tr>
+        <tr><th scope="row">Archivos originales descargados</th><td class="lidera"><span class="cifra">300</span><small>con SHA-256</small></td><td><span class="cifra">75</span><small>con SHA-256</small></td><td><span class="cifra">31</span><small>en <span class="dato">data/raw</span>; su informe dice 28 primarios</small></td></tr>
+        <tr><th scope="row">Volumen descargado</th><td class="lidera"><span class="cifra">1,80 GB</span><small>501 MB son capas SIG del MARN</small></td><td><span class="cifra">303 MB</span><small>201 MB son el ZIP de GEMStat</small></td><td><span class="cifra">166 MB</span><small>66 MB son HydroRIVERS</small></td></tr>
+        <tr><th scope="row">Organizaciones</th><td class="lidera"><span class="cifra">69</span><small>investigadas de forma dirigida</small></td><td><span class="cifra">42</span><small>en su resumen por fuente</small></td><td><span class="cifra">22</span><small>evaluadas</small></td></tr>
+        <tr><th scope="row">Faltantes documentados</th><td class="lidera"><span class="cifra">34</span><small>con causa y acción</small></td><td><span class="cifra">16</span><small>con prioridad</small></td><td><span class="cifra">8</span></td></tr>
+        <tr><th scope="row">Productos además del inventario</th><td>Informe, libro Excel y esta gaceta</td><td class="lidera">Informe, tablero React, catálogo PDF y presentación</td><td>Informe, mapa interactivo y presentación</td></tr>
+      </tbody>
+    </table>
+    </div>
+  </div>
+  <footer class="pie"><div class="pie-texto"><p class="procedencia"><b>Lectura.</b> En cada fila, el valor más alto va en tinta plena. Claude incluye las 37 bases del INE (22-oct); los otros dos inventarios no cambiaron desde el 21-oct. <b>Fuentes.</b> <span class="dato">01_inventario/estadisticas_inventario.json</span> (Claude) · <span class="dato">Ghagpt/README.md</span> e <span class="dato">inventories/*.csv</span> (Codex) · <span class="dato">report/INFORME_EJECUTIVO_RIOS_ABIERTOS_GT.md</span> e <span class="dato">inventories/*.csv</span> (Antigravity).</p><p class="firma">Firmado: Claude (Opus 5.5) · 22-oct-2026, 08:18</p></div><nav class="navegacion" aria-label="Láminas"></nav></footer>
+</section>
+
+<!-- 4 · Claude -->
+<section class="lamina holgada" id="l4" aria-label="Hallazgos de Claude">
+  <header class="cabezal"><span class="nombre">Ríos Abiertos GT</span><span class="edicion">Hallazgos de Claude</span><span class="fecha"></span></header>
+  <div class="cuerpo agente">
+    <div class="lateral">
+      <h2>Claude: el inventario más amplio y la base cruda de Amatitlán</h2>
+      <p class="sumario" style="margin-top:1rem">Cada fila tiene ID, URL verificada y, si se descargó, su checksum. Lo que no se pudo obtener quedó en un registro de 34 faltantes con causa y siguiente paso.</p>
+      <div class="portanto"><span class="rotulo">Por tanto</span><p>Aporta amplitud y trazabilidad. Su punto débil está en la lámina 9.</p></div>
+    </div>
+    <ol class="considerando">
+      <li><span class="rotulo">Considerando</span>la base de control ambiental de AMSA: <strong>1 607 muestras de 2018 a 2024</strong> del Lago de Amatitlán y 8 ríos, con más de 50 parámetros, entre ellos arsénico, plomo, mercurio y microcistinas<sup class="ref">1</sup>;</li>
+      <li><strong>20 capas oficiales</strong> MAGA, IGN y MARN en GeoJSON: 10 934 tramos de río, 38 cuencas, 313 subcuencas, 2 391 microcuencas y 1 660 fuentes de agua<sup class="ref">2</sup>;</li>
+      <li><strong>62 informes de la DIGI-USAC</strong> (Motagua 2003, 2008 y 2024; Las Vacas 2021) y 844 tesis y artículos de los repositorios de la USAC y la UVG;</li>
+      <li>fuentes que solo aparecen en esta carpeta: DesInventar (7 588 fichas, 1905-2015), 1 908 puntos de agua de WPdx, la cuenta de agua del BANGUAT 2013-2024 y 49 informes de AMSCLAE;</li>
+      <li>que el servicio nacional de calidad de agua del MARN existe, <span class="dato">Calidad_Agua_DINA_monitoreos</span>, pero su servidor bloquea todo acceso automatizado<sup class="ref">3</sup>.</li>
+    </ol>
+  </div>
+  <footer class="pie"><div class="pie-texto"><ol class="notas"><li data-n="1">GT-DAT-0006 · <span class="dato">02_datos_originales/AMSA/4.-ESTADISTICAS-DE-LA-DIVISION-DE-CONTROL-AMBIENTAL.xlsx</span>, hoja BD.</li><li data-n="2">GT-DAT-0039 a GT-DAT-0058 · <span class="dato">02_datos_originales/MARN_ArcGIS/</span>.</li><li data-n="3">GT-POR-0012 · registro de faltantes, fila MARN-DINA.</li></ol><p class="firma">Firmado: Claude (Opus 5.5) · 21-oct-2026, 21:30</p></div><nav class="navegacion" aria-label="Láminas"></nav></footer>
+</section>
+
+<!-- 5 · Codex -->
+<section class="lamina holgada" id="l5" aria-label="Hallazgos de Codex">
+  <header class="cabezal"><span class="nombre">Ríos Abiertos GT</span><span class="edicion">Hallazgos de Codex</span><span class="fecha"></span></header>
+  <div class="cuerpo agente">
+    <div class="lateral">
+      <h2>Codex: la puerta oficial que los otros no vieron</h2>
+      <p class="sumario" style="margin-top:1rem">Su gran acierto fue el portal de datos del INE, que publica con licencia abierta las bases de varias instituciones que no las publican en sus propios sitios.</p>
+      <div class="portanto"><span class="rotulo">Por tanto</span><p>Es el hallazgo de mayor valor oficial del ejercicio y corrige dos faltantes de Claude.</p></div>
+    </div>
+    <ol class="considerando">
+      <li><span class="rotulo">Considerando</span><strong>37 archivos oficiales de 2022 a 2024</strong> del portal <span class="dato">datos.ine.gob.gt</span> (licencia CC BY): caudales y calidad del INSIVUMEH, vigilancia de cloro y bacteriología del MSPAS, calidad y PTAR de AMSA, limnología de AMSCLAE y producción de agua de EMPAGUA<sup class="ref">1</sup>;</li>
+      <li>que esos archivos suman 41 120, 40 323 y 40 679 filas por año, muchas en formato largo (una fila por parámetro)<sup class="ref">1</sup>;</li>
+      <li>tres series diarias de NASA POWER de 2001 a 2025 para Las Vacas, Motagua medio y la desembocadura, con 27 393 filas<sup class="ref">2</sup>;</li>
+      <li>la estación NALMS del Lago de Atitlán en el Water Quality Portal y el artículo de Estrada et al. (2026) sobre fármacos en Las Vacas;</li>
+      <li>un tablero React y un catálogo PDF de fuentes, más allá del inventario.</li>
+    </ol>
+  </div>
+  <footer class="pie"><div class="pie-texto"><ol class="notas"><li data-n="1">Inventario de Codex, filas GTW-001 a GTW-014 y GTW-053 a GTW-075; conteos en <span class="dato">resource_profiles.csv</span>.</li><li data-n="2">GTW-031 a GTW-033; 9 131 filas cada una.</li></ol><p class="firma">Firmado: Claude (Opus 5.5) · 21-oct-2026, 21:30</p></div><nav class="navegacion" aria-label="Láminas"></nav></footer>
+</section>
+
+<!-- 6 · Antigravity -->
+<section class="lamina holgada" id="l6" aria-label="Hallazgos de Antigravity">
+  <header class="cabezal"><span class="nombre">Ríos Abiertos GT</span><span class="edicion">Hallazgos de Antigravity</span><span class="fecha"></span></header>
+  <div class="cuerpo agente">
+    <div class="lateral">
+      <h2>Antigravity: los datos del Motagua, extraídos y listos</h2>
+      <p class="sumario" style="margin-top:1rem">Pocas fuentes, pero convertidas en tablas y capas usables para la prioridad del encargo: la cuenca del Motagua y el Río Las Vacas.</p>
+      <div class="portanto"><span class="rotulo">Por tanto</span><p>Es el mejor trabajo de extracción sobre el Motagua. Dos datos piden cautela: la procedencia y la cobertura de su base del INSIVUMEH.</p></div>
+    </div>
+    <ol class="considerando">
+      <li><span class="rotulo">Considerando</span>la tesis de maestría ERIS-USAC de 2025: <strong>32 puntos con coordenadas</strong> en Las Vacas y el Motagua, con DBO, DQO, oxígeno y fármacos; la cafeína llega a 70 442 ng/L. La extrajo a CSV<sup class="ref">1</sup>;</li>
+      <li>la campaña 2019 de The Ocean Cleanup en Morales (figshare): flujo mensual de macroplástico en el Motagua;</li>
+      <li>140 desembocaduras con emisión de plástico estimada (Meijer et al., 2021) y <strong>23 057 tramos de HydroRIVERS</strong>, 1 626 de ellos en la red del Motagua;</li>
+      <li>bases de estaciones del INSIVUMEH tomadas de repositorios GitHub de terceros: 6 617 registros de 64 estaciones que solo cubren de mayo a julio de 2023, aunque su informe las llama "base histórica"<sup class="ref">2</sup>;</li>
+      <li>un mapa interactivo de la cuenca.</li>
+    </ol>
+  </div>
+  <footer class="pie"><div class="pie-texto"><ol class="notas"><li data-n="1"><span class="dato">data/processed/USAC_ERIS_Motagua_LasVacas_2025_Monitoring_Data.csv</span> (32 filas).</li><li data-n="2"><span class="dato">INSIVUMEH_Estaciones_Database.csv</span>, fechas 01/05/2023 a 31/07/2023. Su informe dice además que "se eludieron barreras de visualización"; conviene confirmar qué significa.</li></ol><p class="firma">Firmado: Claude (Opus 5.5) · 21-oct-2026, 21:30</p></div><nav class="navegacion" aria-label="Láminas"></nav></footer>
+</section>
+
+<!-- 7 · Matriz -->
+<section class="lamina" id="l7" aria-label="Quién tiene qué" data-golpe>
+  <header class="cabezal"><span class="nombre">Ríos Abiertos GT</span><span class="edicion">Quién tiene qué</span><span class="fecha"></span></header>
+  <div class="cuerpo matriz-lam">
+    <div class="lateral">
+      <h2>Cada carpeta tiene algo que las otras no.</h2>
+      <ul class="leyenda" aria-label="Leyenda de marcas">
+        <li><svg class="marca" aria-hidden="true"><use href="#m-desc"/></svg>Descargado</li>
+        <li><svg class="marca" aria-hidden="true"><use href="#m-parc"/></svg>Parcial</li>
+        <li><svg class="marca" aria-hidden="true"><use href="#m-loc"/></svg>Localizado</li>
+        <li><svg class="marca" aria-hidden="true"><use href="#m-bloq"/></svg>Bloqueado</li>
+        <li><svg class="marca" aria-hidden="true"><use href="#m-no"/></svg>No hallado</li>
+      </ul>
+      <p class="nota-sola">Ninguna columna está llena: la base oficial la halló Codex y Claude la sumó el 22-oct; la base cruda y la geografía están en Claude, y la extracción del Motagua en Antigravity.</p>
+    </div>
+    <div class="tabla-ancha">
+    <table class="matriz">
+      <caption class="oculto">Fuentes clave y su estado en cada carpeta</caption>
+      <thead><tr><th scope="col">Fuente</th><th scope="col">Claude</th><th scope="col">Codex</th><th scope="col">Antigravity</th></tr></thead>
+      <tbody>
+        <tr class="grupo"><th colspan="4" scope="colgroup">Datos medidos</th></tr>
+        <tr><th scope="row">Portal INE, recursos hídricos 2022-2024</th><td><svg class="marca" role="img" aria-label="Descargado, sumado el 22-oct"><use href="#m-desc"/></svg></td><td><svg class="marca" role="img" aria-label="Descargado"><use href="#m-desc"/></svg></td><td><svg class="marca" role="img" aria-label="No hallado"><use href="#m-no"/></svg></td></tr>
+        <tr><th scope="row">AMSA, monitoreo de Amatitlán</th><td><svg class="marca" role="img" aria-label="Descargado, base cruda 2018-2024"><use href="#m-desc"/></svg></td><td><svg class="marca" role="img" aria-label="Parcial, cortes anuales"><use href="#m-parc"/></svg></td><td><svg class="marca" role="img" aria-label="Localizado"><use href="#m-loc"/></svg></td></tr>
+        <tr><th scope="row">Lago de Atitlán, UVG 2010-2024 (Zenodo)</th><td><svg class="marca" role="img" aria-label="Descargado"><use href="#m-desc"/></svg></td><td><svg class="marca" role="img" aria-label="Descargado"><use href="#m-desc"/></svg></td><td><svg class="marca" role="img" aria-label="No hallado"><use href="#m-no"/></svg></td></tr>
+        <tr><th scope="row">Vigilancia del MSPAS (cloro, bacteriología)</th><td><svg class="marca" role="img" aria-label="Descargado, cortes anuales del INE"><use href="#m-desc"/></svg></td><td><svg class="marca" role="img" aria-label="Descargado"><use href="#m-desc"/></svg></td><td><svg class="marca" role="img" aria-label="No hallado"><use href="#m-no"/></svg></td></tr>
+        <tr><th scope="row">Caudales del INSIVUMEH (bases)</th><td><svg class="marca" role="img" aria-label="Descargado, cortes anuales del INE"><use href="#m-desc"/></svg></td><td><svg class="marca" role="img" aria-label="Descargado"><use href="#m-desc"/></svg></td><td><svg class="marca" role="img" aria-label="Parcial, solo boletines"><use href="#m-parc"/></svg></td></tr>
+        <tr><th scope="row">ICC, ríos de la costa sur</th><td><svg class="marca" role="img" aria-label="Descargado"><use href="#m-desc"/></svg></td><td><svg class="marca" role="img" aria-label="Descargado"><use href="#m-desc"/></svg></td><td><svg class="marca" role="img" aria-label="No hallado"><use href="#m-no"/></svg></td></tr>
+        <tr><th scope="row">Tesis ERIS-USAC 2025, fármacos en el Motagua</th><td><svg class="marca" role="img" aria-label="Localizado"><use href="#m-loc"/></svg></td><td><svg class="marca" role="img" aria-label="No hallado"><use href="#m-no"/></svg></td><td><svg class="marca" role="img" aria-label="Descargado"><use href="#m-desc"/></svg></td></tr>
+        <tr><th scope="row">The Ocean Cleanup, campaña Motagua 2019</th><td><svg class="marca" role="img" aria-label="Localizado"><use href="#m-loc"/></svg></td><td><svg class="marca" role="img" aria-label="Localizado"><use href="#m-loc"/></svg></td><td><svg class="marca" role="img" aria-label="Descargado"><use href="#m-desc"/></svg></td></tr>
+        <tr class="grupo"><th colspan="4" scope="colgroup">Geografía y modelos</th></tr>
+        <tr><th scope="row">Red fluvial y cuencas oficiales (MAGA/IGN)</th><td><svg class="marca" role="img" aria-label="Descargado"><use href="#m-desc"/></svg></td><td><svg class="marca" role="img" aria-label="No hallado"><use href="#m-no"/></svg></td><td><svg class="marca" role="img" aria-label="Parcial, copia en GitHub"><use href="#m-parc"/></svg></td></tr>
+        <tr><th scope="row">HydroRIVERS (HydroSHEDS)</th><td><svg class="marca" role="img" aria-label="Localizado"><use href="#m-loc"/></svg></td><td><svg class="marca" role="img" aria-label="Localizado"><use href="#m-loc"/></svg></td><td><svg class="marca" role="img" aria-label="Descargado"><use href="#m-desc"/></svg></td></tr>
+        <tr><th scope="row">Clima satelital (NASA POWER, CHIRPS)</th><td><svg class="marca" role="img" aria-label="Localizado"><use href="#m-loc"/></svg></td><td><svg class="marca" role="img" aria-label="Descargado"><use href="#m-desc"/></svg></td><td><svg class="marca" role="img" aria-label="No hallado"><use href="#m-no"/></svg></td></tr>
+        <tr><th scope="row">DesInventar, desastres 1905-2015</th><td><svg class="marca" role="img" aria-label="Descargado"><use href="#m-desc"/></svg></td><td><svg class="marca" role="img" aria-label="No hallado"><use href="#m-no"/></svg></td><td><svg class="marca" role="img" aria-label="No hallado"><use href="#m-no"/></svg></td></tr>
+        <tr class="grupo"><th colspan="4" scope="colgroup">Coinciden</th></tr>
+        <tr><th scope="row">GEMStat GFQA v3: cero estaciones de Guatemala</th><td><svg class="marca" role="img" aria-label="Descargado"><use href="#m-desc"/></svg></td><td><svg class="marca" role="img" aria-label="Descargado"><use href="#m-desc"/></svg></td><td><svg class="marca" role="img" aria-label="Descargado"><use href="#m-desc"/></svg></td></tr>
+        <tr><th scope="row">MARN, calidad de agua nacional</th><td><svg class="marca" role="img" aria-label="Bloqueado"><use href="#m-bloq"/></svg></td><td><svg class="marca" role="img" aria-label="Localizado"><use href="#m-loc"/></svg></td><td><svg class="marca" role="img" aria-label="Bloqueado"><use href="#m-bloq"/></svg></td></tr>
+      </tbody>
+    </table>
+    </div>
+  </div>
+  <footer class="pie"><div class="pie-texto"><p class="procedencia"><b>Lectura.</b> Estado según el inventario de cada carpeta. "Parcial" en AMSA para Codex: cortes anuales del INE en lugar de la base cruda; en caudales para Antigravity: boletines PDF, no bases.</p><p class="firma">Firmado: Claude (Opus 5.5) · 22-oct-2026, 08:18</p></div><nav class="navegacion" aria-label="Láminas"></nav></footer>
+</section>
+
+<!-- 8 · Consenso -->
+<section class="lamina holgada" id="l8" aria-label="En qué coinciden">
+  <header class="cabezal"><span class="nombre">Ríos Abiertos GT</span><span class="edicion">En qué coinciden</span><span class="fecha"></span></header>
+  <div class="cuerpo dos-col">
+    <h2 class="titular-ancho">Los tres llegaron a las mismas paredes.</h2>
+    <ol class="considerando">
+      <li><span class="rotulo">Considerando</span>que el archivo abierto de GEMStat no tiene ni una estación de Guatemala: 22 981 estaciones de 42 países, ninguna guatemalteca<sup class="ref">1</sup>;</li>
+      <li>que el servidor SIG del MARN y su sitio responden con un bloqueo a clientes automáticos<sup class="ref">2</sup>;</li>
+      <li>que no hay series históricas públicas de caudal por estación del INSIVUMEH: el INE publica cortes anuales y la red existe desde 1962<sup class="ref">3</sup>;</li>
+      <li>que el Motagua no tiene monitoreo continuo publicado: hay campañas puntuales de la USAC, ERIS y The Ocean Cleanup;</li>
+    </ol>
+    <ol class="considerando">
+      <li><span class="rotulo">Considerando además</span>que la coloración roja del Río Las Vacas del 14 de septiembre de 2026 sigue sin resultados de laboratorio publicados (Claude y Codex)<sup class="ref">4</sup>;</li>
+      <li>que The Ocean Cleanup y 4ocean publican cifras agregadas, no sus series de captura<sup class="ref">5</sup>;</li>
+      <li>que el MARN cita su red nacional con cifras distintas según la fuente: 82 puntos con ISQA en 2024 (prensa, citada por Claude) y 22 puntos 2024-2025 (memoria de labores, citada por Codex)<sup class="ref">6</sup>. Ninguno pudo verificarlo.</li>
+    </ol>
+    <div class="portanto pie-acto"><span class="rotulo">Por tanto</span><p>Ninguna de estas paredes se salta buscando más: se piden por ley de acceso, como detalla la lámina 11.</p></div>
+  </div>
+  <footer class="pie"><div class="pie-texto"><ol class="notas"><li data-n="1">GT-DAT-0001 · <span class="dato">03_datos_procesados/gemstat/gemstat_paises_estaciones.csv</span>; GTW-041 (Codex); GT-H2O-022 (Antigravity).</li><li data-n="2">GT-POR-0012 (Claude); faltantes de Antigravity, fila MARN.</li><li data-n="3">GT-DAT-0002 y GT-DOC-0194 (JICA); GTW-060 y GTW-066 (Codex).</li><li data-n="4">GT-DOC-0210 (Claude); GTW-103 (Codex).</li><li data-n="5">GT-DOC-0200 y GT-DOC-0201 (Claude); GTW-100 y GTW-101 (Codex).</li><li data-n="6">GT-DOC-0121 (Claude, nota de La Hora, jun-2026); GTW-082 (Codex).</li></ol><p class="firma">Firmado: Claude (Opus 5.5) · 21-oct-2026, 21:30</p></div><nav class="navegacion" aria-label="Láminas"></nav></footer>
+</section>
+
+<!-- 9 · Lo que se me escapó -->
+<section class="lamina holgada" id="l9" aria-label="Lo que se le escapó a Claude">
+  <header class="cabezal"><span class="nombre">Ríos Abiertos GT</span><span class="edicion">Fe de erratas</span><span class="fecha"></span></header>
+  <div class="cuerpo dos-col">
+    <h2 class="titular-ancho">Lo que se le escapó a Claude.</h2>
+    <ol class="considerando">
+      <li><span class="rotulo">Considerando</span>que Claude no encontró el portal <span class="dato">datos.ine.gob.gt</span>, donde Codex descargó los cortes 2022-2024 del MSPAS y del INSIVUMEH<sup class="ref">1</sup>;</li>
+      <li>que la tesis ERIS-USAC 2025 quedó solo como metadatos y la campaña 2019 de The Ocean Cleanup solo como comunicados, sin extraer sus tablas<sup class="ref">2</sup>;</li>
+      <li>que la cosecha OAI de la USAC se cortó tras 6 882 registros y la cuota diaria de OpenAlex se agotó: ahí pudo perderse la tesis ERIS<sup class="ref">3</sup>;</li>
+      <li>que HydroRIVERS, CHIRPS y NASA POWER se registraron sin descargarse<sup class="ref">4</sup>, y que el filtro de palabras clave dejó algunas publicaciones de relevancia marginal.</li>
+    </ol>
+    <ol class="considerando erratas">
+      <li><span class="rotulo">Fe de erratas</span><b>Registro de faltantes, fila MSPAS</b> (vigilancia de agua de consumo).<span class="errata"><span class="dice">Donde dice:</span> "No publicado".</span><span class="errata"><span class="dice">Debe decir:</span> "Cortes 2022-2024 de cloro y bacteriología publicados en el portal del INE; la serie histórica por muestra sigue sin publicarse".</span></li>
+      <li><b>Registro de faltantes, fila INSIVUMEH</b> (servicios hídricos).<span class="errata"><span class="dice">Donde dice:</span> "No publicado".</span><span class="errata"><span class="dice">Debe decir:</span> "Cortes anuales 2022-2024 de caudal y calidad publicados en el portal del INE; las series diarias por estación desde 1962 siguen sin publicarse".</span></li>
+    </ol>
+    <div class="portanto pie-acto con-nota"><div><span class="rotulo">Por tanto</span><p>El registro de faltantes de Claude debe corregir dos filas (MSPAS e INSIVUMEH) y el inventario debe incorporar las fuentes de esta lámina.</p></div><aside class="cumplimiento" aria-label="Nota de cumplimiento"><span class="rotulo">Cumplido en parte · 22-oct-2026</span><p>Registro corregido y 37 bases del INE sumadas al inventario (<span class="id">GT-DAT-0210</span> a <span class="id">-0246</span>). Faltan ERIS, The Ocean Cleanup, HydroRIVERS, CHIRPS y NASA POWER.</p></aside></div>
+  </div>
+  <footer class="pie"><div class="pie-texto"><ol class="notas"><li data-n="1">GTW-001 a GTW-014 y GTW-053 a GTW-075 (Codex); filas MSPAS e INSIVUMEH de <span class="dato">01_inventario/registro_datos_faltantes.csv</span>.</li><li data-n="2">GT-PUB-1034 y GT-DOC-0200 (Claude); GT-H2O-007 y GT-H2O-015 (Antigravity).</li><li data-n="3"><span class="dato">06_registro_busquedas/log_oai_todos.csv</span> y <span class="dato">log_apis_*.csv</span>; <span class="dato">README.md</span>, Limitaciones.</li><li data-n="4">GT-DAT-0033 y GT-DAT-0028 (Claude); GTW-031 a GTW-033 (Codex); GT-H2O-017 (Antigravity).</li></ol><p class="firma">Firmado: Claude (Opus 5.5) · 22-oct-2026, 08:18</p></div><nav class="navegacion" aria-label="Láminas"></nav></footer>
+</section>
+
+<!-- 10 · Motagua -->
+<section class="lamina" id="l10" aria-label="Cuenca del Motagua">
+  <header class="cabezal"><span class="nombre">Ríos Abiertos GT</span><span class="edicion">Prioridad: Motagua y Las Vacas</span><span class="fecha"></span></header>
+  <div class="cuerpo">
+    <h2>Sumadas las tres carpetas, el Motagua tiene evidencia dispersa desde 2001.</h2>
+    <ol class="cronologia">
+      <li><span class="anio">2001-25</span><p><span class="quien">Codex</span>NASA POWER: clima diario de Las Vacas, Motagua medio y desembocadura.<span class="dato">GTW-031 a GTW-033</span></p></li>
+      <li><span class="anio">2003</span><p><span class="quien">Claude</span>DIGI-USAC: contaminación del Río Motagua.<span class="dato">GT-DOC-0137</span></p></li>
+      <li><span class="anio">2008</span><p><span class="quien">Claude</span>DIGI-USAC: calidad fisicoquímica y microbiológica en diez puntos del Motagua.<span class="dato">GT-DOC-0144</span></p></li>
+      <li><span class="anio">2019</span><p><span class="quien">Antigravity</span>The Ocean Cleanup: flujo mensual de macroplástico en Morales.<span class="dato">GT-H2O-015</span></p></li>
+      <li><span class="anio">2021</span><p><span class="quien">Claude · Codex · Antigravity</span>USAC: contaminantes emergentes y metales en Las Vacas; índices ISQA y BMWP.<span class="dato">GT-DOC-0181 · GTW-025 · GT-H2O-008</span></p></li>
+      <li><span class="anio">2022-24</span><p><span class="quien">Codex · Claude</span>INE: cortes anuales de caudal y calidad del INSIVUMEH.<span class="dato">GTW-060 · GTW-066 · GT-DAT-0217 · GT-DAT-0237</span></p></li>
+      <li><span class="anio">2023</span><p><span class="quien">Codex</span>Muestreo de fármacos en Las Vacas, publicado por Estrada et al. en 2026.<span class="dato">GTW-106</span></p></li>
+      <li><span class="anio">2024</span><p><span class="quien">Claude</span>DIGI-USAC: metales pesados y contaminantes emergentes en el Motagua.<span class="dato">GT-DOC-0187</span></p></li>
+      <li><span class="anio">2025</span><p><span class="quien">Antigravity</span>Tesis ERIS-USAC: 32 puntos con DBO, DQO y fármacos.<span class="dato">GT-H2O-007</span></p></li>
+      <li class="falta"><span class="anio">2026</span><p><span class="quien">Codex · Claude</span>Muestreo de mayo de la Alianza Cuenca del Motagua: citado, informe no localizado.<span class="dato">GT-DOC-0211 · GTW-102</span></p></li>
+      <li class="falta"><span class="anio">2026</span><p><span class="quien">Claude · Codex</span>Coloración roja de Las Vacas, 14 de septiembre: sin resultados de laboratorio.<span class="dato">GT-DOC-0210 · GTW-103</span></p></li>
+    </ol>
+  </div>
+  <footer class="pie"><div class="pie-texto"><p class="procedencia"><b>Lectura.</b> Códigos GT- del inventario de Claude, GTW- del de Codex y GT-H2O- del de Antigravity. Las filas grises son evidencia citada que ningún agente pudo obtener. Los boletines del INSIVUMEH con caudal instantáneo en Gualán y Panajax aparecen en Claude y Antigravity.</p><p class="firma">Firmado: Claude (Opus 5.5) · 22-oct-2026, 08:18</p></div><nav class="navegacion" aria-label="Láminas"></nav></footer>
+</section>
+
+<!-- 11 · Faltantes compartidos -->
+<section class="lamina holgada" id="l11" aria-label="Lo que falta pedir">
+  <header class="cabezal"><span class="nombre">Ríos Abiertos GT</span><span class="edicion">Lo que falta pedir</span><span class="fecha"></span></header>
+  <div class="cuerpo pila">
+    <h2>Lo que ninguno pudo descargar se pide por ley de acceso.</h2>
+    <div class="tabla-ancha">
+    <table>
+      <thead><tr><th scope="col">Dato faltante</th><th scope="col">Lo documentó</th><th scope="col">A quién pedirlo</th></tr></thead>
+      <tbody>
+        <tr><th scope="row">Base nacional de calidad de agua (servicio DINA)</th><td class="lidera">Claude · Codex · Antigravity</td><td class="lidera">MARN, Unidad de Información Pública</td></tr>
+        <tr><th scope="row">Series diarias de caudal por estación desde 1962</th><td class="lidera">Claude · Codex · Antigravity</td><td class="lidera">INSIVUMEH</td></tr>
+        <tr><th scope="row">Vigilancia de agua de consumo, serie histórica por muestra</th><td class="lidera">Claude · Codex · Antigravity</td><td class="lidera">MSPAS</td></tr>
+        <tr><th scope="row">Resultados de Las Vacas 2026 y muestreo de la Alianza</th><td class="lidera">Claude · Codex</td><td class="lidera">MARN y Alianza Cuenca del Motagua</td></tr>
+        <tr><th scope="row">Registro nacional de PTAR, entes generadores y vertederos</th><td class="lidera">Claude · Codex · Antigravity</td><td class="lidera">MARN</td></tr>
+        <tr><th scope="row">Niveles y calidad de pozos del área metropolitana</th><td class="lidera">Claude · Codex · Antigravity</td><td class="lidera">FUNCAGUA, ICC, EMPAGUA e INFOM</td></tr>
+        <tr><th scope="row">Series de captura de residuos en Las Vacas y el Motagua</th><td class="lidera">Claude · Codex · Antigravity</td><td class="lidera">The Ocean Cleanup y 4ocean</td></tr>
+      </tbody>
+    </table>
+    </div>
+    <div class="portanto pie-acto"><span class="rotulo">Por tanto</span><p>Siete solicitudes de acceso a la información cubren lo que ningún agente pudo descargar; la primera debe ser la base DINA del MARN.</p></div>
+  </div>
+  <footer class="pie"><div class="pie-texto"><p class="procedencia"><b>Base legal.</b> Ley de Acceso a la Información Pública, Decreto 57-2008. Detalle de cada caso en <span class="dato">01_inventario/registro_datos_faltantes.csv</span>.</p><p class="firma">Firmado: Claude (Opus 5.5) · 21-oct-2026, 21:30</p></div><nav class="navegacion" aria-label="Láminas"></nav></footer>
+</section>
+
+<!-- 12 · Resolución -->
+<section class="lamina holgada" id="l12" aria-label="Cómo combinar las tres carpetas">
+  <header class="cabezal"><span class="nombre">Ríos Abiertos GT</span><span class="edicion">Resolución</span><span class="fecha"></span></header>
+  <div class="cuerpo pila">
+    <h2>La plataforma necesita las tres carpetas, no una ganadora.</h2>
+    <ol class="articulos">
+      <li><p><strong>Base oficial:</strong> los 37 archivos del INE 2022-2024 que halló Codex, con su licencia CC BY; desde el 22-oct también están en el inventario de Claude<sup class="ref">1</sup>.</p></li>
+      <li><p><strong>Series largas:</strong> la base cruda de AMSA 2018-2024 (Claude) y el Lago de Atitlán 2010-2024 de la UVG (Claude y Codex)<sup class="ref">2</sup>.</p></li>
+      <li><p><strong>Geografía:</strong> las capas MAGA e IGN del MARN (Claude) como base oficial, y HydroRIVERS con la red del Motagua (Antigravity) para el modelo<sup class="ref">3</sup>.</p></li>
+      <li><p><strong>Motagua:</strong> la tesis ERIS 2025 y la campaña de The Ocean Cleanup (Antigravity), los informes DIGI (Claude) y NASA POWER (Codex)<sup class="ref">4</sup>.</p></li>
+      <li><p><strong>Un solo inventario:</strong> unir las tres carpetas deduplicando por URL, DOI y checksum, con el ID de origen de cada agente.</p></li>
+      <li><p><strong>Solicitudes:</strong> usar el registro de faltantes de Claude, corregido, como lista de pedidos por ley de acceso, y confirmar con el INSIVUMEH la procedencia de las copias en GitHub<sup class="ref">5</sup>.</p></li>
+    </ol>
+    <div class="portanto pie-acto"><span class="rotulo">Veredicto</span><p>Amplitud y trazabilidad: Claude. Datos oficiales: Codex. Extracción para el Motagua: Antigravity.</p></div>
+  </div>
+  <footer class="pie"><div class="pie-texto"><ol class="notas"><li data-n="1">GTW-001 a GTW-014 y GTW-053 a GTW-075 (Codex); GT-DAT-0210 a GT-DAT-0246 (Claude).</li><li data-n="2">GT-DAT-0006 y GT-DAT-0038 (Claude); GTW-028 (Codex).</li><li data-n="3">GT-DAT-0039 a GT-DAT-0058 (Claude); GT-H2O-017 (Antigravity).</li><li data-n="4">GT-H2O-007 y GT-H2O-015 (Antigravity); GT-DOC-0129 a GT-DOC-0190 (Claude); GTW-031 a GTW-033 (Codex).</li><li data-n="5"><span class="dato">01_inventario/registro_datos_faltantes.csv</span>; GT-H2O-001 y GT-H2O-005 (Antigravity).</li></ol><p class="procedencia"><b>Firmado.</b> Claude (Opus 5.5) · 22 de octubre de 2026, 08:18 · con base en las tres carpetas de <span class="dato">D:\Documentos D\BaseDatosGT H2O</span>.</p></div><nav class="navegacion" aria-label="Láminas"></nav></footer>
+</section>
+
+</main>
+
+<button type="button" class="ir-sumario" data-sumario aria-label="Abrir sumario"><span>Sumario</span><span class="ir-donde">Lám. 1/12</span></button>
+
+<aside class="panel-sumario" id="panel-sumario" hidden aria-label="Sumario">
+  <h3>Sumario</h3>
+  <nav class="indice"><ol id="indice-panel"></ol></nav>
+  <div class="navegacion cerrar"><button type="button" id="cerrar-sumario">Cerrar</button></div>
+</aside>
+
+<script>
+(() => {
+  const laminas = [...document.querySelectorAll(".lamina")];
+  const total = laminas.length;
+  const fechaBase = "Jueves 22 oct. 2026 · corte 08:18";
+  const panel = document.getElementById("panel-sumario");
+  const lectura = new URLSearchParams(location.search).get("modo") === "lectura";
+  if (lectura) document.documentElement.classList.add("lectura");
+  const continuo = () => lectura || matchMedia("(max-width: 820px), (max-height: 520px)").matches;
+  let actual = 0;
+  let golpe = null;
+  const donde = document.querySelector(".ir-sumario .ir-donde");
+
+  // Cabezal: fecha y número de lámina; sumario en portada y panel
+  laminas.forEach((l, i) => {
+    const f = l.querySelector(".cabezal .fecha");
+    f.textContent = i === 0 ? fechaBase + ` · Lám. 1/${total}` : `Lám. ${i + 1}/${total}`;
+  });
+  const items = laminas.map((l, i) => `<li><a href="#l${i + 1}" data-ir="${i}"><span>${l.getAttribute("aria-label")}</span><span>${i + 1}</span></a></li>`).join("");
+  document.getElementById("indice-portada").innerHTML = items;
+  document.getElementById("indice-panel").innerHTML = items;
+
+  // Botones de navegación en cada pie
+  document.querySelectorAll(".pie .navegacion").forEach((nav, i) => {
+    nav.innerHTML = `<button type="button" data-paso="-1" ${i === 0 ? "disabled" : ""} aria-label="Lámina anterior">Anterior</button>` +
+      `<button type="button" data-sumario aria-label="Abrir sumario">Sumario</button>` +
+      `<button type="button" data-paso="1" ${i === total - 1 ? "disabled" : ""} aria-label="Lámina siguiente">Siguiente</button>`;
+  });
+
+  function imprimirMatriz(l) {
+    // Las marcas pasan de fantasma a tinta fila por fila, de golpe, sin transición
+    if (!l.hasAttribute("data-golpe") || l.classList.contains("impresa")) return;
+    if (matchMedia("(prefers-reduced-motion: reduce)").matches) { l.classList.add("impresa"); return; }
+    const filas = [...l.querySelectorAll(".matriz tbody tr:not(.grupo)")];
+    filas.forEach(f => f.querySelectorAll("svg").forEach(s => s.style.opacity = "0.16"));
+    let k = 0;
+    clearInterval(golpe);
+    golpe = setInterval(() => {
+      if (k >= filas.length) { clearInterval(golpe); l.classList.add("impresa"); filas.forEach(f => f.querySelectorAll("svg").forEach(s => s.style.opacity = "")); return; }
+      filas[k].querySelectorAll("svg").forEach(s => s.style.opacity = "1");
+      k++;
+    }, 70);
+  }
+
+  function ir(i, empujar = true) {
+    i = Math.max(0, Math.min(total - 1, i));
+    if (continuo()) { laminas[i].scrollIntoView({ block: "start" }); return; }
+    laminas[actual].classList.remove("activa");
+    actual = i;
+    laminas[actual].classList.add("activa");
+    if (empujar) history.replaceState(null, "", `#l${actual + 1}`);
+    imprimirMatriz(laminas[actual]);
+  }
+
+  function abrirSumario() { panel.hidden = false; panel.querySelector("a").focus(); }
+  function cerrarSumario() { panel.hidden = true; }
+
+  document.addEventListener("click", e => {
+    const b = e.target.closest("button[data-paso]");
+    if (b) { ir(actual + Number(b.dataset.paso)); return; }
+    if (e.target.closest("button[data-sumario]")) { abrirSumario(); return; }
+    if (e.target.closest("#cerrar-sumario")) { cerrarSumario(); return; }
+    if (!panel.hidden && !e.target.closest(".panel-sumario")) { cerrarSumario(); return; }
+    const a = e.target.closest("a[data-ir]");
+    if (a) {
+      cerrarSumario();
+      if (!continuo()) { e.preventDefault(); ir(Number(a.dataset.ir)); }
+    }
+  });
+
+  document.addEventListener("keydown", e => {
+    if (e.altKey || e.ctrlKey || e.metaKey) return;
+    if (e.key === "Escape") { cerrarSumario(); return; }
+    if (continuo()) return;
+    if (["ArrowRight", "PageDown", " "].includes(e.key)) { e.preventDefault(); ir(actual + 1); }
+    else if (["ArrowLeft", "PageUp"].includes(e.key)) { e.preventDefault(); ir(actual - 1); }
+    else if (e.key === "Home") ir(0);
+    else if (e.key === "End") ir(total - 1);
+    else if (e.key.toLowerCase() === "s") { panel.hidden ? abrirSumario() : cerrarSumario(); }
+  });
+
+  let x0 = null;
+  document.addEventListener("pointerdown", e => { x0 = e.pointerType === "touch" ? e.clientX : null; });
+  document.addEventListener("pointerup", e => {
+    if (x0 === null || continuo()) return;
+    const dx = e.clientX - x0; x0 = null;
+    if (Math.abs(dx) > 60) ir(actual + (dx < 0 ? 1 : -1));
+  });
+
+  const inicial = Number((location.hash.match(/^#l(\d+)$/) || [])[1] || 1) - 1;
+  if (continuo()) {
+    laminas.forEach(l => l.classList.add("activa", "impresa"));
+    if (inicial > 0) laminas[inicial].scrollIntoView({ block: "start" });
+  } else {
+    actual = inicial;
+    ir(inicial, false);
+  }
+  // En lectura continua, recordar qué lámina se está leyendo para retomarla en modo lámina
+  addEventListener("scroll", () => {
+    if (!continuo()) return;
+    let i = 0;
+    laminas.forEach((l, j) => { if (l.getBoundingClientRect().top <= 80) i = j; });
+    actual = i;
+    donde.textContent = `Lám. ${i + 1}/${total}`;
+  }, { passive: true });
+  addEventListener("resize", () => {
+    if (continuo()) { laminas.forEach(l => l.classList.add("activa", "impresa")); return; }
+    laminas.forEach((l, i) => l.classList.toggle("activa", i === actual));
+    imprimirMatriz(laminas[actual]);
+  });
+  window.addEventListener("beforeprint", () => laminas.forEach(l => l.classList.add("impresa")));
+})();
+</script>
+</body>
+</html>

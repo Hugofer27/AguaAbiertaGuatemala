@@ -1,0 +1,59 @@
+fallo 404  https://www.amsclae.gob.gt/wp-content/uploads/2016/10/DatosRios_Clima2015_2016.zip
+descargado 200 3740621 https://www.amsclae.gob.gt/descargas/informesdica2015/limnologico.pdf
+descargado 200 2616354 https://www.amsclae.gob.gt/wp-content/uploads/2016/12/limnologico2016.pdf
+descargado 200 2229032 https://www.amsclae.gob.gt/wp-content/uploads/2018/10/limnologico2017.pdf
+descargado 200 982902 https://www.amsclae.gob.gt/descargas/informesdica2018/monitoreolimnologico2018.pdf
+descargado 200 1755854 https://www.amsclae.gob.gt/wp-content/uploads/2019/12/limnologico2019.pdf
+descargado 200 1922834 https://www.amsclae.gob.gt/descargas/informesdica2020/limnologico2020.pdf
+descargado 200 1299932 https://www.amsclae.gob.gt/wp-content/uploads/2026/01/INFORME-MONITOREO-LIMNOLOGICO-2025.pdf
+descargado 200 1963573 https://www.amsclae.gob.gt/wp-content/uploads/2025/02/InformesDICA2024.pdf
+descargado 200 893735 https://www.amsclae.gob.gt/descargas/informesdica2015/caudales.pdf
+descargado 200 720645 https://www.amsclae.gob.gt/wp-content/uploads/2016/12/caudales2016.pdf
+descargado 200 3687750 https://www.amsclae.gob.gt/descargas/informesdica2018/caudales2018.pdf
+descargado 200 628919 https://www.amsclae.gob.gt/wp-content/uploads/2019/12/caudales2019.pdf
+descargado 200 1473611 https://www.amsclae.gob.gt/descargas/informesdica2020/caudales2020.pdf
+descargado 200 1014481 https://www.amsclae.gob.gt/wp-content/uploads/2026/01/Informe-Monitoreo-de-Caudales.pdf
+descargado 200 1298042 https://www.amsclae.gob.gt/descargas/informesdica2015/consumohumano.pdf
+descargado 200 1289008 https://www.amsclae.gob.gt/wp-content/uploads/2016/12/consumohumano2016.pdf
+descargado 200 175543 https://www.amsclae.gob.gt/descargas/informesdica2018/consumohumano2018.pdf
+descargado 200 373279 https://www.amsclae.gob.gt/wp-content/uploads/2021/12/consumohumano2021.pdf
+descargado 200 1222323 https://www.amsclae.gob.gt/descargas/informesdica2015/usorecreativo.pdf
+descargado 200 1198121 https://www.amsclae.gob.gt/wp-content/uploads/2016/12/recreacional2016.pdf
+descargado 200 193387 https://www.amsclae.gob.gt/descargas/informesdica2018/recreacional2018.pdf
+descargado 200 973209 https://www.amsclae.gob.gt/descargas/informesdica2020/recreacional2020.pdf
+descargado 200 2151541 https://www.amsclae.gob.gt/wp-content/uploads/2021/12/usorecreacional2021.pdf
+descargado 200 1191705 https://www.amsclae.gob.gt/wp-content/uploads/2026/01/Monioreo-de-Salubridad.pdf
+fallo 404  https://www.amsclae.gob.gt/wp-content/uploads/2016/05/rios.pdf
+descargado 200 12869869 https://www.amsclae.gob.gt/descargas/informesdica2018/rios2018.pdf
+descargado 200 1656767 https://www.amsclae.gob.gt/descargas/informesdica2020/rios2020.pdf
+descargado 200 2815366 https://www.amsclae.gob.gt/wp-content/uploads/2021/12/rios2021.pdf
+descargado 200 2364729 https://www.amsclae.gob.gt/descargas/informesdica2015/ptars.pdf
+descargado 200 1970041 https://www.amsclae.gob.gt/wp-content/uploads/2016/12/ptars2016.pdf
+descargado 200 280594 https://www.amsclae.gob.gt/descargas/informesdica2018/ptars2018.pdf
+descargado 200 1001930 https://www.amsclae.gob.gt/wp-content/uploads/2019/12/ptar2019.pdf
+descargado 200 382372 https://www.amsclae.gob.gt/descargas/informesdica2020/ptars2020.pdf
+descargado 200 511775 https://www.amsclae.gob.gt/descargas/informesdica2015/niveldellago.pdf
+descargado 200 489247 https://www.amsclae.gob.gt/wp-content/uploads/2016/12/niveldellago2016.pdf
+descargado 200 645029 https://www.amsclae.gob.gt/wp-content/uploads/2019/12/nivellago2019.pdf
+descargado 200 1266119 https://www.amsclae.gob.gt/wp-content/uploads/2026/01/Monitoreo-de-nivel-del-lago-Atitlan.pdf
+fallo 404  https://www.amsclae.gob.gt/wp-content/uploads/2015/01/Record-de-la-altura-del-nivel-del-agua-del-lago-Atitlán-
+descargado 200 1481353 https://www.amsclae.gob.gt/descargas/informesdica2015/clima.pdf
+descargado 200 974994 https://www.amsclae.gob.gt/wp-content/uploads/2016/12/clima2016.pdf
+descargado 200 3559336 https://www.amsclae.gob.gt/wp-content/uploads/2019/12/climatico2019.pdf
+descargado 200 12487068 https://www.amsclae.gob.gt/descargas/informesdica2020/clima2020.pdf
+descargado 200 2598587 https://www.amsclae.gob.gt/wp-content/uploads/2026/01/Informe-Anual-Monitoreo-Climatico.pdf
+descargado 200 1235267 https://www.amsclae.gob.gt/wp-content/uploads/2019/12/puntosdecontaminacion.pdf
+fallo 404  https://www.amsclae.gob.gt/wp-content/uploads/2014/09/NotaInformativaCianobacteria.pdf
+fallo 404  https://www.amsclae.gob.gt/wp-content/uploads/2014/05/estadodellagoes.pdf
+descargado 200 189432 https://www.amsclae.gob.gt/wp-content/uploads/2016/11/desechossolidos.pdf
+fallo 404  https://www.amsclae.gob.gt/wp-content/uploads/2015/10/mapahidrografico.pdf
+fallo 404  https://www.amsclae.gob.gt/wp-content/uploads/2015/01/informehidrologicosanpedro2.pdf
+fallo 404  https://www.amsclae.gob.gt/wp-content/uploads/2015/01/estudioaguaysaneamientosanpedro.pdf
+fallo 404  https://www.amsclae.gob.gt/wp-content/uploads/2014/05/listadoproyectosaguasresiduales.pdf
+descargado 200 1670676 https://www.amsclae.gob.gt/wp-content/uploads/2019/12/listadoinvestigaciones2019.pdf
+descargado 200 2221961 https://www.amsclae.gob.gt/wp-content/uploads/2019/09/actualizaciondicainvestigaciones.pdf
+descargado 200 400156 https://www.amsclae.gob.gt/wp-content/uploads/2016/04/bdica.pdf
+descargado 200 1596271 https://www.amsclae.gob.gt/wp-content/uploads/2026/01/CONSERVACION-Y-MANEJO-DE-LAS-ZONAS-LITORALES-DEL-LAGO-AT
+descargado 200 8339904 https://www.amsclae.gob.gt/wp-content/uploads/2019/04/estrategiaresiduos.pdf
+descargado 200 15604473 https://www.amsclae.gob.gt/wp-content/uploads/2026/03/Memoria-de-labores-2025.pdf
+Descargados 49/58

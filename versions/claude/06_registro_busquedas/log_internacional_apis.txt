@@ -1,0 +1,17 @@
+OK WB-WDI-AGUA-GTM 162372
+OK UNSD-SDG6-GTM 2
+OK HYDROWASTE-V10 2443159
+HydroWASTE Guatemala: 8 plantas
+OK WPDX-GT 2239258
+FALLO OSM-plantas_tratamiento_aguas_residuales 502 Server Error: Bad Gateway for url: https://overpass-api.de/api/interpreter
+FALLO OSM-plantas_potabilizadoras 502 Server Error: Bad Gateway for url: https://overpass-api.de/api/interpreter
+FALLO OSM-pozos_agua 502 Server Error: Bad Gateway for url: https://overpass-api.de/api/interpreter
+FALLO OSM-tanques_torres_agua 502 Server Error: Bad Gateway for url: https://overpass-api.de/api/interpreter
+OK OSM-represas_presas 13051
+FALLO OSM-rellenos_vertederos 502 Server Error: Bad Gateway for url: https://overpass-api.de/api/interpreter
+FALLO OSM-estaciones_monitoreo_agua 502 Server Error: Bad Gateway for url: https://overpass-api.de/api/interpreter
+OK OSM-fuentes_manantiales 3584
+FALLO OSM-rios_principales 502 Server Error: Bad Gateway for url: https://overpass-api.de/api/interpreter
+OK DESINVENTAR-GTM 1720457
+OK GHCN-D-ESTACIONES-GT 0
+OK GHCN-D-INVENTARIO-GT 0

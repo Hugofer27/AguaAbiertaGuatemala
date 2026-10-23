@@ -1,0 +1,8 @@
+descargado MARN_Rios_MAGA_2016 10934 entidades; esriGeometryPolyline
+FALLO OSM-plantas_potabilizadoras 502 Server Error: Bad Gateway for url: https://overpass-api.de/api/interpreter
+OK OSM-pozos_agua 4322
+FALLO OSM-tanques_torres_agua 502 Server Error: Bad Gateway for url: https://overpass-api.de/api/interpreter
+OK OSM-estaciones_monitoreo_agua 1241
+OK OSM-rios_principales 439726
+OK GHCN-D-ESTACIONES-GT 0
+OK GHCN-D-INVENTARIO-GT 0

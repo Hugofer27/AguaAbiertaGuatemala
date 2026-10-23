@@ -12,6 +12,12 @@ fuente_de_datos/
 tmp/
 verification/
 
+# Fuentes originales de las versiones de investigación (demasiado grandes
+# para GitHub; los inventarios, manifiestos y datos procesados sí se versionan)
+versions/claude/02_datos_originales/
+versions/antigravity/data/raw/
+versions/**/.impeccable/
+
 # Configuración local y secretos
 .env
 .env.*

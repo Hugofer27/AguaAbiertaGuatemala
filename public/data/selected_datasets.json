@@ -1,0 +1,577 @@
+[
+  {
+    "number": 40,
+    "id": "GTW-004",
+    "title": "calidad agua amsa 2023.csv",
+    "fileName": "calidad_agua_amsa_2023.csv",
+    "institution": "INE/AMSA",
+    "topic": "Calidad del agua",
+    "territory": "Lago de Amatitlán y cuenca del río Villalobos",
+    "period": "2023",
+    "format": "CSV",
+    "bytes": 491573,
+    "size": "480.1 KB",
+    "accessState": "Descargado y verificado",
+    "summary": "O2 | Color Aparente | Color Verdadero | DBO5 | DQO | Fósforo total | Ortofosfatos | Nitrógeno de Amonio | Nitrógeno de Nitrato | Nitrógeno de Nitrito | Nitrógeno total | Solidos suspendidos totales | Turbidez | Coliformes Fecales | Arsénico | Cadmio | Cromo Total | Plomo | Mercurio | Cobre | Niquel | Zinc | Hierro | Altitud | Caudal | pH | Temperatura | Cond. | Sali. | TDS | Sólidos Totales | Sólidos Sedimentables | Grasas y Aceites | E. coli | pH in situ | Temperatura in situ | Conductividad. in situ | Salinidad in situ | solidos totales disueltos in situ | O2  in situ | O2 in situ | Transparencia | Materia Flotante | Sensación Térmica | Precipitación | Humedad | Viento | Silicatos | Microcistinas Totales | Microcistinas Disueltas",
+    "sourceUrl": "https://datos.ine.gob.gt/dataset/1-recursos-hidricos",
+    "downloadUrl": "https://datos.ine.gob.gt/dataset/51dfaf81-d5d4-4220-9aae-05a392635619/resource/5dffc94c-08f2-48cb-8ffd-2f9bc8a45ffc/download/4.-base-calidad-del-agua-amsa.csv",
+    "localPath": "../fuente_de_datos/AMSA/calidad_agua_amsa_2023.csv",
+    "license": "Creative Commons Attribution",
+    "sha256": "7b6f417c3144aa155d8242b284d8200c8d4f8d2f3c087588572a07c7e0ca4b21",
+    "records": "5674",
+    "dateMin": "",
+    "dateMax": "",
+    "parameters": [
+      "O2",
+      "Color Aparente",
+      "Color Verdadero",
+      "DBO5",
+      "DQO",
+      "Fósforo total",
+      "Ortofosfatos",
+      "Nitrógeno de Amonio"
+    ],
+    "coordinates": "no",
+    "selectedMvp": true,
+    "selectionReason": "Cobertura de calidad en Amatitlán y la cuenca del Villalobos, con amplia diversidad de parámetros.",
+    "profile": {}
+  },
+  {
+    "number": 47,
+    "id": "GTW-006",
+    "title": "rios atitlan 2023.csv",
+    "fileName": "rios_atitlan_2023.csv",
+    "institution": "INE/AMSCLAE",
+    "topic": "Calidad del agua",
+    "territory": "Lago de Atitlán y/o su cuenca",
+    "period": "2023",
+    "format": "CSV",
+    "bytes": 100655,
+    "size": "98.3 KB",
+    "accessState": "Descargado y verificado",
+    "summary": "Temperatura °C | T. Ambiente °C | Cambio Temp °C | PH | Secchi (cm) | TDS (mg/L) | O2 (mg/L) | O2% | Salinidad % | Conductividad (µS/cm) | Caudal (l/s) | Caudal (m³/s) | Fosfato (mg/L) | Nitratos (mg/L) | Turbides     (FAU) | Coliformes Fecales (NMP) | DBO (mg/L) | ICA | Calidad | NT (mg/l) | PT (mg/l) | Nitrogeno Total (kg/día) | Fosforo Total (Kg/día) | Sedimentos (mg/L)",
+    "sourceUrl": "https://datos.ine.gob.gt/dataset/1-recursos-hidricos",
+    "downloadUrl": "https://datos.ine.gob.gt/dataset/51dfaf81-d5d4-4220-9aae-05a392635619/resource/6e064b2f-c5b0-4cd6-a7be-9c02e0200b76/download/6.-base-consolidado-de-rios-atitlan-2023.csv",
+    "localPath": "../fuente_de_datos/AMSCLAE/rios_atitlan_2023.csv",
+    "license": "Creative Commons Attribution",
+    "sha256": "7580767a68c9b948d8646d5fb2f8a8259a4c42df4980eb82bdab19d3d2cd95ec",
+    "records": "957",
+    "dateMin": "2023-01-01",
+    "dateMax": "2023-01-01",
+    "parameters": [
+      "Temperatura °C",
+      "T. Ambiente °C",
+      "Cambio Temp °C",
+      "PH",
+      "Secchi (cm)",
+      "TDS (mg/L)",
+      "O2 (mg/L)",
+      "O2%"
+    ],
+    "coordinates": "yes",
+    "selectedMvp": true,
+    "selectionReason": "Monitoreo de ríos tributarios de Atitlán con caudal, fisicoquímica, nutrientes e indicadores microbiológicos.",
+    "profile": {}
+  },
+  {
+    "number": 60,
+    "id": "GTW-025",
+    "title": "contaminantes emergentes rio las vacas 2021.pdf",
+    "fileName": "contaminantes_emergentes_rio_las_vacas_2021.pdf",
+    "institution": "USAC",
+    "topic": "Hidrología",
+    "territory": "Río Las Vacas y conexión con río Motagua",
+    "period": "2021",
+    "format": "PDF",
+    "bytes": 3316285,
+    "size": "3.2 MB",
+    "accessState": "Descargado y verificado",
+    "summary": "Fármacos, nutrientes, metales, agua y sedimento",
+    "sourceUrl": "https://digi.usac.edu.gt/bvirtual2/",
+    "downloadUrl": "https://digi.usac.edu.gt/bvirtual/informes/puirna/INF-2021-67.pdf",
+    "localPath": "../fuente_de_datos/USAC/contaminantes_emergentes_rio_las_vacas_2021.pdf",
+    "license": "No indicada en el archivo; verificar antes de redistribuir",
+    "sha256": "a3b636508131c66c328e1b913a54ff54a20a96642f866c15dd0b7508317f99fa",
+    "records": "94",
+    "dateMin": "",
+    "dateMax": "",
+    "parameters": [
+      "Fármacos, nutrientes, metales, agua y sedimento"
+    ],
+    "coordinates": "unknown",
+    "selectedMvp": true,
+    "selectionReason": "Evidencia académica sobre contaminantes emergentes en Las Vacas y su conexión con el Motagua.",
+    "profile": {}
+  },
+  {
+    "number": 74,
+    "id": "GTW-028",
+    "title": "Lake Atitlan water quality CWG 2010-2024.csv",
+    "fileName": "Lake_Atitlan_water_quality_CWG_2010-2024.csv",
+    "institution": "Universidad del Valle de Guatemala / Zenodo",
+    "topic": "Referencia técnica",
+    "territory": "Lago de Atitlán y/o su cuenca",
+    "period": "2010-2024",
+    "format": "CSV",
+    "bytes": 1374212,
+    "size": "1.3 MB",
+    "accessState": "Descargado y verificado",
+    "summary": "Consultar documento o metadatos del recurso",
+    "sourceUrl": "https://zenodo.org/records/18673028",
+    "downloadUrl": "https://zenodo.org/records/18673028/files/Lake_Atitlan_water_quality_CWG_2010-2024.csv?download=1",
+    "localPath": "../fuente_de_datos/UVG_Zenodo/Lake_Atitlan_water_quality_CWG_2010-2024.csv",
+    "license": "CC BY 4.0",
+    "sha256": "b22d2b2c3337a6e5b9b3b2202c3af72c3c4888740e6738898e52e0518698eea1",
+    "records": "30826",
+    "dateMin": "2010-01-27",
+    "dateMax": "2024-05-14",
+    "parameters": [
+      "Consultar documento o metadatos del recurso"
+    ],
+    "coordinates": "no",
+    "selectedMvp": true,
+    "selectionReason": "La serie continua más extensa del paquete para un cuerpo de agua guatemalteco: Atitlán, 2010-2024.",
+    "profile": {
+      "records": 30826,
+      "dateMin": "2010-01-27",
+      "dateMax": "2024-05-14",
+      "maxDepth": 315.0,
+      "series": [
+        {
+          "label": "2010",
+          "value": 5.84,
+          "unit": "mg/L"
+        },
+        {
+          "label": "2011",
+          "value": 5.8,
+          "unit": "mg/L"
+        },
+        {
+          "label": "2012",
+          "value": 5.15,
+          "unit": "mg/L"
+        },
+        {
+          "label": "2013",
+          "value": 5.14,
+          "unit": "mg/L"
+        },
+        {
+          "label": "2014",
+          "value": 5.17,
+          "unit": "mg/L"
+        },
+        {
+          "label": "2015",
+          "value": 4.75,
+          "unit": "mg/L"
+        },
+        {
+          "label": "2016",
+          "value": 5.5,
+          "unit": "mg/L"
+        },
+        {
+          "label": "2017",
+          "value": 2.06,
+          "unit": "mg/L"
+        },
+        {
+          "label": "2018",
+          "value": 2.85,
+          "unit": "mg/L"
+        },
+        {
+          "label": "2019",
+          "value": 1.99,
+          "unit": "mg/L"
+        },
+        {
+          "label": "2020",
+          "value": 1.75,
+          "unit": "mg/L"
+        },
+        {
+          "label": "2021",
+          "value": 1.68,
+          "unit": "mg/L"
+        },
+        {
+          "label": "2022",
+          "value": 1.76,
+          "unit": "mg/L"
+        },
+        {
+          "label": "2023",
+          "value": 1.85,
+          "unit": "mg/L"
+        },
+        {
+          "label": "2024",
+          "value": 1.69,
+          "unit": "mg/L"
+        }
+      ],
+      "seriesLabel": "Oxígeno disuelto medio por observación y año (descriptivo; no ajustado por profundidad)"
+    }
+  },
+  {
+    "number": 54,
+    "id": "GTW-031",
+    "title": "nasa power las vacas daily 2001 2025.csv",
+    "fileName": "nasa_power_las_vacas_daily_2001_2025.csv",
+    "institution": "NASA POWER",
+    "topic": "Clima",
+    "territory": "Río Las Vacas y conexión con río Motagua",
+    "period": "2001-2025 (diario)",
+    "format": "CSV",
+    "bytes": 286574,
+    "size": "279.9 KB",
+    "accessState": "Descargado y verificado",
+    "summary": "Precipitación, temperatura, humedad relativa y viento",
+    "sourceUrl": "https://power.larc.nasa.gov/api/temporal/daily/point?parameters=PRECTOTCORR,T2M,RH2M,WS2M&community=AG&longitude=-90.49&latitude=14.67&start=20010101&end=20251231&format=CSV&header=true",
+    "downloadUrl": "https://power.larc.nasa.gov/api/temporal/daily/point?parameters=PRECTOTCORR,T2M,RH2M,WS2M&community=AG&longitude=-90.49&latitude=14.67&start=20010101&end=20251231&format=CSV&header=true",
+    "localPath": "../fuente_de_datos/NASA_POWER/nasa_power_las_vacas_daily_2001_2025.csv",
+    "license": "Términos abiertos del proveedor; citar la fuente",
+    "sha256": "f0f0f94f90be26b7f3a7f55ae75c100373080c5415290e1c676b0ce453be3110",
+    "records": "9131",
+    "dateMin": "2001-01-01",
+    "dateMax": "2025-01-01",
+    "parameters": [
+      "Precipitación, temperatura, humedad relativa y viento"
+    ],
+    "coordinates": "no",
+    "selectedMvp": true,
+    "selectionReason": "Serie meteorológica diaria de apoyo para Las Vacas, 2001-2025, sin requerir una clave privada.",
+    "profile": {
+      "records": 9131,
+      "start": 2001,
+      "end": 2025,
+      "series": [
+        {
+          "label": "2016",
+          "value": 853.4,
+          "unit": "mm/año"
+        },
+        {
+          "label": "2017",
+          "value": 1164.1,
+          "unit": "mm/año"
+        },
+        {
+          "label": "2018",
+          "value": 1703.1,
+          "unit": "mm/año"
+        },
+        {
+          "label": "2019",
+          "value": 1631.0,
+          "unit": "mm/año"
+        },
+        {
+          "label": "2020",
+          "value": 2116.7,
+          "unit": "mm/año"
+        },
+        {
+          "label": "2021",
+          "value": 1456.2,
+          "unit": "mm/año"
+        },
+        {
+          "label": "2022",
+          "value": 1942.8,
+          "unit": "mm/año"
+        },
+        {
+          "label": "2023",
+          "value": 1256.3,
+          "unit": "mm/año"
+        },
+        {
+          "label": "2024",
+          "value": 1457.3,
+          "unit": "mm/año"
+        },
+        {
+          "label": "2025",
+          "value": 1871.0,
+          "unit": "mm/año"
+        }
+      ]
+    }
+  },
+  {
+    "number": 56,
+    "id": "GTW-033",
+    "title": "nasa power motagua outlet daily 2001 2025.csv",
+    "fileName": "nasa_power_motagua_outlet_daily_2001_2025.csv",
+    "institution": "NASA POWER",
+    "topic": "Clima",
+    "territory": "Cuenca del río Motagua",
+    "period": "2001-2025 (diario)",
+    "format": "CSV",
+    "bytes": 287052,
+    "size": "280.3 KB",
+    "accessState": "Descargado y verificado",
+    "summary": "Precipitación, temperatura, humedad relativa y viento",
+    "sourceUrl": "https://power.larc.nasa.gov/api/temporal/daily/point?parameters=PRECTOTCORR,T2M,RH2M,WS2M&community=AG&longitude=-88.30&latitude=15.72&start=20010101&end=20251231&format=CSV&header=true",
+    "downloadUrl": "https://power.larc.nasa.gov/api/temporal/daily/point?parameters=PRECTOTCORR,T2M,RH2M,WS2M&community=AG&longitude=-88.30&latitude=15.72&start=20010101&end=20251231&format=CSV&header=true",
+    "localPath": "../fuente_de_datos/NASA_POWER/nasa_power_motagua_outlet_daily_2001_2025.csv",
+    "license": "Términos abiertos del proveedor; citar la fuente",
+    "sha256": "4f3cf2f0df6117d3cea97876bba7f53b71281b0bb18718f2ea4e19b801c4209f",
+    "records": "9131",
+    "dateMin": "2001-01-01",
+    "dateMax": "2025-01-01",
+    "parameters": [
+      "Precipitación, temperatura, humedad relativa y viento"
+    ],
+    "coordinates": "no",
+    "selectedMvp": true,
+    "selectionReason": "Serie meteorológica diaria en la desembocadura del Motagua para contrastar la cuenca alta y baja.",
+    "profile": {
+      "records": 9131,
+      "start": 2001,
+      "end": 2025,
+      "series": [
+        {
+          "label": "2016",
+          "value": 1719.2,
+          "unit": "mm/año"
+        },
+        {
+          "label": "2017",
+          "value": 1588.9,
+          "unit": "mm/año"
+        },
+        {
+          "label": "2018",
+          "value": 1055.8,
+          "unit": "mm/año"
+        },
+        {
+          "label": "2019",
+          "value": 1042.5,
+          "unit": "mm/año"
+        },
+        {
+          "label": "2020",
+          "value": 2102.6,
+          "unit": "mm/año"
+        },
+        {
+          "label": "2021",
+          "value": 1998.9,
+          "unit": "mm/año"
+        },
+        {
+          "label": "2022",
+          "value": 2578.3,
+          "unit": "mm/año"
+        },
+        {
+          "label": "2023",
+          "value": 1614.2,
+          "unit": "mm/año"
+        },
+        {
+          "label": "2024",
+          "value": 1970.1,
+          "unit": "mm/año"
+        },
+        {
+          "label": "2025",
+          "value": 1308.9,
+          "unit": "mm/año"
+        }
+      ]
+    }
+  },
+  {
+    "number": 16,
+    "id": "GTW-045",
+    "title": "rios costa sur 2017 2026.pdf",
+    "fileName": "rios_costa_sur_2017_2026.pdf",
+    "institution": "ICC",
+    "topic": "Hidrología",
+    "territory": "Vertiente del Pacífico / costa sur de Guatemala",
+    "period": "2017",
+    "format": "PDF",
+    "bytes": 14768496,
+    "size": "14.1 MB",
+    "accessState": "Descargado y verificado",
+    "summary": "Síntesis del sistema de información de los ríos de la costa sur de Guatemala: 2017 a 2026",
+    "sourceUrl": "https://icc.org.gt/es/estudios-del-agua-subterranea/",
+    "downloadUrl": "https://icc.org.gt/wp-content/uploads/2023/03/288.pdf",
+    "localPath": "../fuente_de_datos/ICC/rios_costa_sur_2017_2026.pdf",
+    "license": "No indicada en el archivo; verificar antes de redistribuir",
+    "sha256": "2661f53b541b0c6e53e63afbc6ffd27da722c5dfd342232cb90aaf161a31ef99",
+    "records": "66",
+    "dateMin": "",
+    "dateMax": "",
+    "parameters": [
+      "Síntesis del sistema de información de los ríos de la costa sur de Guatemala: 2017 a 2026"
+    ],
+    "coordinates": "unknown",
+    "selectedMvp": true,
+    "selectionReason": "Lectura territorial de los ríos de la costa sur producida por ICC, con continuidad de informes 2017-2026.",
+    "profile": {}
+  },
+  {
+    "number": 63,
+    "id": "GTW-052",
+    "title": "atitlan nalms results.csv",
+    "fileName": "atitlan_nalms_results.csv",
+    "institution": "Water Quality Portal (USGS/EPA)",
+    "topic": "Referencia técnica",
+    "territory": "Lago de Atitlán y/o su cuenca",
+    "period": "2018-05-15 a 2020-03-10",
+    "format": "CSV",
+    "bytes": 70719,
+    "size": "69.1 KB",
+    "accessState": "Descargado y verificado",
+    "summary": "Profundidad de fondo y profundidad Secchi",
+    "sourceUrl": "https://www.waterqualitydata.us/provider/STORET/NALMS/NALMS-TF14.7053%2C-91.1984/",
+    "downloadUrl": "https://www.waterqualitydata.us/data/Result/search?siteid=NALMS-TF14.7053%2C-91.1984&mimeType=csv",
+    "localPath": "../fuente_de_datos/Water_Quality_Portal/atitlan_nalms_results.csv",
+    "license": "Datos públicos de proveedores WQP; revisar metadatos",
+    "sha256": "da6f969e40415e9cc0532102e17d3d8e046ad5982653bec6e0784e9f903c3468",
+    "records": "98",
+    "dateMin": "2018-05-15",
+    "dateMax": "2020-03-10",
+    "parameters": [
+      "Profundidad de fondo y profundidad Secchi"
+    ],
+    "coordinates": "no",
+    "selectedMvp": true,
+    "selectionReason": "Estación georreferenciada real en el lago de Atitlán y resultados públicos del Water Quality Portal.",
+    "profile": {}
+  },
+  {
+    "number": 33,
+    "id": "GTW-067",
+    "title": "3. Base de Producción agua potable EMPAGUA 2024.xlsx",
+    "fileName": "3._Base_de_Producción_agua_potable_EMPAGUA_2024.xlsx",
+    "institution": "INE / EMPAGUA",
+    "topic": "Abastecimiento",
+    "territory": "Guatemala; cobertura nacional según el recurso",
+    "period": "2024",
+    "format": "XLSX",
+    "bytes": 25155,
+    "size": "24.6 KB",
+    "accessState": "Descargado y verificado",
+    "summary": "Producción mensual de agua potable",
+    "sourceUrl": "https://datos.ine.gob.gt/dataset/1-recursos-hidricos-2024",
+    "downloadUrl": "https://datos.ine.gob.gt/dataset/2d7ce7a6-9b88-4e22-a26a-2cf931a30bd9/resource/e71902b6-ded7-4a81-b644-50eddcd37259/download/3.-base-de-produccion-agua-potable-empagua-2024.xlsx",
+    "localPath": "../fuente_de_datos/INE/3._Base_de_Producción_agua_potable_EMPAGUA_2024.xlsx",
+    "license": "Creative Commons Attribution",
+    "sha256": "7831ddeca4066e90a2e42476f0c81a2503ffc8ea7274b0dd66ae3f76ffaabd2e",
+    "records": "108",
+    "dateMin": "",
+    "dateMax": "",
+    "parameters": [
+      "Producción mensual de agua potable"
+    ],
+    "coordinates": "unknown",
+    "selectedMvp": true,
+    "selectionReason": "Producción mensual de agua potable de EMPAGUA en 2024, útil para la dimensión de abastecimiento urbano.",
+    "profile": {}
+  },
+  {
+    "number": 34,
+    "id": "GTW-068",
+    "title": "4. Base de monitoreo del Agua INSIVUMEH 2024.xlsx",
+    "fileName": "4._Base_de_monitoreo_del_Agua_INSIVUMEH_2024.xlsx",
+    "institution": "INE / INSIVUMEH",
+    "topic": "Calidad del agua",
+    "territory": "Guatemala; cobertura nacional según el recurso",
+    "period": "2024",
+    "format": "XLSX",
+    "bytes": 270371,
+    "size": "264.0 KB",
+    "accessState": "Descargado y verificado",
+    "summary": "Parámetros fisicoquímicos, nutrientes, sólidos, oxígeno y otros según tabla",
+    "sourceUrl": "https://datos.ine.gob.gt/dataset/1-recursos-hidricos-2024",
+    "downloadUrl": "https://datos.ine.gob.gt/dataset/2d7ce7a6-9b88-4e22-a26a-2cf931a30bd9/resource/d08589e5-e264-41cc-b67d-4867ff11d3bc/download/4.-base-de-monitoreo-del-agua-insivumeh-2024.xlsx",
+    "localPath": "../fuente_de_datos/INE/4._Base_de_monitoreo_del_Agua_INSIVUMEH_2024.xlsx",
+    "license": "Creative Commons Attribution",
+    "sha256": "5d8e7d479a47a1900783bbdc105b32a4ea24b716a7535937b6c57b76bbde451a",
+    "records": "3180",
+    "dateMin": "",
+    "dateMax": "",
+    "parameters": [
+      "Parámetros fisicoquímicos, nutrientes, sólidos, oxígeno y otros según tabla"
+    ],
+    "coordinates": "unknown",
+    "selectedMvp": true,
+    "selectionReason": "Monitoreo oficial 2024 de INSIVUMEH con coordenadas y parámetros fisicoquímicos para el mapa inicial.",
+    "profile": {}
+  },
+  {
+    "number": 35,
+    "id": "GTW-069",
+    "title": "5. Base de Calidad del agua AMSA 2024.xlsx",
+    "fileName": "5._Base_de_Calidad_del_agua_AMSA_2024.xlsx",
+    "institution": "INE / AMSA",
+    "topic": "Calidad del agua",
+    "territory": "Lago de Amatitlán y cuenca del río Villalobos",
+    "period": "2024",
+    "format": "XLSX",
+    "bytes": 340443,
+    "size": "332.5 KB",
+    "accessState": "Descargado y verificado",
+    "summary": "Parámetros fisicoquímicos, nutrientes, sólidos, oxígeno y otros según tabla",
+    "sourceUrl": "https://datos.ine.gob.gt/dataset/1-recursos-hidricos-2024",
+    "downloadUrl": "https://datos.ine.gob.gt/dataset/2d7ce7a6-9b88-4e22-a26a-2cf931a30bd9/resource/fe582752-489e-4b7d-af5d-c5db11d9f1a9/download/5.-base-de-calidad-del-agua-amsa-2024.xlsx",
+    "localPath": "../fuente_de_datos/INE/5._Base_de_Calidad_del_agua_AMSA_2024.xlsx",
+    "license": "Creative Commons Attribution",
+    "sha256": "692533b1b59a23abceef93222f0c70ac75ad1b0aa5514506b594dbd7129e41b1",
+    "records": "5676",
+    "dateMin": "",
+    "dateMax": "",
+    "parameters": [
+      "Parámetros fisicoquímicos, nutrientes, sólidos, oxígeno y otros según tabla"
+    ],
+    "coordinates": "unknown",
+    "selectedMvp": true,
+    "selectionReason": "Calidad del agua de AMSA en 2024, representativa del lago de Amatitlán y la cuenca del Villalobos.",
+    "profile": {}
+  },
+  {
+    "number": 38,
+    "id": "GTW-072",
+    "title": "8. Base de Vigilancia cloro residual MSPAS 2024.xlsx",
+    "fileName": "8._Base_de_Vigilancia_cloro_residual_MSPAS_2024.xlsx",
+    "institution": "INE / MSPAS",
+    "topic": "Calidad del agua",
+    "territory": "Guatemala; cobertura nacional según el recurso",
+    "period": "2024",
+    "format": "XLSX",
+    "bytes": 31862,
+    "size": "31.1 KB",
+    "accessState": "Descargado y verificado",
+    "summary": "Cloro residual",
+    "sourceUrl": "https://datos.ine.gob.gt/dataset/1-recursos-hidricos-2024",
+    "downloadUrl": "https://datos.ine.gob.gt/dataset/2d7ce7a6-9b88-4e22-a26a-2cf931a30bd9/resource/d728e11e-aa34-4a23-a32c-c3abc58fec28/download/8.-base-de-vigilancia-cloro-residual-mspas-2024.xlsx",
+    "localPath": "../fuente_de_datos/INE/8._Base_de_Vigilancia_cloro_residual_MSPAS_2024.xlsx",
+    "license": "Creative Commons Attribution",
+    "sha256": "0802cd759c37c96a6f413d44aa44c8928c324daff733dfd8a75b621c63b59b72",
+    "records": "277",
+    "dateMin": "",
+    "dateMax": "",
+    "parameters": [
+      "Cloro residual"
+    ],
+    "coordinates": "unknown",
+    "selectedMvp": true,
+    "selectionReason": "Vigilancia municipal de cloro residual de MSPAS en 2024, con cobertura nacional agregada.",
+    "profile": {
+      "records": 277,
+      "totalSamples": 207966,
+      "insideRange": 136547,
+      "outsideRange": 71419,
+      "insideShare": 65.7
+    }
+  }
+]

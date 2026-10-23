@@ -1,0 +1,25 @@
+# Dependencias
+node_modules/
+
+# Compilados y cachés
+dist/
+*.tsbuildinfo
+vite.config.js
+vite.config.d.ts
+
+# Datos fuente pesados y artefactos regenerables
+fuente_de_datos/
+tmp/
+verification/
+
+# Configuración local y secretos
+.env
+.env.*
+!.env.example
+
+# Sistema y editores
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+

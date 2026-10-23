@@ -1,0 +1,53 @@
+{
+  "cutoff": "2026-10-21",
+  "inventoriedResources": 113,
+  "downloadedFiles": 75,
+  "organizations": 42,
+  "missingDataRecords": 16,
+  "selectedMvpDatasets": 12,
+  "mappedFeatures": 155,
+  "formats": [
+    "CSV",
+    "JSON",
+    "PDF",
+    "R",
+    "XLS",
+    "XLSX",
+    "ZIP"
+  ],
+  "institutions": [
+    "AMSCLAE",
+    "Banco Mundial",
+    "FAO AQUASTAT",
+    "ICC",
+    "INE / AMSA",
+    "INE / AMSCLAE",
+    "INE / EMPAGUA",
+    "INE / INSIVUMEH",
+    "INE / MSPAS",
+    "INE/AMSA",
+    "INE/AMSCLAE",
+    "INE/INSIVUMEH",
+    "INE/MSPAS",
+    "NASA POWER",
+    "PNUMA GEMStat",
+    "USAC",
+    "Universidad del Valle de Guatemala / Zenodo",
+    "Water Quality Portal (USGS/EPA)"
+  ],
+  "topics": [
+    "Abastecimiento",
+    "Agua subterránea",
+    "Calidad del agua",
+    "Clima",
+    "Contaminación",
+    "Hidrología",
+    "Referencia técnica",
+    "Saneamiento"
+  ],
+  "accessStates": [
+    "Descargado y verificado"
+  ],
+  "mapStyle": "https://tiles.openfreemap.org/styles/dark",
+  "mapAttribution": "OpenFreeMap © OpenMapTiles · Datos de OpenStreetMap"
+}

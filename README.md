@@ -81,11 +81,16 @@ La publicación vuelve a generar `datos/` y falla si no coincide con lo subido. 
 
 ## Archivos originales (Drive)
 
-Los ~2 GB de originales no caben en GitHub. Para armar el paquete desde las carpetas de investigación de su computadora:
+Los ~2 GB de originales no caben en GitHub. El paquete se arma en la computadora donde están las carpetas de investigación:
+
+- **Windows:** doble clic en `ARMAR_ORIGINALES.cmd` y arrastre a la ventana la carpeta que contiene las tres investigaciones.
+- **Cualquier sistema:**
 
 ```bash
-python pipeline/empaquetar_originales.py --buscar "RUTA/Investigación Claude" --buscar "RUTA/Ghagpt" --buscar "RUTA/Investigación Antigravity" --zip
+python pipeline/empaquetar_originales.py --buscar "RUTA/carpeta con las investigaciones" --zip
 ```
+
+El script revisa también las subcarpetas, así que basta con la carpeta que las contiene (`--buscar` se puede repetir).
 
 1. El script verifica cada archivo contra su SHA-256 y crea `originales/` y `AguaAbiertaGT_originales.zip`, con un informe de lo que faltó.
 2. Suba la carpeta o el ZIP a Drive y compártalo con "Cualquier persona con el enlace".

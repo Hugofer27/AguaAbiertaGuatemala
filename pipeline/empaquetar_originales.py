@@ -128,7 +128,7 @@ def main() -> int:
         f"Carpetas revisadas: {', '.join(str(c) for c in carpetas)}",
         f"Archivos en el manifiesto: {len(manifiesto)}",
         f"Copiados: {copiados} · Ya presentes: {ya_presentes} · No encontrados: {len(faltan)}",
-        f"Tamaño del paquete: {tamano_legible(total_bytes)}",
+        f"Tamaño del paquete: {tamano_legible(total_bytes) or '0 B'}",
         f"Archivos con tamaño coincidente que se verificaron por SHA-256: {revisados}",
         "",
         "No encontrados (se pueden volver a descargar desde url_origen):",

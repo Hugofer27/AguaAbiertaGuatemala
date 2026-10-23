@@ -5,7 +5,7 @@ Esta carpeta contiene todos los datos del portal en formatos abiertos. Se puede 
 - Los CSV están en UTF-8 (con BOM, para que Excel muestre bien los acentos).
 - Los GeoJSON usan WGS 84 (EPSG:4326) y se abren en QGIS, R (`sf`) o Python (`geopandas`).
 
-Fecha de corte: 22 de octubre de 2026 · Versión 1.0.0. La generan `pipeline/construir_datos.py` y `pipeline/verificar_datos.py`. No edite estos archivos a mano: cambie el pipeline y vuelva a ejecutarlo.
+Fecha de corte: 22 de octubre de 2026 · Versión 1.0.1. La generan `pipeline/construir_datos.py` y `pipeline/verificar_datos.py`. No edite estos archivos a mano: cambie el pipeline y vuelva a ejecutarlo.
 
 ## Contenido
 

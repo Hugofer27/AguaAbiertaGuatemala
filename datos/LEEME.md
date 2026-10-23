@@ -5,7 +5,7 @@ Esta carpeta contiene todos los datos del portal en formatos abiertos. Se puede 
 - Los CSV están en UTF-8 (con BOM, para que Excel muestre bien los acentos).
 - Los GeoJSON usan WGS 84 (EPSG:4326) y se abren en QGIS, R (`sf`) o Python (`geopandas`).
 
-Fecha de corte: 22 de octubre de 2026 · Versión 1.1.0. La generan `pipeline/construir_datos.py` y `pipeline/verificar_datos.py`. No edite estos archivos a mano: cambie el pipeline y vuelva a ejecutarlo.
+Fecha de corte: 22 de octubre de 2026 · Versión 1.2.0. La generan `pipeline/construir_datos.py` y `pipeline/verificar_datos.py`. No edite estos archivos a mano: cambie el pipeline y vuelva a ejecutarlo.
 
 ## Contenido
 
@@ -18,7 +18,7 @@ Fecha de corte: 22 de octubre de 2026 · Versión 1.1.0. La generan `pipeline/co
 | `catalogo/equivalencias_de_ids.csv` | IDs anteriores que apuntan al mismo registro (alias) |
 | `capas/*.geojson` | Una capa por archivo; la lista y su descripción están en `app/capas.json` |
 | `mediciones/mediciones.csv` | 3 632 valores en formato largo |
-| `mediciones/sitios.csv` | Los 796 puntos del mapa con coordenadas y precisión de ubicación |
+| `mediciones/sitios.csv` | Los 799 puntos del mapa con coordenadas, precisión de ubicación y fuentes (IDs del catálogo o, si no están en él, enlaces) |
 | `mediciones/parametros.csv` | Código, nombre, unidad y grupo de cada parámetro |
 | `manifiesto/originales.csv` | Los 342 archivos originales con URL de origen, tamaño y SHA-256 |
 | `resumen.json` | Recuentos generales y lista de ubicaciones excluidas del mapa |
@@ -72,6 +72,7 @@ Una fila por valor medido. Está pensada para comparar después con normas y gu�
 | `homonimo` | La fuente no publica la coordenada; se usa la del punto INSIVUMEH con el mismo nombre y municipio |
 | `transcrita` | Transcrita de un documento (tesis o informe); conviene verificarla |
 | `modelada` | Celda o punto de un modelo, no una estación en terreno |
+| `aproximada` | La fuente describe el lugar (aldea, embalse o desembocadura) sin publicar la coordenada. Solo la usa la capa de barreras de plástico, que viene apagada |
 
 ## Advertencias
 

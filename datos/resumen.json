@@ -1,5 +1,5 @@
 {
-  "version": "1.1.0",
+  "version": "1.2.0",
   "fecha_corte": "2026-10-22",
   "fuentes": 643,
   "conjuntos_de_datos": 260,
@@ -25,11 +25,12 @@
     "ptar_hydrowaste": 8,
     "wpdx": 128,
     "plasticos": 70,
+    "barreras_plastico": 3,
     "clima_nasa": 3,
     "estaciones_meteo": 64,
     "gemstat_mexico": 365
   },
-  "puntos_en_mapa": 796,
+  "puntos_en_mapa": 799,
   "mediciones": 3632,
   "parametros": 39,
   "ids_unificados": 84,

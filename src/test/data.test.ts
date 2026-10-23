@@ -31,8 +31,9 @@ describe('carpeta de datos', () => {
     for (const capa of capas.filter((c) => c.geometria === 'punto')) {
       for (const sitio of leer<Coleccion<Sitio>>(capa.archivo).features) {
         const [lon, lat] = sitio.geometry.coordinates
-        expect(['publicada', 'homonimo', 'transcrita', 'modelada']).toContain(sitio.properties.precision)
-        expect(sitio.properties.fuente_ids.length).toBeGreaterThan(0)
+        expect(['publicada', 'homonimo', 'transcrita', 'modelada', 'aproximada']).toContain(sitio.properties.precision)
+        expect(sitio.properties.fuente_ids.length + (sitio.properties.enlaces?.length ?? 0), sitio.id).toBeGreaterThan(0)
+        for (const enlace of sitio.properties.enlaces ?? []) expect(enlace.url).toMatch(/^https:\/\//)
         for (const id of sitio.properties.fuente_ids) {
           expect(conocidos.has(id) || id.startsWith('GT-PUB'), `${sitio.id} → ${id}`).toBe(true)
         }
@@ -43,6 +44,15 @@ describe('carpeta de datos', () => {
           expect(lat).toBeLessThan(18)
         }
       }
+    }
+  })
+
+  it('las capas de ubicación aproximada vienen apagadas y lo dicen en el título', () => {
+    const aproximadas = capas.filter((c) => c.precision === 'aproximada')
+    expect(aproximadas.map((c) => c.id)).toContain('barreras_plastico')
+    for (const capa of aproximadas) {
+      expect(capa.visible, capa.id).toBe(false)
+      expect(capa.titulo).toMatch(/aproximada/)
     }
   })
 

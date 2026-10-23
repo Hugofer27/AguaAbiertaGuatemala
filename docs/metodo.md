@@ -42,6 +42,7 @@ Un lugar solo se dibuja si tiene una coordenada defendible. Cada punto declara l
 - **Por punto homónimo.** La base de caudales del INE 2022 no trae coordenadas. Cada estación se ubica en el punto de monitoreo del INSIVUMEH que tiene el mismo nombre y un municipio compatible. Si hay más de un candidato, o si el nombre casi igual corresponde a otra estación de la misma base (por ejemplo, Matacuy y Matucuy), no se ubica.
 - **Transcrita.** Coordenadas copiadas de las tablas de un documento, como los 32 sitios de la tesis USAC-ERIS 2025 sobre Las Vacas.
 - **Modelada.** Celdas de NASA POWER, tramos de HydroRIVERS y desembocaduras del modelo de plásticos.
+- **Aproximada.** Solo en la capa de barreras de plástico, que viene apagada y lo dice en su título. Las fuentes (notas de prensa y comunicados del MARN, AMSA y The Ocean Cleanup) describen el lugar, pero no publican coordenadas. Cada barrera se ubica en el punto con coordenada que mejor representa ese lugar, y su ficha explica cuál se usó y enlaza a las notas. La lista se mantiene a mano en `pipeline/barreras_plastico.csv`.
 
 Exclusiones documentadas en `datos/resumen.json`:
 

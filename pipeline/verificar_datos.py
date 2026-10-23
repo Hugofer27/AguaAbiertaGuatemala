@@ -89,10 +89,17 @@ def main() -> int:
             if not capa.get("fuera_de_guatemala") and not dentro_de_guatemala(lon, lat):
                 error(f"{capa['id']}/{f['id']}: coordenada fuera de Guatemala ({lon}, {lat})")
             p = f["properties"]
-            if p.get("precision") not in {"publicada", "homonimo", "transcrita", "modelada"}:
+            if p.get("precision") not in {"publicada", "homonimo", "transcrita", "modelada", "aproximada"}:
                 error(f"{capa['id']}/{f['id']}: precisión de ubicación no declarada")
-            if not p.get("fuente_ids"):
+            # Un punto cita registros del catálogo o, si la fuente es una nota o un comunicado, sus enlaces.
+            enlaces = p.get("enlaces") or []
+            if not p.get("fuente_ids") and not enlaces:
                 error(f"{capa['id']}/{f['id']}: sin fuente")
+            for e in enlaces:
+                if not str(e.get("url", "")).startswith("https://") or not e.get("texto"):
+                    error(f"{capa['id']}/{f['id']}: enlace de fuente incompleto o sin https ({e})")
+            if p.get("precision") == "aproximada" and capa.get("visible"):
+                error(f"{capa['id']}: una capa de ubicación aproximada no puede venir activa por defecto")
             for fid in p.get("fuente_ids", []):
                 if fid not in conocidos:
                     error(f"{capa['id']}/{f['id']}: fuente {fid} inexistente")

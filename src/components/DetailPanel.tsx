@@ -132,6 +132,14 @@ export default function DetailPanel({ sitio, capa, catalogo, onClose, onAbrirFue
                 {f.url_fuente && <a className="enlace-externo" href={f.url_fuente} target="_blank" rel="noreferrer" aria-label={`Fuente oficial de ${f.titulo}`}><ExternalLink aria-hidden="true" /></a>}
               </li>
             ))}
+            {(p.enlaces ?? []).map((e) => (
+              <li key={e.url}>
+                <a className="enlace-fuente" href={e.url} target="_blank" rel="noreferrer">
+                  <ExternalLink aria-hidden="true" />
+                  <span><strong>{e.texto}</strong><small>{new URL(e.url).hostname.replace(/^www\./, '')}</small></span>
+                </a>
+              </li>
+            ))}
           </ul>
         </section>
 

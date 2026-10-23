@@ -27,6 +27,10 @@ export const PRECISION: Record<Precision, { corto: string; largo: string }> = {
     corto: 'Ubicación de un modelo',
     largo: 'Es una celda o punto de cálculo de un modelo, no una estación en terreno.',
   },
+  aproximada: {
+    corto: 'Ubicación aproximada',
+    largo: 'La fuente describe el lugar (aldea, embalse o desembocadura) pero no publica la coordenada. El punto puede estar a algunos cientos de metros del sitio real.',
+  },
 }
 
 export const TIPO_DATO: Record<string, string> = {

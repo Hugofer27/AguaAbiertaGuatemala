@@ -1,6 +1,6 @@
 export type Vista = 'mapa' | 'datos' | 'acerca'
 
-export type Precision = 'publicada' | 'homonimo' | 'transcrita' | 'modelada'
+export type Precision = 'publicada' | 'homonimo' | 'transcrita' | 'modelada' | 'aproximada'
 
 export interface Fuente {
   id: string
@@ -118,6 +118,8 @@ export interface SitioPropiedades {
   mediciones?: Medicion[]
   serie?: Serie
   emision_t?: number
+  /** Notas o comunicados que respaldan el punto cuando la fuente no está en el catálogo. */
+  enlaces?: { texto: string; url: string }[]
 }
 
 export interface Sitio {

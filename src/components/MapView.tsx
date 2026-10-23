@@ -12,6 +12,7 @@ import {
 } from 'maplibre-gl'
 import mapLibreWorkerUrl from 'maplibre-gl/dist/maplibre-gl-worker.mjs?worker&url'
 import { ENFOQUES, MAPAS_BASE, estiloDe, type MapaBase } from '../capas'
+import { imagenBotella } from '../iconos'
 import type { CapaMeta, Coleccion, Cuenca, Seleccion, Sitio } from '../types'
 
 setWorkerUrl(mapLibreWorkerUrl)
@@ -158,6 +159,17 @@ export default function MapView({
               'line-width': ['interpolate', ['linear'], ['zoom'], 6, ['*', 0.28, ['get', 'orden']], 11, ['*', 0.9, ['get', 'orden']]],
             },
           })
+        } else if (estilo.icono === 'botella' && (map.hasImage('aa-botella') || agregarBotella(estilo.color))) {
+          map.addLayer({
+            id: fuente, type: 'symbol', source: fuente,
+            layout: {
+              visibility: visibilidad,
+              'icon-image': 'aa-botella',
+              'icon-anchor': 'bottom',
+              'icon-allow-overlap': true,
+              'icon-size': ['interpolate', ['linear'], ['zoom'], 5, 0.8, 10, 1.1, 14, 1.4],
+            },
+          })
         } else {
           map.addLayer({
             id: fuente, type: 'circle', source: fuente, minzoom: estilo.minzoom ?? 0, layout: { visibility: visibilidad },
@@ -171,8 +183,17 @@ export default function MapView({
           })
         }
       }
+      // Los íconos van encima de todos los círculos.
+      for (const meta of ordenadas) if (estiloDe(meta.id).icono && map.getLayer(`aa-${meta.id}`)) map.moveLayer(`aa-${meta.id}`)
       listo.current = true
       props.current.onEstado(map.getStyle().name === NOMBRE_RESPALDO ? 'respaldo' : 'listo')
+    }
+
+    // Cada cambio de estilo borra las imágenes; se vuelven a registrar en agregarCapas.
+    function agregarBotella(color: string) {
+      const imagen = imagenBotella(color)
+      if (imagen) map.addImage('aa-botella', imagen, { pixelRatio: 2 })
+      return Boolean(imagen)
     }
 
     map.on('style.load', agregarCapas)

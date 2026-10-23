@@ -12,6 +12,8 @@ export interface EstiloCapa {
   tamano: number
   minzoom?: number
   orden: number
+  /** Dibuja el punto con un ícono en lugar de un círculo. */
+  icono?: 'botella'
 }
 
 // Paleta inspirada en Okabe-Ito, distinguible con daltonismo frecuente.
@@ -24,6 +26,7 @@ export const ESTILOS: Record<string, EstiloCapa> = {
   ptar_hydrowaste: { color: '#8C6D31', tamano: 6.5, orden: 6 },
   wpdx: { color: '#E69F00', tamano: 4.5, orden: 7 },
   plasticos: { color: '#7A5195', tamano: 4, orden: 8 },
+  barreras_plastico: { color: '#0E7C66', tamano: 7, orden: 8.5, icono: 'botella' },
   clima_nasa: { color: '#999933', tamano: 7, orden: 9 },
   estaciones_meteo: { color: '#6B7A80', tamano: 4.5, orden: 10 },
   gemstat_mexico: { color: '#882255', tamano: 4, orden: 11 },

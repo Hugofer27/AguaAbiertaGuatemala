@@ -3,7 +3,7 @@
 ## Versión 1.0 (actual)
 
 - Catálogo unificado de fuentes, publicaciones y datos faltantes.
-- Atlas con 14 capas y precisión de ubicación declarada por punto.
+- Atlas con 15 capas y precisión de ubicación declarada por punto.
 - Mediciones en formato largo con código de parámetro y unidad.
 - Sitio publicado en GitHub Pages y carpeta `datos/` descargable.
 - La versión 1.0 no califica la calidad del agua.

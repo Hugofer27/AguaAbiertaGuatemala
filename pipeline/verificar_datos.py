@@ -51,6 +51,12 @@ def main() -> int:
         if fila["id_canonico"] not in conocidos:
             error(f"La equivalencia {fila['id_origen']} → {fila['id_canonico']} apunta a un ID inexistente")
 
+    # Texto dañado por una mala decodificación (carácter de reemplazo U+FFFD).
+    for nombre, filas in (("catálogo", catalogo), ("publicaciones", publicaciones)):
+        for r in filas:
+            if any(isinstance(v, str) and "\ufffd" in v for v in r.values()):
+                error(f"{nombre} {r['id']}: contiene el carácter de reemplazo U+FFFD; agregue la corrección en REPARACIONES")
+
     # 2. Campos obligatorios del catálogo.
     for r in catalogo:
         for campo in ("titulo", "institucion", "tipo", "tema", "acceso", "descarga"):

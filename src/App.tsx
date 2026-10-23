@@ -31,6 +31,8 @@ function hashDe(vista: Vista, params: Record<string, string | null | undefined> 
 }
 
 function prefiereOscuro() {
+  const tema = document.documentElement.dataset.theme
+  if (tema) return tema === 'dark'
   return typeof window.matchMedia === 'function' && window.matchMedia('(prefers-color-scheme: dark)').matches
 }
 
@@ -54,7 +56,12 @@ export default function App() {
   const navegar = useCallback((vista: Vista, params?: Record<string, string | null | undefined>, reemplazar = false) => {
     const destino = hashDe(vista, params)
     if (reemplazar) {
-      window.history.replaceState(null, '', destino)
+      try {
+        window.history.replaceState(null, '', destino)
+      } catch {
+        // Algunos marcos incrustados bloquean el historial; el hash sigue funcionando.
+        window.location.hash = destino
+      }
       setRuta(leerRuta())
     } else if (window.location.hash !== destino) {
       window.location.hash = destino

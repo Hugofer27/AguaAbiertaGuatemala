@@ -111,6 +111,15 @@ DESTACADOS_EXTRA = {"GT-DAT-0006", "GT-DAT-0038", "GT-DAT-0019", "GT-DAT-0013", 
 
 EMAIL = re.compile(r"[\w.+-]+@[\w-]+(\.[\w-]+)+")
 
+# Palabras que llegan con el carácter de reemplazo U+FFFD por una mala decodificación en la fuente.
+REPARACIONES = {"Chilasc\ufffd": "Chilascó", "Pet\ufffdn": "Petén"}
+
+
+def reparar(texto: str) -> str:
+    for roto, correcto in REPARACIONES.items():
+        texto = texto.replace(roto, correcto)
+    return texto
+
 
 # ---------------------------------------------------------------------------
 # Normalización de campos
@@ -218,7 +227,7 @@ def construir_catalogo() -> dict[str, Any]:
         registro = {
             "id": rid,
             "tipo": TIPOS.get(fila["Dataset or publication"], fila["Dataset or publication"]),
-            "titulo": fila["Resource title"].strip(),
+            "titulo": reparar(fila["Resource title"].strip()),
             "institucion": corto,
             "institucion_detalle": detalle,
             "categoria": fila["Source category"],
@@ -261,7 +270,7 @@ def construir_catalogo() -> dict[str, Any]:
         pid = fila["Resource ID"]
         publicaciones[pid] = {
             "id": pid,
-            "titulo": fila["Title"].strip(),
+            "titulo": reparar(fila["Title"].strip()),
             "autores": fila["Authors"],
             "anio": fila["Year of publication"],
             "url": fila["DOI or permanent URL"],

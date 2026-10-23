@@ -1,7 +1,7 @@
 {
   "name": "agua-abierta-guatemala",
   "private": true,
-  "version": "0.1.0",
+  "version": "1.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite --host 0.0.0.0",
@@ -9,7 +9,8 @@
     "preview": "node scripts/serve_dashboard.mjs",
     "test": "vitest run",
     "test:watch": "vitest",
-    "check": "npm run test && npm run build"
+    "check": "npm run test && npm run build",
+    "datos": "python pipeline/construir_datos.py && python pipeline/verificar_datos.py"
   },
   "dependencies": {
     "lucide-react": "^1.61.0",

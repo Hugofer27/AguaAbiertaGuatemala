@@ -1,80 +1,117 @@
 # Agua Abierta Guatemala
 
-Versión 0.1.0 de un portal local para explorar recursos hídricos y fuentes públicas de agua de Guatemala. La aplicación usa React, TypeScript, Vite y MapLibre. No necesita claves privadas ni un backend.
+Catálogo y atlas abierto de los datos públicos sobre el agua en Guatemala: quién mide qué, dónde, desde cuándo y dónde conseguirlo.
 
-## Versiones de investigación incluidas
+**Sitio web:** https://hugofer27.github.io/AguaAbiertaGuatemala/ (se publica solo desde la rama `main`).
 
-- `src/` contiene la aplicación integrada de Agua Abierta Guatemala.
-- `versions/claude/` conserva los informes, inventarios, scripts, manifiestos, registros de búsqueda y datos procesados producidos por Claude.
-- `versions/antigravity/` conserva los prototipos HTML, informes, inventarios, scripts, manifiestos y datos procesados producidos por Antigravity.
+| | |
+|---|---|
+| Fuentes | 643 conjuntos de datos, documentos y portales de 85 instituciones |
+| Publicaciones | 1 494 artículos, tesis e informes (1 199 de acceso abierto) |
+| Datos faltantes | 42 registros con el motivo y cómo pedirlos por la LAIP |
+| Mapa | 14 capas y 796 puntos, cada uno con la precisión de su ubicación |
+| Mediciones | 3 632 valores de 39 parámetros, con unidad, fecha y fuente |
+| Originales | 342 archivos (~2 GB) verificados con SHA-256 |
 
-Consulte [`versions/README.md`](versions/README.md) para conocer la procedencia y las exclusiones por tamaño.
+Datos al 22 de octubre de 2026. El portal muestra valores con su procedencia y no califica la calidad del agua.
 
-## Qué incluye
+## Usar los datos sin la web
 
-- Mapa MapLibre con 155 ubicaciones derivadas únicamente de coordenadas publicadas.
-- Búsqueda de fuentes hídricas y fuentes de datos.
-- Capas activables, visibilidad progresiva por escala, leyenda y fichas de evidencia.
-- Imagen satelital reciente bajo demanda para cada ubicación, mediante NASA Worldview/GIBS y sin clave privada; cada recorte se centra en las coordenadas del punto y las muestra junto a una retícula visible.
-- Alternativa tabular completa para la información del mapa.
-- Biblioteca con los 75 archivos descargados, filtros, orden, fichas técnicas y SHA-256.
-- Selección documentada de 12 conjuntos para el MVP.
-- Copias organizadas en `fuente_de_datos/` sin modificar los originales de `Ghagpt/data/raw/`.
-- Catálogo maestro en HTML y PDF.
-- Modelo conservador de estados narrativos y documentación de procedencia.
+Todo está en la carpeta [`datos/`](datos/), en CSV y GeoJSON. El diccionario de columnas está en [`datos/LEEME.md`](datos/LEEME.md).
 
-## Ejecutar localmente
+```python
+import pandas as pd, geopandas as gpd
+mediciones = pd.read_csv("datos/mediciones/mediciones.csv")
+puntos = gpd.read_file("datos/capas/monitoreo_insivumeh.geojson")
+```
 
-Requiere Node.js 20 o posterior.
+```r
+library(readr); library(sf)
+fuentes <- read_csv("datos/catalogo/fuentes.csv")
+cuencas <- st_read("datos/capas/cuencas.geojson")
+```
 
-La forma más sencilla en Windows es hacer doble clic en `ABRIR_DASHBOARD.cmd`. El archivo instala las dependencias si faltan, abre el navegador y deja el servidor activo mientras la ventana permanezca abierta.
+En Excel, abra cualquier CSV. En QGIS, arrastre los `.geojson`.
 
-```powershell
-cd AguaAbiertaGuatemala
+## Ejecutar el sitio en su computadora
+
+Requiere [Node.js](https://nodejs.org/) 20 o posterior.
+
+- **Windows:** doble clic en `ABRIR_DASHBOARD.cmd`.
+- **Cualquier sistema:**
+
+```bash
 npm install
-npm run dev -- --host 127.0.0.1 --port 4173
+npm run dev        # http://localhost:5173/
 ```
 
-Abra `http://127.0.0.1:4173/`. No abra `index.html` directamente: la aplicación necesita el servidor local para cargar sus módulos y los archivos de la biblioteca. El mapa base requiere conexión a internet; los 155 elementos normalizados, la biblioteca y la documentación son locales. Si OpenFreeMap no responde, la aplicación conserva un fondo cartográfico local de respaldo y mantiene visibles los puntos.
+Comandos útiles:
 
-## Construir y probar
+| Comando | Qué hace |
+|---|---|
+| `npm test` | Pruebas de la interfaz y de la carpeta `datos/` |
+| `npm run build` | Construye el sitio en `dist/` (incluye `dist/datos/`) |
+| `npm run preview` | Sirve `dist/` en http://127.0.0.1:4173/ |
+| `npm run datos` | Regenera y verifica `datos/` (requiere Python 3.10+) |
 
-```powershell
-npm run test
-npm run build
-npm run preview -- --host 127.0.0.1 --port 4173
+## Cómo está organizado
+
+```
+datos/        Carpeta pública: catálogo, capas, mediciones y manifiesto (lo que usa la web)
+pipeline/     Python sin dependencias externas
+  construir_datos.py       versions/ → datos/
+  verificar_datos.py       controles de calidad (los corre la publicación)
+  empaquetar_originales.py arma el paquete de archivos originales para Drive
+  equivalencias.csv        equivalencias de IDs revisadas a mano
+src/          Aplicación web (React + TypeScript + MapLibre)
+  capas.ts                 colores, grupos y enfoques del mapa
+  textos.ts                textos compartidos de la interfaz
+docs/         metodo.md y hoja_de_ruta.md
+versions/     Material de las búsquedas de origen (entrada del pipeline)
 ```
 
-El resultado de interfaz se genera en `dist/`. La vista previa incluida sirve también `fuente_de_datos/` bajo demanda sin duplicar sus aproximadamente 303 MB. Para publicar la experiencia completa en un hosting estático, copie esa carpeta como `dist/fuente_de_datos/` antes de subir el contenido de `dist/`.
+### Agregar o cambiar datos
 
-## Regenerar metadatos y copias
+1. Modifique `pipeline/construir_datos.py`. Para una capa nueva, cree un método en la clase `Constructor` siguiendo el patrón de las existentes.
+2. Si es una capa, agregue su color en `src/capas.ts`.
+3. Ejecute `npm run datos` y luego `npm test`.
 
-El script necesita Python 3.11+ y `openpyxl` para leer los XLSX de 2024.
+La publicación vuelve a generar `datos/` y falla si no coincide con lo subido. Así, la web y los archivos descargables nunca quedan desfasados.
 
-```powershell
-python .\scripts\build_data.py
-python .\scripts\build_pdf.py
+## Archivos originales (Drive)
+
+Los ~2 GB de originales no caben en GitHub. Para armar el paquete desde las carpetas de investigación de su computadora:
+
+```bash
+python pipeline/empaquetar_originales.py --buscar "RUTA/Investigación Claude" --buscar "RUTA/Ghagpt" --buscar "RUTA/Investigación Antigravity" --zip
 ```
 
-`build_data.py` usa como fuente la carpeta hermana `Ghagpt/`, copia los 75 archivos listados en `archivos_descargados.csv`, vuelve a calcular SHA-256 y genera:
+1. El script verifica cada archivo contra su SHA-256 y crea `originales/` y `AguaAbiertaGT_originales.zip`, con un informe de lo que faltó.
+2. Suba la carpeta o el ZIP a Drive y compártalo con "Cualquier persona con el enlace".
+3. Pegue ese enlace en `datos/config.json` (`enlace_originales`). Desde ahí, las fichas muestran el botón **Copia de respaldo**.
 
-- `public/data/catalog.json`
-- `public/data/selected_datasets.json`
-- `public/data/water_features.geojson`
-- `public/data/summary.json`
-- `fuente_de_datos/manifest_fuentes.csv`
-- `verification/copy_integrity.json`
-- `catalogo_fuentes_agua_guatemala.html`
+## Publicación
 
-Las copias de `fuente_de_datos/` no se guardan en Git porque incluyen archivos que superan el límite de tamaño de GitHub. Los metadatos normalizados necesarios para desarrollar y probar la interfaz sí forman parte del repositorio. Para reconstruir el archivo documental completo, coloque `Ghagpt/` junto a la carpeta del proyecto y ejecute los scripts anteriores.
+El flujo [`.github/workflows/pages.yml`](.github/workflows/pages.yml) verifica los datos, corre las pruebas y construye el sitio en cada push. En `main` además publica en GitHub Pages. También genera dos descargas:
 
-## Límites del MVP
+- `descargas/agua-abierta-guatemala-datos.zip`, con la carpeta de datos;
+- `descargas/agua-abierta-guatemala-sitio.zip`, con el sitio para usar sin internet.
 
-- No existe backend, autenticación ni moderación de reportes.
-- “Reportar problema” está deshabilitado y marcado como Fase 2.
-- No se afirma que los datos sean en tiempo real. La interfaz muestra la fecha de corte real.
-- La imagen satelital tampoco es una transmisión en directo: usa color verdadero MODIS/Aqua en un recorte aproximado de 40 km, muestra la fecha UTC solicitada y puede tener retrasos, nubes o áreas todavía no procesadas. Puntos muy próximos pueden compartir píxeles y nubosidad por la resolución nominal de 250 m.
-- El estado narrativo no emite conclusiones de calidad del agua en esta versión: las fuentes aparecen como “Sin datos suficientes” cuando la evidencia no permite una clasificación responsable.
-- Los recursos sin coordenadas verificables permanecen en la biblioteca y no se colocan en el mapa.
+**Activación (una sola vez):** en el repositorio, *Settings → Pages → Build and deployment → Source: GitHub Actions*.
 
-Consulte [DATA_METHOD.md](DATA_METHOD.md), [EMOTION_MODEL.md](EMOTION_MODEL.md) y [MVP_DATASETS.md](MVP_DATASETS.md) para el detalle metodológico.
+## Método y límites
+
+Vea [`docs/metodo.md`](docs/metodo.md). En resumen:
+
+- Solo se mapean coordenadas defendibles y cada punto declara su precisión.
+- Se excluyeron 81 ubicaciones que no cumplían ese criterio.
+- Los valores son campañas con fecha, no datos en tiempo real.
+- Un dato modelado nunca se presenta como medición.
+
+Los próximos pasos, incluida la comparación con COGUANOR NTG 29001, NOM-127-SSA1-2021 y las guías de la OMS, están en [`docs/hoja_de_ruta.md`](docs/hoja_de_ruta.md).
+
+## Cómo citar
+
+> Agua Abierta Guatemala (2026). Catálogo y atlas de datos públicos sobre el agua en Guatemala, versión 1.0. https://hugofer27.github.io/AguaAbiertaGuatemala/
+
+Cada conjunto de datos conserva la licencia de su institución. Revise la columna `licencia` de `datos/catalogo/fuentes.csv` antes de redistribuir un archivo.

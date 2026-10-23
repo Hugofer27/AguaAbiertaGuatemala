@@ -28,7 +28,7 @@ def escribir_csv(ruta: Path, filas: Iterable[dict[str, Any]], columnas: list[str
     ruta.parent.mkdir(parents=True, exist_ok=True)
     total = 0
     with ruta.open("w", encoding="utf-8-sig", newline="") as archivo:
-        escritor = csv.DictWriter(archivo, fieldnames=columnas, extrasaction="ignore")
+        escritor = csv.DictWriter(archivo, fieldnames=columnas, extrasaction="ignore", lineterminator="\n")
         escritor.writeheader()
         for fila in filas:
             escritor.writerow({clave: formatear_celda(fila.get(clave)) for clave in columnas})
@@ -56,7 +56,7 @@ def escribir_json(ruta: Path, valor: Any, compacto: bool = True) -> None:
         texto = json.dumps(valor, ensure_ascii=False, separators=(",", ":"))
     else:
         texto = json.dumps(valor, ensure_ascii=False, indent=2)
-    ruta.write_text(texto + "\n", encoding="utf-8")
+    ruta.write_text(texto + "\n", encoding="utf-8", newline="\n")
 
 
 def sin_acentos(texto: str) -> str:

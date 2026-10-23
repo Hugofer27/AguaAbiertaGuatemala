@@ -1,0 +1,69 @@
+name: Verificar y publicar
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pages-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  construir:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Regenerar datos y comprobar que el repositorio está al día
+        run: |
+          python pipeline/construir_datos.py
+          git diff --exit-code -- datos/ || (echo "::error::datos/ no coincide con el pipeline. Ejecute python pipeline/construir_datos.py y suba los cambios." && exit 1)
+
+      - name: Verificar datos
+        run: python pipeline/verificar_datos.py
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+      - run: npm test
+      - run: npm run build
+
+      - name: Paquetes descargables
+        run: |
+          mkdir -p paquete/agua-abierta-guatemala
+          cp -r dist/. paquete/agua-abierta-guatemala/
+          cp scripts/sitio_sin_internet/* paquete/agua-abierta-guatemala/
+          mkdir -p dist/descargas
+          (cd paquete && zip -qr ../dist/descargas/agua-abierta-guatemala-sitio.zip agua-abierta-guatemala)
+          (cd datos && zip -qr ../dist/descargas/agua-abierta-guatemala-datos.zip .)
+          ls -la dist/descargas
+
+      - uses: actions/upload-pages-artifact@v3
+        if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+        with:
+          path: dist
+
+  publicar:
+    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+    needs: construir
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.despliegue.outputs.page_url }}
+    steps:
+      - id: despliegue
+        uses: actions/deploy-pages@v4

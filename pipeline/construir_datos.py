@@ -19,7 +19,6 @@ import math
 import re
 from collections import Counter, defaultdict
 from difflib import SequenceMatcher
-from datetime import date
 from pathlib import Path
 from typing import Any
 
@@ -1420,7 +1419,6 @@ def main() -> None:
     resumen = {
         "version": VERSION,
         "fecha_corte": FECHA_CORTE,
-        "generado": date.today().isoformat(),
         "fuentes": len(lista_fuentes),
         "conjuntos_de_datos": conteo_tipos["Conjunto de datos"],
         "documentos": conteo_tipos["Documento"],

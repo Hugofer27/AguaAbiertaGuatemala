@@ -115,7 +115,7 @@ def main() -> int:
 
     columnas = list(manifiesto[0].keys()) + ["estado"] if manifiesto else ["estado"]
     with (salida / "MANIFIESTO.csv").open("w", encoding="utf-8-sig", newline="") as archivo:
-        escritor = csv.DictWriter(archivo, fieldnames=columnas)
+        escritor = csv.DictWriter(archivo, fieldnames=columnas, lineterminator="\n")
         escritor.writeheader()
         escritor.writerows(filas_salida)
     (salida / "LEEME.txt").write_text(LEEME, encoding="utf-8")

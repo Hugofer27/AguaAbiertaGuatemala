@@ -1,5 +1,24 @@
 # Historial de versiones
 
+## 1.0.0 — 2026-10-23
+
+Primera versión que integra las tres búsquedas de datos en un solo portal.
+
+- Catálogo unificado sin duplicados: 643 fuentes y 1 494 publicaciones. Los IDs anteriores se conservan como alias.
+- Nueva pestaña de datos faltantes (42 registros), con el motivo y cómo pedirlos por la Ley de Acceso a la Información Pública.
+- Mapa con 14 capas:
+  - nuevas: cuencas, lagos, red fluvial del Motagua, caudales mensuales, acidificación costera, fármacos en Las Vacas, plantas de tratamiento, puntos de agua, plásticos y estaciones meteorológicas;
+  - botones de enfoque territorial;
+  - modo limpio;
+  - ficha de cuenca;
+  - tabla alternativa al mapa.
+- Cada punto declara la precisión de su ubicación. Se excluyeron 81 ubicaciones sin coordenada defendible.
+- Mediciones en formato largo con código de parámetro y unidad. El oxígeno disuelto se controla contra la saturación teórica.
+- Carpeta `datos/` exportable (CSV y GeoJSON), con diccionario de datos y manifiesto de 342 originales con SHA-256.
+- Interfaz rediseñada: tema claro con modo oscuro automático, barra superior y tres secciones (Mapa, Datos, Acerca de).
+- Publicación automática en GitHub Pages, con ZIP de datos y ZIP del sitio para usar sin internet.
+- Se retiró el "estado narrativo" del agua. La comparación con normas queda en la hoja de ruta.
+
 ## 0.1.0 — 2026-10-23
 
 Primera versión publicable de Agua Abierta Guatemala.

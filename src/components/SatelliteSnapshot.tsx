@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import { CalendarDays, ChevronLeft, ChevronRight, ExternalLink, ImageOff, Satellite } from 'lucide-react'
-import type { WaterFeature } from '../types'
+import type { Sitio } from '../types'
 
 const NASA_SNAPSHOT_ENDPOINT = 'https://wvs.earthdata.nasa.gov/api/v1/snapshot'
 const NASA_WORLDVIEW_ENDPOINT = 'https://worldview.earthdata.nasa.gov/'
@@ -31,7 +31,7 @@ function formatDate(value: string) {
   }).format(new Date(`${value}T00:00:00Z`)).replace('.', '')
 }
 
-export function buildSatelliteUrls(feature: WaterFeature, date: string) {
+export function buildSatelliteUrls(feature: Sitio, date: string) {
   const [longitude, latitude] = feature.geometry.coordinates
   const south = Math.max(-89.9, latitude - VIEW_RADIUS_DEGREES)
   const west = Math.max(-179.9, longitude - VIEW_RADIUS_DEGREES)
@@ -63,7 +63,7 @@ export function buildSatelliteUrls(feature: WaterFeature, date: string) {
   return { snapshot: snapshot.toString(), worldview: worldview.toString() }
 }
 
-export default function SatelliteSnapshot({ feature }: { feature: WaterFeature }) {
+export default function SatelliteSnapshot({ feature }: { feature: Sitio }) {
   const [open, setOpen] = useState(false)
   const [daysAgo, setDaysAgo] = useState(1)
   const [imageState, setImageState] = useState<'loading' | 'ready' | 'error'>('loading')
@@ -126,7 +126,7 @@ export default function SatelliteSnapshot({ feature }: { feature: WaterFeature }
                 <img
                   key={`${feature.id}-${urls.snapshot}`}
                   src={urls.snapshot}
-                  alt={`Imagen satelital de color verdadero centrada en ${feature.properties.name}, correspondiente al ${formatDate(date)}`}
+                  alt={`Imagen satelital de color verdadero centrada en ${feature.properties.nombre}, correspondiente al ${formatDate(date)}`}
                   loading="lazy"
                   onLoad={() => setImageState('ready')}
                   onError={() => setImageState('error')}

@@ -1,0 +1,16 @@
+Agua Abierta Guatemala · sitio para usar en su computadora
+===========================================================
+
+1. Descomprima esta carpeta.
+2. Windows: haga doble clic en ABRIR_SITIO.cmd
+   macOS / Linux: ejecute ./abrir_sitio.sh en una terminal.
+3. Se abrirá http://127.0.0.1:8000/ en su navegador.
+
+Necesita Python 3 (o Node.js) instalado. El sitio no se puede abrir con doble clic
+en index.html porque el navegador bloquea la lectura de los datos desde el disco.
+
+Los datos (catálogo, capas, mediciones) funcionan sin internet. El mapa base de
+fondo sí necesita conexión; sin ella, los puntos y las cuencas siguen visibles.
+
+La carpeta datos/ contiene todos los archivos en CSV y GeoJSON para Excel, R,
+Python o QGIS. Vea datos/LEEME.md.

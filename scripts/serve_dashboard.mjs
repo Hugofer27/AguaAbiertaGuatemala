@@ -5,7 +5,6 @@ import { fileURLToPath } from 'node:url'
 
 const projectRoot = resolve(dirname(fileURLToPath(import.meta.url)), '..')
 const distRoot = resolve(projectRoot, 'dist')
-const libraryRoot = resolve(projectRoot, 'fuente_de_datos')
 const args = process.argv.slice(2)
 
 function argument(name, fallback) {
@@ -62,7 +61,7 @@ function sendFile(req, res, filePath) {
 
   const headers = {
     'Accept-Ranges': 'bytes',
-    'Cache-Control': filePath.startsWith(libraryRoot) ? 'private, max-age=3600' : 'no-cache',
+    'Cache-Control': 'no-cache',
     'Content-Length': String(end - start + 1),
     'Content-Type': type,
   }
@@ -84,13 +83,12 @@ const server = createServer((req, res) => {
   try {
     const url = new URL(req.url ?? '/', `http://${host}:${port}`)
     const pathname = decodeURIComponent(url.pathname)
-    const isLibrary = pathname.startsWith('/fuente_de_datos/')
-    const relativePath = isLibrary ? pathname.slice('/fuente_de_datos/'.length) : pathname === '/' ? 'index.html' : pathname
-    let filePath = safeFile(isLibrary ? libraryRoot : distRoot, relativePath)
+    const relativePath = pathname === '/' ? 'index.html' : pathname
+    let filePath = safeFile(distRoot, relativePath)
 
     if (!filePath || !existsSync(filePath) || !statSync(filePath).isFile()) {
       const acceptsHtml = req.headers.accept?.includes('text/html')
-      filePath = !isLibrary && acceptsHtml ? resolve(distRoot, 'index.html') : null
+      filePath = acceptsHtml ? resolve(distRoot, 'index.html') : null
     }
     if (!filePath) {
       res.writeHead(404, { 'Content-Type': 'text/plain; charset=utf-8' })

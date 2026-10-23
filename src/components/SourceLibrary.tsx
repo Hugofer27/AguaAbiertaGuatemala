@@ -1,197 +1,350 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { createPortal } from 'react-dom'
-import { Download, ExternalLink, FileSearch, Filter, Search, ShieldCheck, X } from 'lucide-react'
-import type { CatalogItem, Summary } from '../types'
+import { Download, ExternalLink, FileSearch, Map as MapIcon, Search, ShieldCheck, Star, X } from 'lucide-react'
+import { cargarPublicaciones, urlDatos } from '../data'
+import type { Config, Faltante, Fuente, Publicacion, Resumen } from '../types'
 import { usePanelFocus } from '../usePanelFocus'
 
+export type Pestana = 'conjuntos' | 'documentos' | 'portales' | 'publicaciones' | 'faltantes'
+
+const PESTANAS: { id: Pestana; nombre: string; tipo?: Fuente['tipo'] }[] = [
+  { id: 'conjuntos', nombre: 'Conjuntos de datos', tipo: 'Conjunto de datos' },
+  { id: 'documentos', nombre: 'Documentos', tipo: 'Documento' },
+  { id: 'portales', nombre: 'Portales', tipo: 'Portal o servicio' },
+  { id: 'publicaciones', nombre: 'Publicaciones' },
+  { id: 'faltantes', nombre: 'Datos faltantes' },
+]
+
+const TODAS = ''
+const POR_PAGINA = 30
+
 interface SourceLibraryProps {
-  catalog: CatalogItem[]
-  summary: Summary
-  initialQuery?: string
+  catalogo: Fuente[]
+  faltantes: Faltante[]
+  resumen: Resumen
+  config: Config
+  consulta?: string
+  abrirId?: string | null
+  onAbrirId: (id: string | null) => void
+  onVerCapa: (capaId: string) => void
 }
 
-const ALL = 'Todas'
-
-function uniq(values: string[]) {
-  return [ALL, ...Array.from(new Set(values.filter(Boolean))).sort((a, b) => a.localeCompare(b, 'es'))]
+function normalizar(texto: string) {
+  return texto.normalize('NFD').replace(/\p{Diacritic}/gu, '').toLocaleLowerCase('es')
 }
 
-function matches(value: string, filter: string) {
-  return filter === ALL || value === filter
+function opciones(valores: string[]) {
+  return Array.from(new Set(valores.filter(Boolean))).sort((a, b) => a.localeCompare(b, 'es'))
 }
 
-export default function SourceLibrary({ catalog, summary, initialQuery = '' }: SourceLibraryProps) {
-  const [query, setQuery] = useState(initialQuery)
-  const [institution, setInstitution] = useState(ALL)
-  const [topic, setTopic] = useState(ALL)
-  const [territory, setTerritory] = useState(ALL)
-  const [period, setPeriod] = useState(ALL)
-  const [format, setFormat] = useState(ALL)
-  const [access, setAccess] = useState(ALL)
-  const [sort, setSort] = useState('relevance')
-  const [selected, setSelected] = useState<CatalogItem | null>(null)
+export function pestanaDeId(id: string, catalogo: Fuente[]): Pestana | null {
+  if (id.startsWith('GT-PUB')) return 'publicaciones'
+  if (id.startsWith('FALT-')) return 'faltantes'
+  const fuente = catalogo.find((f) => f.id === id || f.ids_alias.includes(id))
+  return PESTANAS.find((p) => p.tipo === fuente?.tipo)?.id ?? null
+}
 
-  const options = useMemo(() => ({
-    institutions: uniq(catalog.map((item) => item.institution)),
-    topics: uniq(catalog.map((item) => item.topic)),
-    territories: uniq(catalog.map((item) => item.territory)),
-    periods: uniq(catalog.map((item) => item.period)),
-    formats: uniq(catalog.map((item) => item.format)),
-    access: uniq(catalog.map((item) => item.accessState)),
-  }), [catalog])
+export default function SourceLibrary({ catalogo, faltantes, resumen, config, consulta = '', abrirId, onAbrirId, onVerCapa }: SourceLibraryProps) {
+  const [pestana, setPestana] = useState<Pestana>(() => (abrirId && pestanaDeId(abrirId, catalogo)) || 'conjuntos')
+  const [texto, setTexto] = useState(consulta)
+  const [institucion, setInstitucion] = useState(TODAS)
+  const [tema, setTema] = useState(TODAS)
+  const [acceso, setAcceso] = useState(TODAS)
+  const [estado, setEstado] = useState(TODAS)
+  const [soloMotagua, setSoloMotagua] = useState(false)
+  const [soloArchivo, setSoloArchivo] = useState(false)
+  const [soloMapa, setSoloMapa] = useState(false)
+  const [orden, setOrden] = useState('destacados')
+  const [limite, setLimite] = useState(POR_PAGINA)
+  const [publicaciones, setPublicaciones] = useState<Publicacion[] | null>(null)
+  const [errorPublicaciones, setErrorPublicaciones] = useState('')
 
-  const filtered = useMemo(() => {
-    const normalized = query.trim().toLocaleLowerCase('es')
-    const rows = catalog.filter((item) => {
-      const haystack = `${item.title} ${item.fileName} ${item.institution} ${item.topic} ${item.territory}`.toLocaleLowerCase('es')
-      return (!normalized || haystack.includes(normalized))
-        && matches(item.institution, institution)
-        && matches(item.topic, topic)
-        && matches(item.territory, territory)
-        && matches(item.period, period)
-        && matches(item.format, format)
-        && matches(item.accessState, access)
+  useEffect(() => setTexto(consulta), [consulta])
+  useEffect(() => {
+    if (abrirId) {
+      const destino = pestanaDeId(abrirId, catalogo)
+      if (destino) setPestana(destino)
+    }
+  }, [abrirId, catalogo])
+  useEffect(() => setLimite(POR_PAGINA), [pestana, texto, institucion, tema, acceso, estado, soloMotagua, soloArchivo, soloMapa, orden])
+  useEffect(() => {
+    if (pestana !== 'publicaciones' || publicaciones) return
+    cargarPublicaciones().then(setPublicaciones).catch(() => setErrorPublicaciones('No se pudieron cargar las publicaciones.'))
+  }, [pestana, publicaciones])
+
+  const tipo = PESTANAS.find((p) => p.id === pestana)?.tipo
+  const delTipo = useMemo(() => catalogo.filter((f) => f.tipo === tipo), [catalogo, tipo])
+  const filtros = useMemo(() => ({
+    instituciones: opciones(delTipo.map((f) => f.institucion)),
+    temas: opciones(delTipo.map((f) => f.tema)),
+    accesos: opciones(delTipo.map((f) => f.acceso)),
+    estados: opciones(faltantes.map((f) => f.estado)),
+  }), [delTipo, faltantes])
+
+  const q = normalizar(texto.trim())
+
+  const fuentesFiltradas = useMemo(() => {
+    const filas = delTipo.filter((f) => {
+      const pajar = normalizar(`${f.titulo} ${f.institucion} ${f.institucion_detalle} ${f.cobertura} ${f.parametros} ${f.tema} ${f.id} ${f.ids_alias.join(' ')}`)
+      return (!q || pajar.includes(q))
+        && (!institucion || f.institucion === institucion)
+        && (!tema || f.tema === tema)
+        && (!acceso || f.acceso === acceso)
+        && (!soloMotagua || f.motagua_las_vacas)
+        && (!soloArchivo || f.descarga === 'Archivo descargado')
+        && (!soloMapa || f.capas.length > 0)
     })
-    return [...rows].sort((a, b) => {
-      if (sort === 'date') return b.period.localeCompare(a.period, 'es', { numeric: true })
-      if (sort === 'source') return a.institution.localeCompare(b.institution, 'es')
-      if (sort === 'name') return a.title.localeCompare(b.title, 'es')
-      if (sort === 'size') return b.bytes - a.bytes
-      return Number(b.selectedMvp) - Number(a.selectedMvp) || a.number - b.number
+    return filas.sort((a, b) => {
+      if (orden === 'recientes') return (b.anio_max ?? 0) - (a.anio_max ?? 0) || a.titulo.localeCompare(b.titulo, 'es')
+      if (orden === 'nombre') return a.titulo.localeCompare(b.titulo, 'es')
+      if (orden === 'institucion') return a.institucion.localeCompare(b.institucion, 'es') || a.titulo.localeCompare(b.titulo, 'es')
+      return Number(b.destacado) - Number(a.destacado) || Number(b.capas.length > 0) - Number(a.capas.length > 0) || a.prioridad - b.prioridad || a.id.localeCompare(b.id)
     })
-  }, [access, catalog, format, institution, period, query, sort, territory, topic])
+  }, [acceso, delTipo, institucion, orden, q, soloArchivo, soloMapa, soloMotagua, tema])
 
-  const reset = () => {
-    setQuery('')
-    setInstitution(ALL)
-    setTopic(ALL)
-    setTerritory(ALL)
-    setPeriod(ALL)
-    setFormat(ALL)
-    setAccess(ALL)
-    setSort('relevance')
+  const publicacionesFiltradas = useMemo(() => {
+    if (!publicaciones) return []
+    const filas = publicaciones.filter((p) => {
+      const pajar = normalizar(`${p.titulo} ${p.autores} ${p.fuente} ${p.lugar} ${p.parametros} ${p.id} ${p.ids_alias.join(' ')}`)
+      return (!q || pajar.includes(q)) && (!soloMotagua || p.motagua_las_vacas)
+    })
+    return filas.sort((a, b) => (orden === 'nombre' ? a.titulo.localeCompare(b.titulo, 'es') : Number(b.anio || 0) - Number(a.anio || 0)))
+  }, [orden, publicaciones, q, soloMotagua])
+
+  const faltantesFiltrados = useMemo(() => faltantes.filter((f) => {
+    const pajar = normalizar(`${f.institucion} ${f.dato_esperado} ${f.motivo} ${f.siguiente_paso}`)
+    return (!q || pajar.includes(q)) && (!estado || f.estado === estado)
+  }), [estado, faltantes, q])
+
+  const conteo = { conjuntos: resumen.conjuntos_de_datos, documentos: resumen.documentos, portales: resumen.portales, publicaciones: resumen.publicaciones, faltantes: resumen.faltantes }
+  const visibles = pestana === 'publicaciones' ? publicacionesFiltradas.length : pestana === 'faltantes' ? faltantesFiltrados.length : fuentesFiltradas.length
+
+  const limpiar = () => {
+    setTexto(''); setInstitucion(TODAS); setTema(TODAS); setAcceso(TODAS); setEstado(TODAS)
+    setSoloMotagua(false); setSoloArchivo(false); setSoloMapa(false); setOrden('destacados')
   }
 
+  const abierto = abrirId
+    ? catalogo.find((f) => f.id === abrirId || f.ids_alias.includes(abrirId)) ?? publicaciones?.find((p) => p.id === abrirId || p.ids_alias.includes(abrirId)) ?? null
+    : null
+
+  const csv = pestana === 'publicaciones' ? 'catalogo/publicaciones.csv' : pestana === 'faltantes' ? 'catalogo/faltantes.csv' : 'catalogo/fuentes.csv'
+
   return (
-    <section className="library-view" aria-labelledby="library-title">
-      <header className="library-titlebar">
+    <section className="vista-datos" aria-labelledby="titulo-datos">
+      <header className="vista-cabeza">
         <div>
-          <span className="section-context">Índice verificable</span>
-          <h1 id="library-title">Fuentes de datos</h1>
-          <p>Los 75 archivos descargados están disponibles desde el inicio. El contenido detallado se abre solo cuando lo solicita.</p>
+          <h1 id="titulo-datos">Datos</h1>
+          <p>Todo lo que se encontró sobre el agua en Guatemala: conjuntos de datos, informes, portales y publicaciones, con su procedencia. Lo que no se pudo obtener también está registrado.</p>
         </div>
-        <div className="library-count">
-          <strong>{filtered.length}</strong>
-          <span>de {summary.downloadedFiles} archivos</span>
-        </div>
+        <a className="boton secundario" href={urlDatos(csv)} download><Download aria-hidden="true" /> Descargar esta lista (CSV)</a>
       </header>
 
-      <div className="library-toolbar">
-        <label className="search-field wide">
-          <Search aria-hidden="true" />
-          <span className="sr-only">Buscar por archivo o institución</span>
-          <input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Buscar archivo, institución o territorio…" />
-          {query && <button onClick={() => setQuery('')} aria-label="Limpiar búsqueda"><X aria-hidden="true" /></button>}
-        </label>
-        <label className="sort-field">
-          <span>Ordenar</span>
-          <select value={sort} onChange={(event) => setSort(event.target.value)}>
-            <option value="relevance">Relevancia MVP</option>
-            <option value="date">Fecha / periodo</option>
-            <option value="source">Fuente</option>
-            <option value="name">Nombre</option>
-            <option value="size">Tamaño</option>
-          </select>
-        </label>
+      <div className="pestanas" role="tablist" aria-label="Tipo de registro">
+        {PESTANAS.map((p) => (
+          <button key={p.id} role="tab" id={`pestana-${p.id}`} aria-selected={pestana === p.id} aria-controls="panel-datos" className={pestana === p.id ? 'activa' : ''} onClick={() => setPestana(p.id)}>
+            {p.nombre} <span className="cuenta">{conteo[p.id].toLocaleString('es-GT')}</span>
+          </button>
+        ))}
       </div>
 
-      <div className="library-layout">
-        <aside className="filter-rail" aria-label="Filtros del catálogo">
-          <div className="filter-title"><Filter aria-hidden="true" /><h2>Filtrar</h2></div>
-          <FilterSelect label="Institución" value={institution} options={options.institutions} onChange={setInstitution} />
-          <FilterSelect label="Tema" value={topic} options={options.topics} onChange={setTopic} />
-          <FilterSelect label="Territorio o cuenca" value={territory} options={options.territories} onChange={setTerritory} />
-          <FilterSelect label="Periodo" value={period} options={options.periods} onChange={setPeriod} />
-          <FilterSelect label="Formato" value={format} options={options.formats} onChange={setFormat} />
-          <FilterSelect label="Estado de acceso" value={access} options={options.access} onChange={setAccess} />
-          <button className="text-button" onClick={reset}>Restablecer filtros</button>
-        </aside>
-
-        <p className="sr-only" role="status" aria-live="polite">{filtered.length} de {summary.downloadedFiles} archivos visibles.</p>
-        <div className="source-results">
-          {filtered.length ? filtered.map((item) => (
-            <article className="source-row" key={item.id}>
-              <button className="source-main" onClick={() => setSelected(item)} aria-label={`Abrir ficha de ${item.title}`}>
-                <span className="source-number">{String(item.number).padStart(2, '0')}</span>
-                <span className="source-name"><strong>{item.title}</strong><small>{item.fileName}</small></span>
-                <span className="source-org">{item.institution}</span>
-                <span className="source-period">{item.period}</span>
-                <span className="source-format">{item.format}</span>
-                <span className={`access-label ${item.accessState === 'Descargado y verificado' ? 'verified' : ''}`}>
-                  {item.accessState === 'Descargado y verificado' && <ShieldCheck aria-hidden="true" />}
-                  {item.accessState}
-                </span>
-                {item.selectedMvp && <span className="mvp-mark">MVP</span>}
-              </button>
-            </article>
-          )) : (
-            <div className="empty-state">
-              <FileSearch aria-hidden="true" />
-              <h2>No hay archivos con esos filtros</h2>
-              <p>Pruebe otra institución, periodo o término de búsqueda.</p>
-              <button className="primary-button" onClick={reset}>Restablecer filtros</button>
-            </div>
+      <div id="panel-datos" role="tabpanel" aria-labelledby={`pestana-${pestana}`} className="panel-datos">
+        <div className="filtros">
+          <label className="campo-busqueda">
+            <Search aria-hidden="true" />
+            <span className="sr-only">Buscar</span>
+            <input type="search" value={texto} onChange={(e) => setTexto(e.target.value)} placeholder={pestana === 'publicaciones' ? 'Buscar por título, autor, lugar…' : 'Buscar por título, institución, río, lago, ID…'} />
+          </label>
+          {tipo && (
+            <>
+              <Selector etiqueta="Institución" valor={institucion} opciones={filtros.instituciones} onCambio={setInstitucion} />
+              <Selector etiqueta="Tema" valor={tema} opciones={filtros.temas} onCambio={setTema} />
+              <Selector etiqueta="Acceso" valor={acceso} opciones={filtros.accesos} onCambio={setAcceso} />
+            </>
           )}
+          {pestana === 'faltantes' && <Selector etiqueta="Estado" valor={estado} opciones={filtros.estados} onCambio={setEstado} />}
+          {pestana !== 'faltantes' && (
+            <label className="selector">
+              <span>Ordenar</span>
+              <select value={orden} onChange={(e) => setOrden(e.target.value)}>
+                {tipo && <option value="destacados">Destacados primero</option>}
+                <option value="recientes">Más recientes</option>
+                <option value="nombre">Nombre</option>
+                {tipo && <option value="institucion">Institución</option>}
+              </select>
+            </label>
+          )}
+          <div className="interruptores">
+            {pestana !== 'faltantes' && <Interruptor etiqueta="Motagua / Las Vacas" valor={soloMotagua} onCambio={setSoloMotagua} />}
+            {tipo && <Interruptor etiqueta="Con archivo descargado" valor={soloArchivo} onCambio={setSoloArchivo} />}
+            {tipo && <Interruptor etiqueta="En el mapa" valor={soloMapa} onCambio={setSoloMapa} />}
+          </div>
         </div>
 
-        {selected && <SourceDetail item={selected} onClose={() => setSelected(null)} />}
+        <p className="conteo-resultados" role="status" aria-live="polite">{visibles.toLocaleString('es-GT')} resultados</p>
+
+        {pestana === 'faltantes' ? (
+          <ul className="lista-faltantes">
+            {faltantesFiltrados.map((f) => <TarjetaFaltante key={f.id} faltante={f} />)}
+          </ul>
+        ) : pestana === 'publicaciones' ? (
+          publicaciones === null ? (
+            <p className="texto-suave" role="status">{errorPublicaciones || 'Cargando publicaciones…'}</p>
+          ) : (
+            <ul className="lista-registros">
+              {publicacionesFiltradas.slice(0, limite).map((p) => (
+                <li key={p.id}>
+                  <button className="registro" onClick={() => onAbrirId(p.id)}>
+                    <span className="registro-titulo">{p.titulo}</span>
+                    <span className="registro-meta">{[p.autores.split(';')[0], p.anio, p.fuente].filter(Boolean).join(' · ')}</span>
+                    <span className="registro-etiquetas"><span>{p.tipo}</span>{p.acceso && <span>{p.acceso}</span>}</span>
+                  </button>
+                </li>
+              ))}
+            </ul>
+          )
+        ) : (
+          <ul className="lista-registros">
+            {fuentesFiltradas.slice(0, limite).map((f) => (
+              <li key={f.id}>
+                <button className="registro" onClick={() => onAbrirId(f.id)}>
+                  <span className="registro-titulo">{f.destacado && <Star aria-label="Destacado" className="destacado" />}{f.titulo}</span>
+                  <span className="registro-meta">{[f.institucion, f.anios, f.formato].filter(Boolean).join(' · ')}</span>
+                  <span className="registro-etiquetas">
+                    <span>{f.tema}</span>
+                    {f.descarga === 'Archivo descargado' && <span className="ok"><ShieldCheck aria-hidden="true" /> Archivo verificado</span>}
+                    {f.capas.length > 0 && <span className="mapa"><MapIcon aria-hidden="true" /> En el mapa</span>}
+                  </span>
+                </button>
+              </li>
+            ))}
+          </ul>
+        )}
+
+        {visibles === 0 && (publicaciones !== null || pestana !== 'publicaciones') && (
+          <div className="vacio">
+            <FileSearch aria-hidden="true" />
+            <h2>No hay resultados con esos filtros</h2>
+            <button className="boton" onClick={limpiar}>Quitar filtros</button>
+          </div>
+        )}
+        {pestana !== 'faltantes' && visibles > limite && (
+          <button className="boton secundario mas" onClick={() => setLimite((l) => l + POR_PAGINA * 2)}>
+            Mostrar más ({(visibles - limite).toLocaleString('es-GT')} restantes)
+          </button>
+        )}
       </div>
+
+      {abierto && <FichaRegistro registro={abierto} config={config} onClose={() => onAbrirId(null)} onVerCapa={onVerCapa} />}
     </section>
   )
 }
 
-function FilterSelect({ label, value, options, onChange }: { label: string; value: string; options: string[]; onChange: (value: string) => void }) {
+function Selector({ etiqueta, valor, opciones: lista, onCambio }: { etiqueta: string; valor: string; opciones: string[]; onCambio: (v: string) => void }) {
   return (
-    <label className="filter-field">
-      <span>{label}</span>
-      <select value={value} onChange={(event) => onChange(event.target.value)}>
-        {options.map((option) => <option key={option}>{option}</option>)}
+    <label className="selector">
+      <span>{etiqueta}</span>
+      <select value={valor} onChange={(e) => onCambio(e.target.value)}>
+        <option value="">Todas</option>
+        {lista.map((o) => <option key={o} value={o}>{o}</option>)}
       </select>
     </label>
   )
 }
 
-function SourceDetail({ item, onClose }: { item: CatalogItem; onClose: () => void }) {
+function Interruptor({ etiqueta, valor, onCambio }: { etiqueta: string; valor: boolean; onCambio: (v: boolean) => void }) {
+  return (
+    <label className="interruptor">
+      <input type="checkbox" checked={valor} onChange={(e) => onCambio(e.target.checked)} />
+      <span>{etiqueta}</span>
+    </label>
+  )
+}
+
+function TarjetaFaltante({ faltante: f }: { faltante: Faltante }) {
+  return (
+    <li className="tarjeta-faltante">
+      <div className="faltante-cabeza">
+        <h3>{f.institucion}</h3>
+        <span className="insignia neutra">{f.estado}</span>
+      </div>
+      <dl>
+        <div><dt>Qué falta</dt><dd>{f.dato_esperado}</dd></div>
+        <div><dt>Por qué no se obtuvo</dt><dd>{f.motivo}</dd></div>
+        <div><dt>Cómo pedirlo</dt><dd>{f.siguiente_paso}</dd></div>
+      </dl>
+      {f.url_evidencia.startsWith('http') && (
+        <a className="enlace" href={f.url_evidencia.split(' ')[0]} target="_blank" rel="noreferrer">Evidencia de que existe <ExternalLink aria-hidden="true" /></a>
+      )}
+    </li>
+  )
+}
+
+function esFuente(r: Fuente | Publicacion): r is Fuente {
+  return 'institucion' in r
+}
+
+function FichaRegistro({ registro, config, onClose, onVerCapa }: { registro: Fuente | Publicacion; config: Config; onClose: () => void; onVerCapa: (id: string) => void }) {
   const panelRef = usePanelFocus<HTMLElement>(onClose, true)
+  const fuente = esFuente(registro) ? registro : null
+  const pub = esFuente(registro) ? null : registro
+  const filas: [string, string][] = fuente
+    ? [
+        ['Institución', fuente.institucion_detalle],
+        ['Tipo', fuente.tipo],
+        ['Tema', fuente.tema],
+        ['Años', fuente.anios],
+        ['Cobertura', fuente.cobertura],
+        ['Parámetros', fuente.parametros],
+        ['Formato', fuente.formato],
+        ['Registros', fuente.registros],
+        ['Licencia', fuente.licencia],
+        ['Acceso', fuente.acceso_detalle],
+        ['Descarga', fuente.descarga + (fuente.archivos > 1 ? ` (${fuente.archivos} archivos)` : '')],
+        ['Verificación', fuente.verificacion],
+      ]
+    : [
+        ['Autores', pub!.autores],
+        ['Año', pub!.anio],
+        ['Revista o institución', pub!.fuente],
+        ['Tipo', pub!.tipo],
+        ['Lugar de estudio', pub!.lugar],
+        ['Años de muestreo', pub!.anios_muestreo],
+        ['Parámetros', pub!.parametros],
+        ['Resultados numéricos', pub!.resultados_numericos],
+        ['Datos crudos', pub!.datos_crudos],
+        ['Acceso', pub!.acceso],
+      ]
+  const url = fuente ? fuente.url_fuente : pub!.url
   return createPortal(
     <>
-      <div className="source-detail-backdrop" aria-hidden="true" onClick={onClose} />
-      <aside ref={panelRef} className="source-detail" role="dialog" aria-modal="true" aria-labelledby="source-detail-title" tabIndex={-1}>
-        <div className="source-detail-head">
-          <span>{item.id} · {item.format}</span>
-          <button className="icon-button light" onClick={onClose} aria-label="Cerrar ficha de fuente"><X aria-hidden="true" /></button>
-        </div>
-        <h2 id="source-detail-title">{item.title}</h2>
-        <p>{item.summary}</p>
-        <dl className="source-facts">
-          <div><dt>Institución</dt><dd>{item.institution}</dd></div>
-          <div><dt>Tema</dt><dd>{item.topic}</dd></div>
-          <div><dt>Territorio</dt><dd>{item.territory}</dd></div>
-          <div><dt>Periodo</dt><dd>{item.period}</dd></div>
-          <div><dt>Tamaño</dt><dd>{item.size}</dd></div>
-          <div><dt>Estado</dt><dd>{item.accessState}</dd></div>
-          <div><dt>Licencia / uso</dt><dd>{item.license}</dd></div>
-          <div><dt>Coordenadas</dt><dd>{item.coordinates}</dd></div>
-        </dl>
-        {item.selectedMvp && <div className="selection-reason"><strong>Por qué está en el MVP</strong><p>{item.selectionReason ?? 'Conjunto representativo procesado para la primera versión.'}</p></div>}
-        {item.parameters.length > 0 && <ul className="tag-list">{item.parameters.map((parameter) => <li key={parameter}>{parameter}</li>)}</ul>}
-        <details className="technical-detail">
-          <summary>Ficha técnica avanzada</summary>
-          <dl><dt>SHA-256</dt><dd>{item.sha256}</dd><dt>Registros / páginas</dt><dd>{item.records || 'No indicado'}</dd></dl>
-        </details>
-        <div className="source-actions">
-          <a className="primary-button" href={item.localPath}><Download aria-hidden="true" /> Abrir archivo local</a>
-          {item.sourceUrl && <a className="secondary-button" href={item.sourceUrl} target="_blank" rel="noreferrer"><ExternalLink aria-hidden="true" /> Visitar procedencia</a>}
+      <div className="velo" aria-hidden="true" onClick={onClose} />
+      <aside ref={panelRef} className="ficha-registro" role="dialog" aria-modal="true" aria-labelledby="registro-titulo" tabIndex={-1}>
+        <header className="ficha-cabeza">
+          <div>
+            <span className="ficha-tipo">{registro.id}{registro.ids_alias.length > 0 && ` · también ${registro.ids_alias.join(', ')}`}</span>
+            <h2 id="registro-titulo">{registro.titulo}</h2>
+          </div>
+          <button className="boton-icono" onClick={onClose} aria-label="Cerrar ficha"><X aria-hidden="true" /></button>
+        </header>
+        <div className="ficha-cuerpo">
+          <div className="acciones">
+            {url?.startsWith('http') && <a className="boton" href={url} target="_blank" rel="noreferrer"><ExternalLink aria-hidden="true" /> {fuente ? 'Fuente oficial' : 'Abrir publicación'}</a>}
+            {fuente?.url_descarga && fuente.url_descarga !== url && <a className="boton secundario" href={fuente.url_descarga} target="_blank" rel="noreferrer"><Download aria-hidden="true" /> Descarga directa</a>}
+            {fuente?.descarga === 'Archivo descargado' && config.enlace_originales && <a className="boton secundario" href={config.enlace_originales} target="_blank" rel="noreferrer"><Download aria-hidden="true" /> Copia de respaldo</a>}
+            {fuente && fuente.capas.length > 0 && <button className="boton secundario" onClick={() => onVerCapa(fuente.capas[0])}><MapIcon aria-hidden="true" /> Ver en el mapa</button>}
+          </div>
+          <dl className="datos-clave apilado">
+            {filas.filter(([, v]) => v && v.trim()).map(([k, v]) => <div key={k}><dt>{k}</dt><dd>{v}</dd></div>)}
+          </dl>
+          {fuente?.notas && <div className="aviso"><p>{fuente.notas}</p></div>}
+          {fuente && fuente.sha256.length > 0 && (
+            <details className="tecnico">
+              <summary>Huella SHA-256 de los archivos ({fuente.sha256.length})</summary>
+              <ul>{fuente.sha256.map((h) => <li key={h}><code>{h}</code></li>)}</ul>
+              <p className="nota-pie">Sirve para comprobar que una copia es idéntica al archivo descargado. Ver datos/manifiesto/originales.csv.</p>
+            </details>
+          )}
         </div>
       </aside>
     </>,

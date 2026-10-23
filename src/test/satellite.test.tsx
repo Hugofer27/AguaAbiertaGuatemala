@@ -1,29 +1,28 @@
 import { fireEvent, render, screen } from '@testing-library/react'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import SatelliteSnapshot, { buildSatelliteUrls } from '../components/SatelliteSnapshot'
-import type { WaterFeature } from '../types'
+import type { Sitio } from '../types'
 
-const feature: WaterFeature = {
+const feature: Sitio = {
   type: 'Feature',
   id: 'station-1',
   geometry: { type: 'Point', coordinates: [-89.88812, 15.29879] },
   properties: {
-    name: 'Matucuy',
-    kind: 'Punto de muestreo',
-    basin: 'Río Polochic',
-    department: 'Alta Verapaz',
-    municipality: 'Panzós',
-    emotion: 'Sin datos suficientes',
-    emotionCode: 'insufficient',
-    emotionReason: 'La serie disponible no permite una conclusión científica.',
-    latest: '6/02/2023',
-    parameters: ['pH (unidad)'],
-    institution: 'INE / INSIVUMEH',
-    sourceIds: ['GTW-003'],
-    confidence: 'Alta para ubicación',
-    warning: 'Datos históricos.',
-    evidence: [],
-    series: [],
+    id: 'station-1',
+    capa: 'monitoreo_insivumeh',
+    nombre: 'Matucuy',
+    tipo: 'Punto de monitoreo de calidad del agua',
+    institucion: 'INSIVUMEH',
+    cuerpo_agua: '',
+    cuenca: 'Río Polochic',
+    departamento: 'Alta Verapaz',
+    municipio: 'Panzós',
+    fecha: '2023',
+    tipo_dato: 'Medido',
+    precision: 'publicada',
+    fuente_ids: ['GT-DAT-0224'],
+    advertencia: '',
+    atributos: {},
   },
 }
 
@@ -47,11 +46,11 @@ describe('imagen satelital reciente', () => {
   })
 
   it('genera un recorte diferente para otra coordenada', () => {
-    const easternFeature: WaterFeature = {
+    const easternFeature: Sitio = {
       ...feature,
       id: 'station-2',
       geometry: { type: 'Point', coordinates: [-88.29, 15.73] },
-      properties: { ...feature.properties, name: 'El Quetzalito' },
+      properties: { ...feature.properties, nombre: 'El Quetzalito' },
     }
     const first = new URL(buildSatelliteUrls(feature, '2026-10-21').snapshot)
     const second = new URL(buildSatelliteUrls(easternFeature, '2026-10-21').snapshot)

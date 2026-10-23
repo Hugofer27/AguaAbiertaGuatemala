@@ -1,0 +1,86 @@
+﻿institucion,categoria,conjuntos_de_datos,documentos,portales,archivos_descargados,anio_min,anio_max,temas_principales
+ArcGIS Online (otras cuentas),Plataforma SIG,72,0,122,0,2011,2026,Cuencas y cartografía; Riesgo e inundaciones; Limnología y sedimentos
+USAC,Universidad,0,64,0,64,1999,2025,Agua subterránea; Calidad del agua; Cuencas y cartografía
+AMSCLAE,Gobierno GT,7,54,1,60,2009,2025,Calidad del agua; Limnología y sedimentos; Agua potable y saneamiento
+AMSA,Gobierno GT,16,24,0,42,2015,2025,Limnología y sedimentos; Cuencas y cartografía; Calidad del agua
+ICC,ONG/privado,1,29,1,30,1997,2026,Riesgo e inundaciones; Clima y lluvia; Caudales e hidrología
+INSIVUMEH,Gobierno GT,13,10,5,28,1962,2026,Caudales e hidrología; Clima y lluvia; Calidad del agua
+MARN,Gobierno GT,20,5,2,20,2009,2026,Cuencas y cartografía; Calidad del agua; Caudales e hidrología
+PANGAEA,Repositorio de datos,24,0,0,0,1900,2025,Limnología y sedimentos; Clima y lluvia; Riesgo e inundaciones
+FUNCAGUA,Plataforma SIG,3,1,14,0,2019,2026,Agua subterránea; Cuencas y cartografía; Caudales e hidrología
+MSPAS,Gobierno GT,13,0,1,13,2012,2024,Agua potable y saneamiento; Calidad del agua; Otros
+UNESCO-Water Information Network System by the International Hydrological Programme,Internacional,12,0,0,0,,,Otros; Residuos y plásticos; Estadística y gobernanza
+IARNA-URL,Universidad,0,11,0,11,2001,2024,Caudales e hidrología; Estadística y gobernanza; Calidad del agua
+NOAA,Internacional,9,0,0,3,1940,2025,Limnología y sedimentos; Clima y lluvia; Riesgo e inundaciones
+Figshare,Publicación científica,5,0,0,0,2022,2025,Cuencas y cartografía; Limnología y sedimentos; Otros
+Zenodo,Publicación científica,5,0,0,0,2021,2025,Riesgo e inundaciones; Residuos y plásticos; Limnología y sedimentos
+Acción Contra el hambre - GIS4tech,Internacional,5,0,0,0,2016,2026,Clima y lluvia; Agua potable y saneamiento; Riesgo e inundaciones
+INE,Gobierno GT,1,2,1,2,2010,2024,Estadística y gobernanza; Residuos y plásticos
+Proyecto Selva Maya (GIZ) / CONAP,Internacional,0,4,0,4,2019,2022,Calidad del agua
+SEGEPLAN,Internacional,3,0,1,3,2024,2026,Cuencas y cartografía; Agua potable y saneamiento
+Banco Mundial,Internacional,2,1,0,1,1961,2024,Agua potable y saneamiento; Otros
+FAO AQUASTAT,Internacional,1,1,1,2,1960,2022,Agua subterránea; Estadística y gobernanza
+NASA POWER,Internacional,3,0,0,3,2001,2025,Clima y lluvia
+UNEP GEMS/Water,Internacional,1,0,1,0,2012,2021,Calidad del agua; Cuencas y cartografía
+Water Point Data Exchange,Internacional,2,0,0,1,2013,2022,Agua potable y saneamiento
+USGS,Satelital,1,1,0,1,1972,1984,Clima y lluvia; Caudales e hidrología
+Mendeley Data,Publicación científica,2,0,0,0,2026,2026,Limnología y sedimentos
+OCHA Latin America and the Caribbean,Internacional,2,0,0,0,2016,2016,Agua potable y saneamiento
+MAGA,Gobierno GT,0,1,1,0,2001,2025,Cuencas y cartografía
+BID,Internacional,0,1,1,0,2009,2026,Agua potable y saneamiento
+The Ocean Cleanup,ONG/privado,1,1,0,1,2019,2025,Otros; Residuos y plásticos
+Alianza por la Cuenca del Motagua,ONG/privado,0,1,1,0,2023,2026,Calidad del agua; Cuencas y cartografía
+Water Quality Portal,Internacional,2,0,0,2,2018,2020,Otros
+Banco de Guatemala,Gobierno GT,1,0,0,3,2013,2024,Estadística y gobernanza
+ONU - División de Estadística,Internacional,1,0,0,1,2000,2025,Agua potable y saneamiento
+OMS/UNICEF JMP,Internacional,1,0,0,0,2000,2024,Agua potable y saneamiento
+McGill University / HydroSHEDS,Internacional,1,0,0,1,2021,2021,Agua potable y saneamiento
+AmeriGEOSS,Internacional,1,0,0,0,2013,2016,Agua potable y saneamiento
+UNDRR - DesInventar Sendai,Internacional,1,0,0,1,1905,2015,Riesgo e inundaciones
+OpenStreetMap,Internacional,1,0,0,7,,,Agua subterránea
+Copernicus Emergency Management Service,Satelital,1,0,0,0,2020,2021,Riesgo e inundaciones
+NASA Disasters / JPL ARIA,Satelital,1,0,0,0,2020,2020,Riesgo e inundaciones
+SERVIR Mesoamérica / CATHALAC,Satelital,1,0,0,0,2010,2011,Riesgo e inundaciones
+UCSB Climate Hazards Center,Satelital,1,0,0,0,1981,1981,Clima y lluvia
+NASA GPM,Satelital,1,0,0,0,2000,2000,Clima y lluvia
+Copernicus Climate Change Service,Satelital,1,0,0,0,1950,1950,Caudales e hidrología
+Copernicus Emergency Management Service - GloFAS,Satelital,1,0,0,0,1979,1979,Caudales e hidrología
+Comisión Europea JRC,Satelital,1,0,0,0,1984,2021,Caudales e hidrología
+WWF / McGill,Satelital,1,0,0,0,,,Caudales e hidrología
+ESA Copernicus,Satelital,1,0,0,0,2015,2015,Agua potable y saneamiento
+Meijer et al. 2021 (The Ocean Cleanup) / Our World in Data,Internacional,1,0,0,0,2015,2015,Residuos y plásticos
+Dartmouth Flood Observatory (Univ. de Colorado) - River and Reservoir Watch,Satelital,1,0,0,0,1998,2026,Caudales e hidrología
+Universidad del Valle de Guatemala / Asociación Guatemalteca de Limnología y Gestión de Lagos,Universidad,1,0,0,3,2010,2024,Calidad del agua
+AEA Randomized Controlled Trials,Publicación científica,1,0,0,0,2023,2023,Calidad del agua
+National Oceanic and Atmospheric Administration (NOAA) National Centers for Environmental Information,Publicación científica,1,0,0,0,2026,2026,Limnología y sedimentos
+CUAHSI,Publicación científica,1,0,0,0,2026,2026,Agua subterránea
+OpenAlex,Publicación científica,1,0,0,0,2021,2021,Clima y lluvia
+National Academy of Sciences,Repositorio de datos,1,0,0,0,2021,2021,Limnología y sedimentos
+DataverseNO,Repositorio de datos,1,0,0,0,2026,2026,Residuos y plásticos
+Taylor & Francis,Repositorio de datos,1,0,0,0,2024,2024,Residuos y plásticos
+UNC Dataverse,Repositorio de datos,1,0,0,0,2024,2024,Residuos y plásticos
+WFP - World Food Programme,Internacional,1,0,0,0,1981,2026,Clima y lluvia
+United Nations Satellite Centre,Internacional,1,0,0,0,2020,2020,Otros
+Caribbean Marine Atlas,Internacional,1,0,0,0,,,Caudales e hidrología
+Mexico,Internacional,1,0,0,0,,,Caudales e hidrología
+EMPAGUA,Gobierno GT,1,0,0,1,2024,2024,Agua potable y saneamiento
+INFOM,Gobierno GT,0,1,0,1,2025,2025,Agua subterránea
+IGRAC,Internacional,0,1,0,0,2022,2022,Agua subterránea
+CEPAL,Internacional,0,1,0,0,1960,1971,Agua potable y saneamiento
+JICA,Internacional,0,1,0,1,1962,2000,Caudales e hidrología
+PNUD,Internacional,0,1,0,1,2018,2026,Residuos y plásticos
+GIZ,Internacional,0,1,0,1,2024,2024,Residuos y plásticos
+UICN,Internacional,0,1,0,0,2020,2023,Calidad del agua
+4ocean,ONG/privado,0,1,0,0,2022,2025,Otros
+Water For People Guatemala,ONG/privado,0,1,0,1,2020,2020,Otros
+COPAE,ONG/privado,0,1,0,1,2006,2010,Calidad del agua
+CAO,Internacional,0,1,0,1,2005,2005,Calidad del agua
+Colectivo Madre Selva,ONG/privado,0,1,0,0,2019,2019,Calidad del agua
+Healthy Reefs for Healthy People,ONG/privado,0,1,0,0,2008,2024,Otros
+AECID,Internacional,0,1,0,0,2020,2020,Agua subterránea
+Mongabay Latam,Prensa/investigación,0,1,0,0,2025,2025,Calidad del agua
+El Universal / Historias sin Fronteras,Prensa/investigación,0,1,0,0,2022,2022,Otros
+Revista,Internacional,0,1,0,1,,,Agua potable y saneamiento
+McGill University / NASA SEDAC,Internacional,1,0,0,0,2024,2024,Caudales e hidrología
+SE-CONRED,Gobierno GT,0,0,1,0,2008,2025,Riesgo e inundaciones
+Global Runoff Data Centre,Internacional,0,0,1,0,,,Caudales e hidrología

@@ -1,0 +1,459 @@
+{
+  "version": "1.0.0",
+  "fecha_corte": "2026-10-22",
+  "generado": "2026-10-23",
+  "fuentes": 643,
+  "conjuntos_de_datos": 260,
+  "documentos": 228,
+  "portales": 155,
+  "publicaciones": 1494,
+  "publicaciones_acceso_abierto": 1199,
+  "faltantes": 42,
+  "organizaciones": 85,
+  "archivos_originales": 342,
+  "bytes_originales": 2169890303,
+  "fuentes_con_archivo": 295,
+  "motagua_las_vacas": 56,
+  "capas": {
+    "cuencas": 38,
+    "lagos": 10,
+    "rios_motagua": 1626,
+    "monitoreo_insivumeh": 84,
+    "caudales_insivumeh": 30,
+    "usac_las_vacas": 32,
+    "acidificacion_marn": 11,
+    "atitlan_wqp": 1,
+    "ptar_hydrowaste": 8,
+    "wpdx": 128,
+    "plasticos": 70,
+    "clima_nasa": 3,
+    "estaciones_meteo": 64,
+    "gemstat_mexico": 365
+  },
+  "puntos_en_mapa": 796,
+  "mediciones": 3632,
+  "parametros": 39,
+  "ids_unificados": 84,
+  "registros_agregados_sin_equivalente": 21,
+  "excluidos_del_mapa": [
+    {
+      "capa": "monitoreo_insivumeh",
+      "nombre": "Sajbiná",
+      "motivo": "Punto 2022 sin coordenada publicada equivalente (o con más de un candidato)"
+    },
+    {
+      "capa": "monitoreo_insivumeh",
+      "nombre": "Bahía de Amatique Punto I",
+      "motivo": "Punto 2022 sin coordenada publicada equivalente (o con más de un candidato)"
+    },
+    {
+      "capa": "monitoreo_insivumeh",
+      "nombre": "Bahía de Amatique Punto II",
+      "motivo": "Punto 2022 sin coordenada publicada equivalente (o con más de un candidato)"
+    },
+    {
+      "capa": "monitoreo_insivumeh",
+      "nombre": "Bahía La Graciosa",
+      "motivo": "Punto 2022 sin coordenada publicada equivalente (o con más de un candidato)"
+    },
+    {
+      "capa": "monitoreo_insivumeh",
+      "nombre": "Laguna Santa Isabel, salida Canal Inglés",
+      "motivo": "Punto 2022 sin coordenada publicada equivalente (o con más de un candidato)"
+    },
+    {
+      "capa": "caudales_insivumeh",
+      "nombre": "ALOTENANGO II",
+      "motivo": "Estación sin punto INSIVUMEH homónimo con coordenada publicada"
+    },
+    {
+      "capa": "caudales_insivumeh",
+      "nombre": "CANTEL II",
+      "motivo": "Estación sin punto INSIVUMEH homónimo con coordenada publicada"
+    },
+    {
+      "capa": "caudales_insivumeh",
+      "nombre": "CORRAL GRANDE",
+      "motivo": "Estación sin punto INSIVUMEH homónimo con coordenada publicada"
+    },
+    {
+      "capa": "caudales_insivumeh",
+      "nombre": "LAS GUACAMAYAS III",
+      "motivo": "Estación sin punto INSIVUMEH homónimo con coordenada publicada"
+    },
+    {
+      "capa": "caudales_insivumeh",
+      "nombre": "MATACUY",
+      "motivo": "Estación sin punto INSIVUMEH homónimo con coordenada publicada"
+    },
+    {
+      "capa": "caudales_insivumeh",
+      "nombre": "SAN LUIS LAS CARRETAS",
+      "motivo": "Estación sin punto INSIVUMEH homónimo con coordenada publicada"
+    },
+    {
+      "capa": "plasticos",
+      "nombre": "Desembocadura 28795",
+      "motivo": "Fuera de Guatemala (costa de Belice, Honduras, El Salvador o México)"
+    },
+    {
+      "capa": "plasticos",
+      "nombre": "Desembocadura 28460",
+      "motivo": "Fuera de Guatemala (costa de Belice, Honduras, El Salvador o México)"
+    },
+    {
+      "capa": "plasticos",
+      "nombre": "Desembocadura 28357",
+      "motivo": "Fuera de Guatemala (costa de Belice, Honduras, El Salvador o México)"
+    },
+    {
+      "capa": "plasticos",
+      "nombre": "Desembocadura 28351",
+      "motivo": "Fuera de Guatemala (costa de Belice, Honduras, El Salvador o México)"
+    },
+    {
+      "capa": "plasticos",
+      "nombre": "Desembocadura 28687",
+      "motivo": "Fuera de Guatemala (costa de Belice, Honduras, El Salvador o México)"
+    },
+    {
+      "capa": "plasticos",
+      "nombre": "Desembocadura 28680",
+      "motivo": "Fuera de Guatemala (costa de Belice, Honduras, El Salvador o México)"
+    },
+    {
+      "capa": "plasticos",
+      "nombre": "Desembocadura 28766",
+      "motivo": "Fuera de Guatemala (costa de Belice, Honduras, El Salvador o México)"
+    },
+    {
+      "capa": "plasticos",
+      "nombre": "Desembocadura 28540",
+      "motivo": "Fuera de Guatemala (costa de Belice, Honduras, El Salvador o México)"
+    },
+    {
+      "capa": "plasticos",
+      "nombre": "Desembocadura 28358",
+      "motivo": "Fuera de Guatemala (costa de Belice, Honduras, El Salvador o México)"
+    },
+    {
+      "capa": "plasticos",
+      "nombre": "Desembocadura 28362",
+      "motivo": "Fuera de Guatemala (costa de Belice, Honduras, El Salvador o México)"
+    },
+    {
+      "capa": "plasticos",
+      "nombre": "Desembocadura 28697",
+      "motivo": "Fuera de Guatemala (costa de Belice, Honduras, El Salvador o México)"
+    },
+    {
+      "capa": "plasticos",
+      "nombre": "Desembocadura 28797",
+      "motivo": "Fuera de Guatemala (costa de Belice, Honduras, El Salvador o México)"
+    },
+    {
+      "capa": "plasticos",
+      "nombre": "Desembocadura 28730",
+      "motivo": "Fuera de Guatemala (costa de Belice, Honduras, El Salvador o México)"
+    },
+    {
+      "capa": "plasticos",
+      "nombre": "Desembocadura 28468",
+      "motivo": "Fuera de Guatemala (costa de Belice, Honduras, El Salvador o México)"
+    },
+    {
+      "capa": "plasticos",
+      "nombre": "Desembocadura 28792",
+      "motivo": "Fuera de Guatemala (costa de Belice, Honduras, El Salvador o México)"
+    },
+    {
+      "capa": "plasticos",
+      "nombre": "Desembocadura 28569",
+      "motivo": "Fuera de Guatemala (costa de Belice, Honduras, El Salvador o México)"
+    },
+    {
+      "capa": "plasticos",
+      "nombre": "Desembocadura 28744",
+      "motivo": "Fuera de Guatemala (costa de Belice, Honduras, El Salvador o México)"
+    },
+    {
+      "capa": "plasticos",
+      "nombre": "Desembocadura 28749",
+      "motivo": "Fuera de Guatemala (costa de Belice, Honduras, El Salvador o México)"
+    },
+    {
+      "capa": "plasticos",
+      "nombre": "Desembocadura 28527",
+      "motivo": "Fuera de Guatemala (costa de Belice, Honduras, El Salvador o México)"
+    },
+    {
+      "capa": "plasticos",
+      "nombre": "Desembocadura 28352",
+      "motivo": "Fuera de Guatemala (costa de Belice, Honduras, El Salvador o México)"
+    },
+    {
+      "capa": "plasticos",
+      "nombre": "Desembocadura 28364",
+      "motivo": "Fuera de Guatemala (costa de Belice, Honduras, El Salvador o México)"
+    },
+    {
+      "capa": "plasticos",
+      "nombre": "Desembocadura 28717",
+      "motivo": "Fuera de Guatemala (costa de Belice, Honduras, El Salvador o México)"
+    },
+    {
+      "capa": "plasticos",
+      "nombre": "Desembocadura 28360",
+      "motivo": "Fuera de Guatemala (costa de Belice, Honduras, El Salvador o México)"
+    },
+    {
+      "capa": "plasticos",
+      "nombre": "Desembocadura 28742",
+      "motivo": "Fuera de Guatemala (costa de Belice, Honduras, El Salvador o México)"
+    },
+    {
+      "capa": "plasticos",
+      "nombre": "Desembocadura 28667",
+      "motivo": "Fuera de Guatemala (costa de Belice, Honduras, El Salvador o México)"
+    },
+    {
+      "capa": "plasticos",
+      "nombre": "Desembocadura 28760",
+      "motivo": "Fuera de Guatemala (costa de Belice, Honduras, El Salvador o México)"
+    },
+    {
+      "capa": "plasticos",
+      "nombre": "Desembocadura 28535",
+      "motivo": "Fuera de Guatemala (costa de Belice, Honduras, El Salvador o México)"
+    },
+    {
+      "capa": "plasticos",
+      "nombre": "Desembocadura 28463",
+      "motivo": "Fuera de Guatemala (costa de Belice, Honduras, El Salvador o México)"
+    },
+    {
+      "capa": "plasticos",
+      "nombre": "Desembocadura 28464",
+      "motivo": "Fuera de Guatemala (costa de Belice, Honduras, El Salvador o México)"
+    },
+    {
+      "capa": "plasticos",
+      "nombre": "Desembocadura 28353",
+      "motivo": "Fuera de Guatemala (costa de Belice, Honduras, El Salvador o México)"
+    },
+    {
+      "capa": "plasticos",
+      "nombre": "Desembocadura 28348",
+      "motivo": "Fuera de Guatemala (costa de Belice, Honduras, El Salvador o México)"
+    },
+    {
+      "capa": "plasticos",
+      "nombre": "Desembocadura 28350",
+      "motivo": "Fuera de Guatemala (costa de Belice, Honduras, El Salvador o México)"
+    },
+    {
+      "capa": "plasticos",
+      "nombre": "Desembocadura 28714",
+      "motivo": "Fuera de Guatemala (costa de Belice, Honduras, El Salvador o México)"
+    },
+    {
+      "capa": "plasticos",
+      "nombre": "Desembocadura 28762",
+      "motivo": "Fuera de Guatemala (costa de Belice, Honduras, El Salvador o México)"
+    },
+    {
+      "capa": "plasticos",
+      "nombre": "Desembocadura 28709",
+      "motivo": "Fuera de Guatemala (costa de Belice, Honduras, El Salvador o México)"
+    },
+    {
+      "capa": "plasticos",
+      "nombre": "Desembocadura 28759",
+      "motivo": "Fuera de Guatemala (costa de Belice, Honduras, El Salvador o México)"
+    },
+    {
+      "capa": "plasticos",
+      "nombre": "Desembocadura 28548",
+      "motivo": "Fuera de Guatemala (costa de Belice, Honduras, El Salvador o México)"
+    },
+    {
+      "capa": "plasticos",
+      "nombre": "Desembocadura 28732",
+      "motivo": "Fuera de Guatemala (costa de Belice, Honduras, El Salvador o México)"
+    },
+    {
+      "capa": "plasticos",
+      "nombre": "Desembocadura 28786",
+      "motivo": "Fuera de Guatemala (costa de Belice, Honduras, El Salvador o México)"
+    },
+    {
+      "capa": "plasticos",
+      "nombre": "Desembocadura 28356",
+      "motivo": "Fuera de Guatemala (costa de Belice, Honduras, El Salvador o México)"
+    },
+    {
+      "capa": "plasticos",
+      "nombre": "Desembocadura 28674",
+      "motivo": "Fuera de Guatemala (costa de Belice, Honduras, El Salvador o México)"
+    },
+    {
+      "capa": "plasticos",
+      "nombre": "Desembocadura 28737",
+      "motivo": "Fuera de Guatemala (costa de Belice, Honduras, El Salvador o México)"
+    },
+    {
+      "capa": "plasticos",
+      "nombre": "Desembocadura 28758",
+      "motivo": "Fuera de Guatemala (costa de Belice, Honduras, El Salvador o México)"
+    },
+    {
+      "capa": "plasticos",
+      "nombre": "Desembocadura 28578",
+      "motivo": "Fuera de Guatemala (costa de Belice, Honduras, El Salvador o México)"
+    },
+    {
+      "capa": "plasticos",
+      "nombre": "Desembocadura 28346",
+      "motivo": "Fuera de Guatemala (costa de Belice, Honduras, El Salvador o México)"
+    },
+    {
+      "capa": "plasticos",
+      "nombre": "Desembocadura 28349",
+      "motivo": "Fuera de Guatemala (costa de Belice, Honduras, El Salvador o México)"
+    },
+    {
+      "capa": "plasticos",
+      "nombre": "Desembocadura 28816",
+      "motivo": "Fuera de Guatemala (costa de Belice, Honduras, El Salvador o México)"
+    },
+    {
+      "capa": "plasticos",
+      "nombre": "Desembocadura 28347",
+      "motivo": "Fuera de Guatemala (costa de Belice, Honduras, El Salvador o México)"
+    },
+    {
+      "capa": "plasticos",
+      "nombre": "Desembocadura 28359",
+      "motivo": "Fuera de Guatemala (costa de Belice, Honduras, El Salvador o México)"
+    },
+    {
+      "capa": "plasticos",
+      "nombre": "Desembocadura 28693",
+      "motivo": "Fuera de Guatemala (costa de Belice, Honduras, El Salvador o México)"
+    },
+    {
+      "capa": "plasticos",
+      "nombre": "Desembocadura 28361",
+      "motivo": "Fuera de Guatemala (costa de Belice, Honduras, El Salvador o México)"
+    },
+    {
+      "capa": "plasticos",
+      "nombre": "Desembocadura 28789",
+      "motivo": "Fuera de Guatemala (costa de Belice, Honduras, El Salvador o México)"
+    },
+    {
+      "capa": "plasticos",
+      "nombre": "Desembocadura 28739",
+      "motivo": "Fuera de Guatemala (costa de Belice, Honduras, El Salvador o México)"
+    },
+    {
+      "capa": "plasticos",
+      "nombre": "Desembocadura 28761",
+      "motivo": "Fuera de Guatemala (costa de Belice, Honduras, El Salvador o México)"
+    },
+    {
+      "capa": "plasticos",
+      "nombre": "Desembocadura 28528",
+      "motivo": "Fuera de Guatemala (costa de Belice, Honduras, El Salvador o México)"
+    },
+    {
+      "capa": "plasticos",
+      "nombre": "Desembocadura 28467",
+      "motivo": "Fuera de Guatemala (costa de Belice, Honduras, El Salvador o México)"
+    },
+    {
+      "capa": "plasticos",
+      "nombre": "Desembocadura 28771",
+      "motivo": "Fuera de Guatemala (costa de Belice, Honduras, El Salvador o México)"
+    },
+    {
+      "capa": "plasticos",
+      "nombre": "Desembocadura 28775",
+      "motivo": "Fuera de Guatemala (costa de Belice, Honduras, El Salvador o México)"
+    },
+    {
+      "capa": "plasticos",
+      "nombre": "Desembocadura 28462",
+      "motivo": "Fuera de Guatemala (costa de Belice, Honduras, El Salvador o México)"
+    },
+    {
+      "capa": "plasticos",
+      "nombre": "Desembocadura 28763",
+      "motivo": "Fuera de Guatemala (costa de Belice, Honduras, El Salvador o México)"
+    },
+    {
+      "capa": "plasticos",
+      "nombre": "Desembocadura 28769",
+      "motivo": "Fuera de Guatemala (costa de Belice, Honduras, El Salvador o México)"
+    },
+    {
+      "capa": "plasticos",
+      "nombre": "Desembocadura 28781",
+      "motivo": "Fuera de Guatemala (costa de Belice, Honduras, El Salvador o México)"
+    },
+    {
+      "capa": "plasticos",
+      "nombre": "Desembocadura 28556",
+      "motivo": "Fuera de Guatemala (costa de Belice, Honduras, El Salvador o México)"
+    },
+    {
+      "capa": "plasticos",
+      "nombre": "Desembocadura 28707",
+      "motivo": "Fuera de Guatemala (costa de Belice, Honduras, El Salvador o México)"
+    },
+    {
+      "capa": "plasticos",
+      "nombre": "Desembocadura 28764",
+      "motivo": "Fuera de Guatemala (costa de Belice, Honduras, El Salvador o México)"
+    },
+    {
+      "capa": "plasticos",
+      "nombre": "Desembocadura 28539",
+      "motivo": "Fuera de Guatemala (costa de Belice, Honduras, El Salvador o México)"
+    },
+    {
+      "capa": "plasticos",
+      "nombre": "Desembocadura 28770",
+      "motivo": "Fuera de Guatemala (costa de Belice, Honduras, El Salvador o México)"
+    },
+    {
+      "capa": "plasticos",
+      "nombre": "Desembocadura 28531",
+      "motivo": "Fuera de Guatemala (costa de Belice, Honduras, El Salvador o México)"
+    },
+    {
+      "capa": "plasticos",
+      "nombre": "Desembocadura 28722",
+      "motivo": "Fuera de Guatemala (costa de Belice, Honduras, El Salvador o México)"
+    },
+    {
+      "capa": "plasticos",
+      "nombre": "Desembocadura 28800",
+      "motivo": "Fuera de Guatemala (costa de Belice, Honduras, El Salvador o México)"
+    }
+  ],
+  "controles_de_calidad": 1,
+  "temas": {
+    "Limnología y sedimentos": 108,
+    "Cuencas y cartografía": 100,
+    "Riesgo e inundaciones": 79,
+    "Calidad del agua": 74,
+    "Clima y lluvia": 63,
+    "Caudales e hidrología": 60,
+    "Agua potable y saneamiento": 57,
+    "Agua subterránea": 42,
+    "Otros": 25,
+    "Residuos y plásticos": 23,
+    "Estadística y gobernanza": 12
+  }
+}

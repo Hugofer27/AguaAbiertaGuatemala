@@ -4,7 +4,9 @@ Este documento explica de dónde vienen los datos de Agua Abierta Guatemala, có
 
 ## 1. De dónde vienen los datos
 
-Entre el 21 y el 22 de octubre de 2026 se hicieron tres búsquedas independientes de datos públicos sobre el agua en Guatemala, con prioridad en la cuenca del Motagua y el río Las Vacas. Cada búsqueda dejó su inventario, sus manifiestos con SHA-256 y sus scripts. Esos materiales se conservan en `versions/` como entrada del pipeline.
+Entre el 21 y el 22 de octubre de 2026 se hicieron tres búsquedas independientes de datos públicos sobre el agua en Guatemala, con prioridad en la cuenca del Motagua y el río Las Vacas. Cada una la hizo un asistente de IA distinto: Claude (Anthropic), ChatGPT/Codex (OpenAI) y Google Antigravity. Hugo Escobar las dirigió y revisó los resultados. Las IA no inventaron datos: buscaron, descargaron y ordenaron archivos publicados por las instituciones. Cada enlace se comprobó con una petición HTTP y cada archivo descargado lleva su huella SHA-256, de modo que cualquiera puede verificar que es el original.
+
+Cada búsqueda dejó su inventario, sus manifiestos y sus scripts. La carpeta `fuentes/` guarda solo lo que lee el pipeline (ver `fuentes/LEEME.md`). El material completo, con informes y prototipos, se retiró en la versión 1.1.0 y sigue en el historial de git: `git checkout e81156a -- versions/`.
 
 Se cubrieron estos canales:
 

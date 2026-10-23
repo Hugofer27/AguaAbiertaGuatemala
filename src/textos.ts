@@ -41,8 +41,10 @@ export const TIPO_DATO: Record<string, string> = {
 export const AVISO_GENERAL =
   'Agua Abierta Guatemala muestra valores con su procedencia. No califica la calidad del agua ni sustituye una evaluación técnica o sanitaria.'
 
-export const CITA = (anio: string, url: string) =>
-  `Agua Abierta Guatemala (${anio}). Catálogo y atlas de datos públicos sobre el agua en Guatemala, versión 1.0. ${url}`
+export const REPOSITORIO = 'https://github.com/Hugofer27/AguaAbiertaGuatemala'
+
+export const CITA = (anio: string, version: string, url: string) =>
+  `Escobar, H. (${anio}). Agua Abierta Guatemala: catálogo y atlas de datos públicos sobre el agua en Guatemala (versión ${version}). ${url}`
 
 export function fechaCorte(valor: string) {
   const fecha = new Date(`${valor}T00:00:00`)

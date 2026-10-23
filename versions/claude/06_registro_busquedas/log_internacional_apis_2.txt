@@ -1,8 +1,0 @@
-OK UNSD-SDG6-GTM 182505
-OK OSM-plantas_tratamiento_aguas_residuales 6777
-FALLO OSM-plantas_potabilizadoras HTTPSConnectionPool(host='overpass.kumi.systems', port=443): Read timed out. (read timeout=240)
-FALLO OSM-pozos_agua HTTPSConnectionPool(host='overpass.kumi.systems', port=443): Read timed out. (read timeout=240)
-FALLO OSM-tanques_torres_agua 504 Server Error: Gateway Timeout for url: https://overpass.kumi.systems/api/interpreter
-OK OSM-rellenos_vertederos 3578
-FALLO OSM-estaciones_monitoreo_agua HTTPSConnectionPool(host='overpass.kumi.systems', port=443): Read timed out. (read timeout=240)
-FALLO OSM-rios_principales HTTPSConnectionPool(host='overpass.kumi.systems', port=443): Read timed out. (read timeout=240)

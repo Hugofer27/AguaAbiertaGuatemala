@@ -1,7 +1,7 @@
 """Construye la carpeta pública `datos/` de Agua Abierta Guatemala.
 
-Lee únicamente archivos versionados en `versions/` (inventarios, manifiestos y
-datos procesados) y genera:
+Lee únicamente archivos versionados en `fuentes/` (inventarios, manifiestos y
+datos procesados de las tres búsquedas) y genera:
 
 - datos/catalogo/   catálogo unificado sin duplicados, publicaciones, faltantes
 - datos/capas/      un GeoJSON por capa del mapa
@@ -24,7 +24,7 @@ from typing import Any
 
 from comun import (
     DATOS,
-    VERSIONES,
+    FUENTES,
     anios,
     clave_laxa,
     clave_texto,
@@ -38,12 +38,12 @@ from comun import (
     tamano_legible,
 )
 
-CLAUDE = VERSIONES / "claude"
-CODEX = VERSIONES / "codex"
-ANTIGRAVITY = VERSIONES / "antigravity"
+CLAUDE = FUENTES / "claude"
+CODEX = FUENTES / "codex"
+ANTIGRAVITY = FUENTES / "antigravity"
 PIPELINE = Path(__file__).resolve().parent
 
-VERSION = "1.0.1"
+VERSION = "1.1.0"
 FECHA_CORTE = "2026-10-22"
 
 # ---------------------------------------------------------------------------

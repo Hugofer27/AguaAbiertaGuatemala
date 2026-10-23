@@ -1,3 +1,5 @@
+import type { StyleSpecification } from 'maplibre-gl'
+
 /**
  * Presentación de cada capa del mapa. Los datos y metadatos vienen de
  * datos/app/capas.json; aquí solo se define cómo se dibujan.
@@ -47,10 +49,20 @@ export const ENFOQUES: Enfoque[] = [
   { id: 'costa-sur', nombre: 'Costa Sur', limites: [[-92.25, 13.75], [-90.0, 14.8]] },
 ]
 
+/** Fondo blanco sin mosaicos externos: solo se ven las capas propias. Sirve para imprimir y funciona sin internet. */
+const ESTILO_BLANCO: StyleSpecification = {
+  version: 8,
+  name: 'Blanco',
+  sources: {},
+  layers: [{ id: 'fondo', type: 'background', paint: { 'background-color': '#ffffff' } }],
+}
+
+/** `estilo` es la URL de un estilo de mosaicos o un estilo completo. */
 export const MAPAS_BASE = {
-  claro: { nombre: 'Claro', url: 'https://tiles.openfreemap.org/styles/positron' },
-  relieve: { nombre: 'Relieve', url: 'https://tiles.openfreemap.org/styles/liberty' },
-  oscuro: { nombre: 'Oscuro', url: 'https://tiles.openfreemap.org/styles/dark' },
+  claro: { nombre: 'Claro', estilo: 'https://tiles.openfreemap.org/styles/positron' },
+  blanco: { nombre: 'Blanco', estilo: ESTILO_BLANCO },
+  relieve: { nombre: 'Relieve', estilo: 'https://tiles.openfreemap.org/styles/liberty' },
+  oscuro: { nombre: 'Oscuro', estilo: 'https://tiles.openfreemap.org/styles/dark' },
 } as const
 
 export type MapaBase = keyof typeof MAPAS_BASE

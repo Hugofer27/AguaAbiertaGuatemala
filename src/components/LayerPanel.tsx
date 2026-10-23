@@ -56,10 +56,12 @@ export default function LayerPanel({ capas, visibles, mapaBase, resaltarRios, on
               </button>
             ))}
           </div>
-          <label className="fila-capa compacta">
-            <input type="checkbox" checked={resaltarRios} onChange={(e) => onResaltarRios(e.target.checked)} />
-            <span className="fila-capa-texto"><span>Resaltar ríos del mapa base</span></span>
-          </label>
+          {typeof MAPAS_BASE[mapaBase].estilo === 'string' && (
+            <label className="fila-capa compacta">
+              <input type="checkbox" checked={resaltarRios} onChange={(e) => onResaltarRios(e.target.checked)} />
+              <span className="fila-capa-texto"><span>Resaltar ríos del mapa base</span></span>
+            </label>
+          )}
         </fieldset>
       </div>
     </section>

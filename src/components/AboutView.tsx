@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Copy, Download, ExternalLink } from 'lucide-react'
 import { urlDatos } from '../data'
-import { AVISO_GENERAL, CITA, fechaCorte, numero } from '../textos'
+import { AVISO_GENERAL, CITA, REPOSITORIO, fechaCorte, numero } from '../textos'
 import type { CapaMeta, Config, Resumen } from '../types'
 
 const ZIP_DATOS = 'descargas/agua-abierta-guatemala-datos.zip'
@@ -27,7 +27,7 @@ export default function AboutView({ resumen, capas, config }: { resumen: Resumen
   const zipSitio = useExiste(`./${ZIP_SITIO}`)
   const [copiado, setCopiado] = useState(false)
   const direccion = typeof window !== 'undefined' ? `${window.location.origin}${window.location.pathname}` : ''
-  const cita = CITA(resumen.fecha_corte.slice(0, 4), direccion)
+  const cita = CITA(resumen.fecha_corte.slice(0, 4), resumen.version, direccion)
 
   const tablas = [
     { nombre: 'Catálogo de fuentes', ruta: 'catalogo/fuentes.csv', detalle: `${numero(resumen.fuentes)} conjuntos de datos, documentos y portales` },
@@ -68,6 +68,11 @@ export default function AboutView({ resumen, capas, config }: { resumen: Resumen
           <p>
             En octubre de 2026 se hicieron tres búsquedas independientes en portales oficiales (INE, INSIVUMEH, MARN, AMSA, AMSCLAE, ICC),
             repositorios científicos (OpenAlex, DataCite, Zenodo, PANGAEA, HDX), los repositorios de la USAC y la UVG, y capas SIG públicas en ArcGIS Online.
+          </p>
+          <p>
+            Cada búsqueda la hizo un asistente de inteligencia artificial distinto: Claude (Anthropic), ChatGPT/Codex (OpenAI) y Google Antigravity.
+            Hugo Escobar las dirigió y revisó. Las IA no generaron datos: localizaron, descargaron y ordenaron archivos publicados por las
+            instituciones. Cada enlace se comprobó y cada archivo descargado lleva su huella SHA-256 para verificar que es el original.
           </p>
           <p>
             Los resultados se unificaron: un mismo archivo hallado dos veces se reconoce por su huella SHA-256, su URL o su DOI, y conserva sus
@@ -142,7 +147,18 @@ export default function AboutView({ resumen, capas, config }: { resumen: Resumen
             <Copy aria-hidden="true" /> {copiado ? 'Cita copiada' : 'Copiar cita'}
           </button>
           <h2>Licencias</h2>
-          <p>Cada conjunto de datos conserva la licencia de su institución (ver la columna licencia del catálogo). Revísela antes de redistribuir un archivo.</p>
+          <ul className="lista-simple">
+            <li>
+              <strong>Contenido de este portal</strong> (catálogo compilado, capas, tablas y textos):{' '}
+              <a href={`${REPOSITORIO}/blob/main/LICENSE-CONTENIDO.md`} target="_blank" rel="noreferrer">CC BY 4.0</a>. Puede usarlo y adaptarlo
+              libremente, también con fines comerciales, citando la fuente.
+            </li>
+            <li><strong>Código</strong>: <a href={`${REPOSITORIO}/blob/main/LICENSE`} target="_blank" rel="noreferrer">MIT</a>.</li>
+            <li>
+              <strong>Datos de terceros</strong>: cada conjunto conserva la licencia de su institución (columna licencia del catálogo). Revísela
+              antes de redistribuir un archivo original.
+            </li>
+          </ul>
         </section>
       </div>
     </article>

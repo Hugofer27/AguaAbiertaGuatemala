@@ -119,7 +119,7 @@ export default function MapView({
     if (!contenedor.current || mapa.current) return
     const map = new MapLibreMap({
       container: contenedor.current,
-      style: MAPAS_BASE[mapaBase].url,
+      style: MAPAS_BASE[mapaBase].estilo,
       bounds: ENFOQUES[0].limites,
       fitBoundsOptions: { padding: 24 },
       minZoom: 4.5,
@@ -243,7 +243,7 @@ export default function MapView({
     listo.current = false
     originales.current.clear()
     onEstado('cargando')
-    map.setStyle(MAPAS_BASE[mapaBase].url, { diff: false })
+    map.setStyle(MAPAS_BASE[mapaBase].estilo, { diff: false })
   }, [mapaBase, onEstado])
 
   useEffect(() => {

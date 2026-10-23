@@ -1,5 +1,13 @@
 # Historial de versiones
 
+## 1.1.0 — 2026-10-23
+
+- Nuevo mapa base **Blanco**: fondo blanco sin mosaicos externos, con solo las capas del portal. Sirve para imprimir y funciona sin internet.
+- Licencias explícitas: CC BY 4.0 para el contenido propio (catálogo compilado, capas, textos, informes) y MIT para el código. Los datos de terceros conservan su licencia.
+- Acerca de, el README y `docs/metodo.md` explican que las búsquedas las hicieron tres asistentes de IA (Claude, ChatGPT/Codex y Google Antigravity), dirigidos y revisados por Hugo Escobar.
+- La cita sugerida lleva autoría y versión.
+- La carpeta `versions/` se reemplazó por `fuentes/`, que guarda solo los 24 archivos que lee el pipeline (36 MB). El material completo sigue en el historial de git (commit `e81156a`). Los datos publicados no cambian.
+
 ## 1.0.1 — 2026-10-23
 
 - La frontera de Petén con México vuelve a seguir el paralelo 17°15′ N, el meridiano 90°59′ O y el paralelo 17°49′ N en la cuenca del Río San Pedro. Antes, una diagonal recortaba el noroeste del departamento.

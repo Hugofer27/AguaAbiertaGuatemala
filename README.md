@@ -59,7 +59,7 @@ Comandos útiles:
 ```
 datos/        Carpeta pública: catálogo, capas, mediciones y manifiesto (lo que usa la web)
 pipeline/     Python sin dependencias externas
-  construir_datos.py       versions/ → datos/
+  construir_datos.py       fuentes/ → datos/
   verificar_datos.py       controles de calidad (los corre la publicación)
   empaquetar_originales.py arma el paquete de archivos originales para Drive
   equivalencias.csv        equivalencias de IDs revisadas a mano
@@ -67,7 +67,7 @@ src/          Aplicación web (React + TypeScript + MapLibre)
   capas.ts                 colores, grupos y enfoques del mapa
   textos.ts                textos compartidos de la interfaz
 docs/         metodo.md y hoja_de_ruta.md
-versions/     Material de las búsquedas de origen (entrada del pipeline)
+fuentes/      Entradas del pipeline: inventarios, manifiestos y datos procesados (ver fuentes/LEEME.md)
 ```
 
 ### Agregar o cambiar datos
@@ -103,6 +103,8 @@ El flujo [`.github/workflows/pages.yml`](.github/workflows/pages.yml) verifica l
 
 Vea [`docs/metodo.md`](docs/metodo.md). En resumen:
 
+- Las búsquedas de datos las hicieron tres asistentes de IA (Claude de Anthropic, ChatGPT/Codex de OpenAI y Google Antigravity), dirigidos y revisados por Hugo Escobar. Los enlaces se comprobaron uno por uno y cada archivo descargado lleva su huella SHA-256.
+
 - Solo se mapean coordenadas defendibles y cada punto declara su precisión.
 - Se excluyeron 81 ubicaciones que no cumplían ese criterio.
 - Los valores son campañas con fecha, no datos en tiempo real.
@@ -112,6 +114,10 @@ Los próximos pasos, incluida la comparación con COGUANOR NTG 29001, NOM-127-SS
 
 ## Cómo citar
 
-> Agua Abierta Guatemala (2026). Catálogo y atlas de datos públicos sobre el agua en Guatemala, versión 1.0. https://hugofer27.github.io/AguaAbiertaGuatemala/
+> Escobar, H. (2026). *Agua Abierta Guatemala: catálogo y atlas de datos públicos sobre el agua en Guatemala* (versión 1.1.0). https://hugofer27.github.io/AguaAbiertaGuatemala/
 
-Cada conjunto de datos conserva la licencia de su institución. Revise la columna `licencia` de `datos/catalogo/fuentes.csv` antes de redistribuir un archivo.
+## Licencias
+
+- **Código** (aplicación web, pipeline y scripts): [MIT](LICENSE).
+- **Contenido propio** (catálogo compilado, capas y tablas de `datos/`, textos, informes y presentaciones): [CC BY 4.0](LICENSE-CONTENIDO.md). Puede usarlo, adaptarlo y redistribuirlo, también con fines comerciales, siempre que dé atribución.
+- **Datos de terceros:** cada conjunto conserva la licencia de su institución. Revise la columna `licencia` de `datos/catalogo/fuentes.csv` antes de redistribuir un archivo original.

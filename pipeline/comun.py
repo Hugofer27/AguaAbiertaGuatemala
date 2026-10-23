@@ -11,7 +11,7 @@ from pathlib import Path
 from typing import Any, Iterable
 
 RAIZ = Path(__file__).resolve().parents[1]
-VERSIONES = RAIZ / "versions"
+FUENTES = RAIZ / "fuentes"
 DATOS = RAIZ / "datos"
 
 # Recuadro de Guatemala con un margen de ~25 km para coordenadas costeras.

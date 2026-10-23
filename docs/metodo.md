@@ -49,6 +49,8 @@ Exclusiones documentadas en `datos/resumen.json`:
 - **Las estaciones de AMSA y AMSCLAE.** Sus archivos usan coordenadas x/y sin un sistema de referencia documentado. Se mantienen en el catálogo y quedan en la hoja de ruta.
 - **Ubicaciones aproximadas por centroide municipal**, y **valores de laboratorio que no se pudieron rastrear a una fuente**.
 
+**Corrección geométrica.** La versión web de la cuenca del Río San Pedro había perdido, al submuestrear vértices, las dos esquinas de la frontera con México en el noroeste de Petén, y trazaba una diagonal de 179 km. El pipeline restaura la línea del Tratado de Límites de 1882: paralelo 17°15′ N, meridiano 90°59′ O y paralelo 17°49′ N. La corrección queda registrada en `datos/resumen.json` (`correcciones_geometricas`).
+
 ## 4. Mediciones
 
 Las mediciones se guardan en formato largo (`datos/mediciones/mediciones.csv`): sitio, parámetro, código armonizado, valor, unidad, fecha y fuente. Este formato sigue la recomendación de modelos como WaterML 2.0 y ODM2 y facilita comparar con normas.

@@ -43,7 +43,7 @@ CODEX = VERSIONES / "codex"
 ANTIGRAVITY = VERSIONES / "antigravity"
 PIPELINE = Path(__file__).resolve().parent
 
-VERSION = "1.0.0"
+VERSION = "1.0.1"
 FECHA_CORTE = "2026-10-22"
 
 # ---------------------------------------------------------------------------
@@ -618,6 +618,55 @@ def simplificar_geometria(geometria: dict[str, Any], tolerancia: float) -> dict[
     return geometria
 
 
+# Frontera Guatemala-México en el noroeste de Petén (Tratado de Límites de 1882): paralelo 17°15' N,
+# meridiano 90°59' W y paralelo 17°49' N. La geometría web de origen perdió las dos esquinas al
+# submuestrear vértices y trazaba una diagonal de 179 km que recortaba el noroeste de Petén.
+PARALELO_SUR = 17.25
+MERIDIANO_PETEN = -(90 + 59 / 60)
+PARALELO_NORTE = 17 + 49 / 60
+
+
+def restaurar_esquinas_peten(geometria: dict[str, Any]) -> tuple[dict[str, Any], int]:
+    """Inserta las esquinas de la frontera donde un anillo salta del paralelo sur al norte sin pasar por ellas."""
+    def en(valor: float, referencia: float) -> bool:
+        return abs(valor - referencia) < 0.01
+
+    def reparar(anillo: list[list[float]]) -> tuple[list[list[float]], int]:
+        salida: list[list[float]] = []
+        insertadas = 0
+        for i, punto in enumerate(anillo):
+            salida.append(punto)
+            if i + 1 == len(anillo):
+                continue
+            siguiente = anillo[i + 1]
+            esquina_sur, esquina_norte = [MERIDIANO_PETEN, PARALELO_SUR], [MERIDIANO_PETEN, PARALELO_NORTE]
+            if en(punto[1], PARALELO_SUR) and punto[0] < MERIDIANO_PETEN and en(siguiente[1], PARALELO_NORTE) and siguiente[0] > MERIDIANO_PETEN:
+                salida.extend([esquina_sur, esquina_norte])
+                insertadas += 2
+            elif en(punto[1], PARALELO_NORTE) and punto[0] > MERIDIANO_PETEN and en(siguiente[1], PARALELO_SUR) and siguiente[0] < MERIDIANO_PETEN:
+                salida.extend([esquina_norte, esquina_sur])
+                insertadas += 2
+        return salida, insertadas
+
+    total = 0
+    if geometria["type"] == "Polygon":
+        anillos = []
+        for anillo in geometria["coordinates"]:
+            nuevo, n = reparar(anillo)
+            anillos.append(nuevo)
+            total += n
+        return {"type": "Polygon", "coordinates": anillos}, total
+    poligonos = []
+    for poligono in geometria["coordinates"]:
+        anillos = []
+        for anillo in poligono:
+            nuevo, n = reparar(anillo)
+            anillos.append(nuevo)
+            total += n
+        poligonos.append(anillos)
+    return {"type": "MultiPolygon", "coordinates": poligonos}, total
+
+
 def distancia_km(a: list[float], b: list[float]) -> float:
     lat = math.radians((a[1] + b[1]) / 2)
     return math.hypot((a[0] - b[0]) * 111.32 * math.cos(lat), (a[1] - b[1]) * 110.57)
@@ -642,6 +691,7 @@ class Constructor:
         self.capas: dict[str, dict[str, Any]] = {}
         self.mediciones: list[dict[str, Any]] = []
         self.excluidos: list[dict[str, str]] = []
+        self.correcciones: list[str] = []
         self.bundle = leer_json(ANTIGRAVITY / "data" / "processed" / "dashboard_national_data_bundle.json")
         codex = leer_json(CODEX / "data" / "water_features.geojson")["features"]
         self.codex = codex
@@ -1102,9 +1152,12 @@ class Constructor:
         for indice, f in enumerate(self.bundle["guatemala_basins_38"]["features"], start=1):
             p = f["properties"]
             nombre = p["name"].replace("Rió", "Río").replace("Rio ", "Río ")
+            geometria, esquinas = restaurar_esquinas_peten(f["geometry"])
+            if esquinas:
+                self.correcciones.append(f"{nombre}: se restauraron {esquinas} vértices de la frontera con México en el noroeste de Petén")
             cuencas.append({
                 "type": "Feature", "id": f"CUENCA-{indice:02d}",
-                "geometry": redondear_geometria(simplificar_geometria(f["geometry"], 0.0012)),
+                "geometry": redondear_geometria(simplificar_geometria(geometria, 0.0012)),
                 "properties": {
                     "id": f"CUENCA-{indice:02d}", "capa": "cuencas", "nombre": nombre, "codigo": p.get("codigo"),
                     "vertiente": {"Pacifico": "Pacífico", "Caribe": "Caribe", "Golfo Mexico": "Golfo de México"}.get(p.get("vertiente"), p.get("vertiente")),
@@ -1211,8 +1264,11 @@ class Constructor:
             nombre = cuenca["properties"]["nombre"]
             nucleo = re.sub(r"^(Río|Lago de|Laguna)\s+", "", nombre).split("-")[0].strip()
             nucleo = especiales.get(nucleo, nucleo)
-            # Nombres cortos (Paz, Moho) se buscan como "río X" para evitar falsos positivos.
-            patron = re.compile(rf"\br[ií]o {re.escape(nucleo)}\b" if len(nucleo) <= 4 else rf"\b{re.escape(nucleo)}\b", re.I)
+            # Nombres cortos o genéricos (Paz, Hondo, San Pedro, La Pasión) se buscan como "río X";
+            # así "San Pedro La Laguna" (Atitlán) no cuenta como mención del río San Pedro (Petén).
+            generico = len(nucleo) <= 5 or nucleo.split(" ")[0] in {"San", "Santa", "La", "El"}
+            es_lago = nombre.startswith(("Lago", "Laguna"))
+            patron = re.compile(rf"\br[ií]o {re.escape(nucleo)}\b" if generico and not es_lago else rf"\b{re.escape(nucleo)}\b", re.I)
             mencionan = [r["id"] for r in fuentes.values() if patron.search(f"{r['titulo']} {r['cobertura']}")]
             mencionan_pub = [r["id"] for r in publicaciones.values() if patron.search(f"{r['titulo']} {r['lugar']}")]
             cuenca["properties"]["puntos_por_capa"] = dict(conteos[cuenca["id"]])
@@ -1447,6 +1503,7 @@ def main() -> None:
         "ids_unificados": len(catalogo["alias"]),
         "registros_agregados_sin_equivalente": catalogo["nuevos"],
         "excluidos_del_mapa": constructor.excluidos,
+        "correcciones_geometricas": constructor.correcciones,
         "controles_de_calidad": sum(1 for m in constructor.mediciones if m["control"]),
         "temas": dict(Counter(r["tema"] for r in lista_fuentes).most_common()),
     }

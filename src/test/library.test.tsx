@@ -1,96 +1,68 @@
 import { fireEvent, render, screen } from '@testing-library/react'
-import { describe, expect, it } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
 import SourceLibrary from '../components/SourceLibrary'
-import type { CatalogItem, Summary } from '../types'
+import type { Faltante, Fuente, Resumen } from '../types'
 
-const catalog: CatalogItem[] = [
-  {
-    number: 1,
-    id: 'GTW-001',
-    title: 'Caudales de ejemplo',
-    fileName: 'caudales.csv',
-    institution: 'INSIVUMEH',
-    topic: 'Hidrología',
-    territory: 'Río Motagua',
-    period: '2024',
-    format: 'CSV',
-    bytes: 1024,
-    size: '1 KB',
-    accessState: 'Descargado y verificado',
-    summary: 'Caudal mensual',
-    sourceUrl: 'https://example.org',
-    downloadUrl: '',
-    localPath: '../fuente_de_datos/INSIVUMEH/caudales.csv',
-    license: 'CC BY',
-    sha256: 'abc',
-    records: '12',
-    dateMin: '',
-    dateMax: '',
-    parameters: ['Caudal'],
-    coordinates: 'yes',
-    selectedMvp: true,
-    selectionReason: 'Cobertura oficial',
-  },
-  {
-    number: 2,
-    id: 'GTW-002',
-    title: 'Calidad del lago',
-    fileName: 'lago.pdf',
-    institution: 'AMSCLAE',
-    topic: 'Calidad del agua',
-    territory: 'Lago de Atitlán',
-    period: '2020',
-    format: 'PDF',
-    bytes: 2048,
-    size: '2 KB',
-    accessState: 'Descargado y verificado',
-    summary: 'Informe técnico',
-    sourceUrl: 'https://example.org/lago',
-    downloadUrl: '',
-    localPath: '../fuente_de_datos/AMSCLAE/lago.pdf',
-    license: 'No indicada',
-    sha256: 'def',
-    records: '10 páginas',
-    dateMin: '',
-    dateMax: '',
-    parameters: [],
-    coordinates: 'unknown',
-    selectedMvp: false,
-  },
-]
-
-const summary: Summary = {
-  cutoff: '2026-10-21',
-  inventoriedResources: 113,
-  downloadedFiles: 75,
-  organizations: 42,
-  missingDataRecords: 16,
-  selectedMvpDatasets: 12,
-  mappedFeatures: 155,
-  formats: ['CSV', 'PDF'],
-  institutions: ['AMSCLAE', 'INSIVUMEH'],
-  topics: ['Calidad del agua', 'Hidrología'],
-  accessStates: ['Descargado y verificado'],
-  mapStyle: '',
-  mapAttribution: '',
+const base: Omit<Fuente, 'id' | 'titulo' | 'institucion' | 'tema'> = {
+  tipo: 'Conjunto de datos', institucion_detalle: '', categoria: 'Gobierno GT', anios: '2024', anio_min: 2024, anio_max: 2024,
+  cobertura: '', parametros: '', formato: 'CSV', registros: '', licencia: 'CC BY', acceso: 'Público', acceso_detalle: 'Público',
+  descarga: 'Archivo descargado', archivos: 1, url_fuente: 'https://example.org', url_descarga: '', sha256: ['abc'], verificacion: '',
+  motagua_las_vacas: false, destacado: false, prioridad: 3, ids_alias: [], notas: '', capas: [],
 }
 
-describe('biblioteca de fuentes', () => {
-  it('busca por institución y muestra el estado vacío', () => {
-    render(<SourceLibrary catalog={catalog} summary={summary} />)
-    const search = screen.getByPlaceholderText('Buscar archivo, institución o territorio…')
-    fireEvent.change(search, { target: { value: 'AMSCLAE' } })
-    expect(screen.getByText('Calidad del lago')).toBeInTheDocument()
-    expect(screen.queryByText('Caudales de ejemplo')).not.toBeInTheDocument()
-    fireEvent.change(search, { target: { value: 'sin coincidencias' } })
-    expect(screen.getByText('No hay archivos con esos filtros')).toBeInTheDocument()
+const catalogo: Fuente[] = [
+  { ...base, id: 'GT-DAT-0001', titulo: 'Calidad del agua AMSA 2024', institucion: 'AMSA', tema: 'Calidad del agua', ids_alias: ['GTW-069'], destacado: true },
+  { ...base, id: 'GT-DAT-0002', titulo: 'Caudales del Motagua', institucion: 'INSIVUMEH', tema: 'Caudales e hidrología', motagua_las_vacas: true, capas: ['caudales_insivumeh'] },
+  { ...base, id: 'GT-DOC-0001', tipo: 'Documento', titulo: 'Informe limnológico de Atitlán', institucion: 'AMSCLAE', tema: 'Calidad del agua' },
+]
+
+const faltantes: Faltante[] = [{
+  id: 'FALT-001', institucion: 'MARN - SIA', institucion_corta: 'MARN', estado: 'Técnicamente inaccesible', dato_esperado: 'Puntos de monitoreo nacional',
+  evidencia: '', url_evidencia: 'https://example.org/evidencia', que_se_intento: '', motivo: 'HTTP 403', solicitud_factible: 'Sí', siguiente_paso: 'Solicitud por la LAIP',
+}]
+
+const resumen = { conjuntos_de_datos: 2, documentos: 1, portales: 0, publicaciones: 0, faltantes: 1 } as Resumen
+
+function renderizar(abrirId: string | null = null, onAbrirId = vi.fn()) {
+  return render(
+    <SourceLibrary catalogo={catalogo} faltantes={faltantes} resumen={resumen} config={{ enlace_originales: '' }} abrirId={abrirId} onAbrirId={onAbrirId} onVerCapa={vi.fn()} />,
+  )
+}
+
+describe('vista de datos', () => {
+  it('busca por título y por ID anterior (alias)', () => {
+    renderizar()
+    const buscar = screen.getByPlaceholderText(/Buscar por título/)
+    fireEvent.change(buscar, { target: { value: 'GTW-069' } })
+    expect(screen.getByText('Calidad del agua AMSA 2024')).toBeInTheDocument()
+    expect(screen.queryByText('Caudales del Motagua')).not.toBeInTheDocument()
+    fireEvent.change(buscar, { target: { value: 'nada que coincida' } })
+    expect(screen.getByText('No hay resultados con esos filtros')).toBeInTheDocument()
   })
 
-  it('abre una ficha técnica accesible', () => {
-    render(<SourceLibrary catalog={catalog} summary={summary} />)
-    fireEvent.click(screen.getByLabelText('Abrir ficha de Caudales de ejemplo'))
-    expect(screen.getByRole('heading', { name: 'Caudales de ejemplo' })).toBeInTheDocument()
-    expect(screen.getByText('Por qué está en el MVP')).toBeInTheDocument()
-    expect(screen.getByText('Cobertura oficial')).toBeInTheDocument()
+  it('filtra por Motagua / Las Vacas y separa documentos', () => {
+    renderizar()
+    fireEvent.click(screen.getByLabelText('Motagua / Las Vacas'))
+    expect(screen.getByText('Caudales del Motagua')).toBeInTheDocument()
+    expect(screen.queryByText('Calidad del agua AMSA 2024')).not.toBeInTheDocument()
+    fireEvent.click(screen.getByRole('tab', { name: /Documentos/ }))
+    expect(screen.queryByText('Informe limnológico de Atitlán')).not.toBeInTheDocument()
+  })
+
+  it('muestra los datos faltantes con cómo pedirlos', () => {
+    renderizar()
+    fireEvent.click(screen.getByRole('tab', { name: /Datos faltantes/ }))
+    expect(screen.getByText('MARN - SIA')).toBeInTheDocument()
+    expect(screen.getByText('Solicitud por la LAIP')).toBeInTheDocument()
+  })
+
+  it('abre la ficha con el enlace a la fuente oficial y los alias', () => {
+    const cerrar = vi.fn()
+    renderizar('GTW-069', cerrar)
+    expect(screen.getByRole('dialog', { name: 'Calidad del agua AMSA 2024' })).toBeInTheDocument()
+    expect(screen.getByText(/también GTW-069/)).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: /Fuente oficial/ })).toHaveAttribute('href', 'https://example.org')
+    fireEvent.click(screen.getByRole('button', { name: 'Cerrar ficha' }))
+    expect(cerrar).toHaveBeenCalledWith(null)
   })
 })

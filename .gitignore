@@ -9,6 +9,9 @@ vite.config.d.ts
 
 # Datos fuente pesados y artefactos regenerables
 fuente_de_datos/
+originales/
+AguaAbiertaGT_originales.zip
+__pycache__/
 tmp/
 verification/
 

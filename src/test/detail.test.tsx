@@ -1,80 +1,63 @@
-import { act, render, screen } from '@testing-library/react'
-import { afterEach, describe, expect, it, vi } from 'vitest'
+import { fireEvent, render, screen } from '@testing-library/react'
+import { describe, expect, it, vi } from 'vitest'
 import DetailPanel from '../components/DetailPanel'
-import type { CatalogItem, WaterFeature } from '../types'
+import type { CapaMeta, Fuente, Sitio } from '../types'
 
-const feature: WaterFeature = {
+const sitio: Sitio = {
   type: 'Feature',
-  id: 'station-1',
-  geometry: { type: 'Point', coordinates: [-89.88812, 15.29879] },
+  id: 'INS-001',
+  geometry: { type: 'Point', coordinates: [-90.43423, 14.90354] },
   properties: {
-    name: 'Matucuy',
-    kind: 'Punto de muestreo',
-    basin: 'Río Polochic',
-    department: 'Alta Verapaz',
-    municipality: 'Panzós',
-    emotion: 'Sin datos suficientes',
-    emotionCode: 'insufficient',
-    emotionReason: 'La serie disponible no permite una conclusión científica.',
-    latest: '6/02/2023',
-    parameters: ['pH (unidad)'],
-    institution: 'INE / INSIVUMEH',
-    sourceIds: ['GTW-003'],
-    confidence: 'Alta para ubicación',
-    warning: 'Datos históricos.',
-    evidence: [{ parameter: 'pH (unidad)', value: 7.93, unit: 'pH', date: '6/02/2023', station: 'Matucuy', sourceId: 'GTW-003' }],
-    series: [],
+    id: 'INS-001',
+    capa: 'monitoreo_insivumeh',
+    nombre: 'Panajax I',
+    tipo: 'Punto de monitoreo de calidad del agua',
+    institucion: 'INSIVUMEH (publicado por el INE)',
+    cuerpo_agua: 'Motagua',
+    cuenca: 'Río Motagua',
+    cuenca_oficial: 'Río Motagua',
+    departamento: 'Guatemala',
+    municipio: 'Chuarrancho',
+    fecha: '2022–2024',
+    tipo_dato: 'Medido',
+    precision: 'publicada',
+    fuente_ids: ['GT-DAT-0239'],
+    advertencia: 'Campañas puntuales por año.',
+    atributos: { 'Años con datos': '2022, 2024' },
+    mediciones: [
+      { codigo: 'PH', parametro: 'pH', valor: 8.36, unidad: 'unidades de pH', fecha: 'Marzo 2024', fuente_id: 'GT-DAT-0239', control: '', unidad_verificada: true },
+      { codigo: 'OD', parametro: 'Oxígeno disuelto', valor: 14.9, unidad: 'mg/L', fecha: '2022', fuente_id: 'GT-DAT-0218', control: 'Revisar: supera la saturación teórica.', unidad_verificada: false },
+    ],
   },
 }
 
-const source: CatalogItem = {
-  number: 48,
-  id: 'GTW-003',
-  title: 'Calidad del agua INSIVUMEH 2023',
-  fileName: 'calidad.csv',
-  institution: 'INE/INSIVUMEH',
-  topic: 'Calidad del agua',
-  territory: 'Guatemala',
-  period: '2023',
-  format: 'CSV',
-  bytes: 100,
-  size: '100 B',
-  accessState: 'Descargado y verificado',
-  summary: 'Muestreo',
-  sourceUrl: 'https://example.org/source',
-  downloadUrl: '',
-  localPath: '../fuente_de_datos/INSIVUMEH/calidad.csv',
-  license: 'CC BY',
-  sha256: 'abc',
-  records: '5323',
-  dateMin: '2023-02-06',
-  dateMax: '2023-12-21',
-  parameters: ['pH'],
-  coordinates: 'yes',
-  selectedMvp: false,
-}
+const fuente = {
+  id: 'GT-DAT-0239',
+  titulo: 'Base de monitoreo del agua INSIVUMEH 2024',
+  institucion: 'INSIVUMEH',
+  url_fuente: 'https://datos.ine.gob.gt/dataset/ejemplo',
+} as Fuente
 
-afterEach(() => {
-  vi.useRealTimers()
-})
+const capa = { id: 'monitoreo_insivumeh', titulo: 'Calidad del agua · INSIVUMEH', archivo: 'capas/monitoreo_insivumeh.geojson' } as CapaMeta
 
 describe('ficha de un punto del mapa', () => {
-  it('revela primero el estado y después el archivo que origina el punto', () => {
-    vi.useFakeTimers()
-    Object.defineProperty(window, 'matchMedia', {
-      configurable: true,
-      value: () => ({ matches: false }),
-    })
+  it('muestra mediciones agrupadas por campaña, la precisión y el control de calidad', () => {
+    render(<DetailPanel sitio={sitio} capa={capa} catalogo={[fuente]} onClose={vi.fn()} onAbrirFuente={vi.fn()} />)
+    expect(screen.getByRole('heading', { name: 'Panajax I' })).toBeInTheDocument()
+    expect(screen.getByText('Marzo 2024')).toBeInTheDocument()
+    expect(screen.getByText('2022')).toBeInTheDocument()
+    expect(screen.getByText('Ubicación publicada')).toBeInTheDocument()
+    expect(screen.getByText('Revisar: supera la saturación teórica.')).toBeInTheDocument()
+    expect(screen.getByText(/Unidad habitual del parámetro/)).toBeInTheDocument()
+    expect(screen.getByText('14.90354, -90.43423')).toBeInTheDocument()
+  })
 
-    render(<DetailPanel feature={feature} catalog={[source]} onClose={vi.fn()} />)
-    expect(screen.getByText('Estado narrativo derivado por el portal')).toBeInTheDocument()
-    expect(screen.queryByRole('heading', { name: '¿Por qué aparece este punto?' })).not.toBeInTheDocument()
-
-    act(() => vi.advanceTimersByTime(1100))
-
-    expect(screen.getByRole('heading', { name: '¿Por qué aparece este punto?' })).toBeInTheDocument()
-    expect(screen.getByText(source.fileName)).toBeInTheDocument()
-    expect(screen.getByRole('link', { name: `Abrir archivo ${source.fileName}` })).toHaveAttribute('href', source.localPath)
-    expect(screen.getByText(/Latitud 15.29879/)).toBeInTheDocument()
+  it('enlaza a la fuente del catálogo y a la fuente oficial', () => {
+    const abrir = vi.fn()
+    render(<DetailPanel sitio={sitio} capa={capa} catalogo={[fuente]} onClose={vi.fn()} onAbrirFuente={abrir} />)
+    fireEvent.click(screen.getByRole('button', { name: /Base de monitoreo del agua INSIVUMEH 2024/ }))
+    expect(abrir).toHaveBeenCalledWith('GT-DAT-0239')
+    expect(screen.getByRole('link', { name: /Fuente oficial de Base de monitoreo/ })).toHaveAttribute('href', fuente.url_fuente)
+    expect(screen.getByRole('link', { name: /Capa \(GeoJSON\)/ })).toHaveAttribute('href', './datos/capas/monitoreo_insivumeh.geojson')
   })
 })

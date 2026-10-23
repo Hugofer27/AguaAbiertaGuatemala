@@ -1,19 +1,40 @@
-import type { AppData } from './types'
+import type { CapaMeta, Coleccion, Config, DatosApp, Faltante, Fuente, Publicacion, Resumen } from './types'
 
-async function getJson<T>(path: string): Promise<T> {
-  const response = await fetch(path)
-  if (!response.ok) {
-    throw new Error(`No se pudo cargar ${path} (${response.status})`)
+const BASE = './datos/'
+
+async function getJson<T>(ruta: string): Promise<T> {
+  const respuesta = await fetch(`${BASE}${ruta}`)
+  if (!respuesta.ok) {
+    throw new Error(`No se pudo cargar ${ruta} (${respuesta.status})`)
   }
-  return response.json() as Promise<T>
+  return respuesta.json() as Promise<T>
 }
 
-export async function loadAppData(): Promise<AppData> {
-  const [catalog, selected, features, summary] = await Promise.all([
-    getJson<AppData['catalog']>('./data/catalog.json'),
-    getJson<AppData['selected']>('./data/selected_datasets.json'),
-    getJson<AppData['features']>('./data/water_features.geojson'),
-    getJson<AppData['summary']>('./data/summary.json'),
+export async function cargarDatos(): Promise<DatosApp> {
+  const [catalogo, faltantes, capas, resumen, config] = await Promise.all([
+    getJson<Fuente[]>('app/catalogo.json'),
+    getJson<Faltante[]>('app/faltantes.json'),
+    getJson<CapaMeta[]>('app/capas.json'),
+    getJson<Resumen>('resumen.json'),
+    getJson<Config>('config.json').catch(() => ({ enlace_originales: '' })),
   ])
-  return { catalog, selected, features, summary }
+  const colecciones = Object.fromEntries(
+    await Promise.all(capas.map(async (capa) => [capa.id, await getJson<Coleccion>(capa.archivo)] as const)),
+  )
+  return { catalogo, faltantes, capas, colecciones, resumen, config }
+}
+
+let publicaciones: Promise<Publicacion[]> | null = null
+
+/** Las 1 494 publicaciones se cargan solo cuando se abre su pestaña. */
+export function cargarPublicaciones(): Promise<Publicacion[]> {
+  publicaciones ??= getJson<Publicacion[]>('app/publicaciones.json').catch((error: unknown) => {
+    publicaciones = null
+    throw error
+  })
+  return publicaciones
+}
+
+export function urlDatos(ruta: string): string {
+  return `${BASE}${ruta}`
 }

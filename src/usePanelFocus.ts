@@ -23,8 +23,8 @@ export function usePanelFocus<T extends HTMLElement>(onClose: () => void, trapFo
       document.body.style.overflow = 'hidden'
     }
 
-    const initialFocus = panel.querySelector<HTMLElement>(FOCUSABLE) ?? panel
-    initialFocus.focus()
+    // The dialog itself takes focus so screen readers announce its title; Tab moves into its controls.
+    panel.focus()
     const onKeyDown = (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
         event.preventDefault()

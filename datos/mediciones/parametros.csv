@@ -1,0 +1,40 @@
+﻿codigo,nombre,unidad,grupo,mediciones
+PH,pH,unidades de pH,Fisicoquímico,305
+TEMP_AGUA,Temperatura del agua,°C,Fisicoquímico,250
+TEMP_AIRE,Temperatura ambiente,°C,Contexto,221
+HR,Humedad relativa,%,Contexto,222
+COND,Conductividad eléctrica,µS/cm,Fisicoquímico,222
+STD,Sólidos totales disueltos,mg/L,Fisicoquímico,148
+SST,Sólidos suspendidos,mg/L,Fisicoquímico,70
+SAL,Salinidad,PSU,Fisicoquímico,71
+OD_SAT,Saturación de oxígeno,%,Oxígeno y materia orgánica,71
+OD,Oxígeno disuelto,mg/L,Oxígeno y materia orgánica,99
+DBO5,Demanda bioquímica de oxígeno (DBO₅),mg/L,Oxígeno y materia orgánica,26
+DQO,Demanda química de oxígeno (DQO),mg/L,Oxígeno y materia orgánica,98
+TURB,Turbiedad,NTU,Fisicoquímico,71
+COLOR,Color real,U Pt-Co,Fisicoquímico,133
+CL,Cloruros (Cl⁻),mg/L,Iones mayores,71
+DUREZA,Dureza total (como CaCO₃),mg/L,Iones mayores,71
+F,Fluoruros (F⁻),mg/L,Iones mayores,71
+SO4,Sulfatos (SO₄²⁻),mg/L,Iones mayores,42
+ALC,Alcalinidad total (como CaCO₃),mg/L,Iones mayores,71
+CO3,Carbonatos (CO₃²⁻),mg/L,Iones mayores,71
+HCO3,Bicarbonatos (HCO₃⁻),mg/L,Iones mayores,71
+SIO2,Silicatos (SiO₂),mg/L,Iones mayores,71
+N_NO3,Nitrógeno de nitratos (N-NO₃⁻),mg/L,Nutrientes,71
+NO3,Nitratos (NO₃⁻),mg/L,Nutrientes,71
+N_NO2,Nitrógeno de nitritos (N-NO₂⁻),mg/L,Nutrientes,71
+NO2,Nitritos (NO₂⁻),mg/L,Nutrientes,71
+N_NH4,Nitrógeno amoniacal (N-NH₄⁺),mg/L,Nutrientes,58
+NH4,Amonio (NH₄⁺),mg/L,Nutrientes,58
+P_PO4,Fósforo de fosfatos (P-PO₄³⁻),mg/L,Nutrientes,71
+PO4,Fosfatos (PO₄³⁻),mg/L,Nutrientes,71
+CN,Cianuro libre (CN⁻),mg/L,Tóxicos,71
+SAAM,Tensoactivos (SAAM),mg/L,Tóxicos,45
+SULFADIAZINA,Sulfadiazina,ng/L,Contaminantes emergentes,19
+SULFAMETOXAZOL,Sulfametoxazol,ng/L,Contaminantes emergentes,15
+CAFEINA,Cafeína,ng/L,Contaminantes emergentes,18
+Q_MENSUAL,Caudal medio mensual,m³/s,Hidrología,341
+SECCHI,Profundidad del disco de Secchi,m,Limnología,1
+PROF_FONDO,Profundidad al fondo,m,Limnología,4
+PRECIP_ANUAL,Precipitación anual (modelada),mm/año,Clima,30

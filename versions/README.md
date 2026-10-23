@@ -14,6 +14,10 @@ No se incluyen los archivos de `02_datos_originales/`: la carpeta pesa aproximad
 
 No se incluyen los archivos de `data/raw/`, que son copias descargadas de fuentes externas y ocupan aproximadamente 158 MB. Los datos procesados y los manifiestos sí se conservan.
 
-## Aplicación principal
+## Codex
 
-Estas carpetas son material histórico y de investigación. La aplicación mantenida se encuentra en la raíz del repositorio y en `src/`.
+`codex/` conserva el MVP 0.1 que antes estaba en la raíz: metadatos normalizados (`data/`), scripts de compilación (`scripts/build_data.py`, que leía la carpeta local `Ghagpt/`), el catálogo HTML/PDF y su documentación de método.
+
+## Uso en la versión 1.0
+
+Estas carpetas son la **entrada** de `pipeline/construir_datos.py`, que genera la carpeta pública `datos/`. La aplicación mantenida está en la raíz del repositorio (`src/`). El destino final de estas carpetas está pendiente de decisión.

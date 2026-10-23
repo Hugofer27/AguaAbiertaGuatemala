@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { ChevronDown, Layers } from 'lucide-react'
 import { GRUPOS, MAPAS_BASE, estiloDe, type MapaBase } from '../capas'
+import { RUTA_BOTELLA } from '../iconos'
 import type { CapaMeta } from '../types'
 
 interface LayerPanelProps {
@@ -14,7 +15,14 @@ interface LayerPanelProps {
 }
 
 function Muestra({ capa }: { capa: CapaMeta }) {
-  const { color } = estiloDe(capa.id)
+  const { color, icono } = estiloDe(capa.id)
+  if (icono === 'botella') {
+    return (
+      <svg className="muestra-icono" viewBox="-9 -38 18 40" aria-hidden="true">
+        <path d={RUTA_BOTELLA} fill={color} stroke="var(--superficie)" strokeWidth="1.6" strokeLinejoin="round" />
+      </svg>
+    )
+  }
   return <span className={`muestra muestra-${capa.geometria}`} style={{ '--muestra': color } as React.CSSProperties} aria-hidden="true" />
 }
 

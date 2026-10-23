@@ -1,5 +1,11 @@
 # Historial de versiones
 
+## 1.2.0 — 2026-10-23
+
+- Nueva capa **Barreras de plástico (ubicación aproximada)**, apagada por defecto: el Interceptor 006 en el río Las Vacas, la retención de El Quetzalito (barda del MARN e Interceptor 021) y la biobarda de AMSA en el Villalobos. Se dibujan con un ícono de botella.
+- Nueva precisión de ubicación **aproximada**, para fuentes que describen el lugar sin publicar la coordenada. El verificador impide que una capa aproximada venga activa por defecto.
+- Las fichas enlazan a las notas o comunicados que respaldan un punto cuando su fuente no está en el catálogo, y `sitios.csv` gana la columna `enlaces`.
+
 ## 1.1.0 — 2026-10-23
 
 - Nuevo mapa base **Blanco**: fondo blanco sin mosaicos externos, con solo las capas del portal. Sirve para imprimir y funciona sin internet.

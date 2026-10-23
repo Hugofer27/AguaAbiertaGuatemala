@@ -52,6 +52,28 @@ describe('ficha de un punto del mapa', () => {
     expect(screen.getByText('14.90354, -90.43423')).toBeInTheDocument()
   })
 
+  it('en una barrera de ubicación aproximada avisa la precisión y enlaza a las notas que la respaldan', () => {
+    const barrera: Sitio = {
+      type: 'Feature',
+      id: 'BAR-003',
+      geometry: { type: 'Point', coordinates: [-90.5684, 14.4874] },
+      properties: {
+        ...sitio.properties,
+        id: 'BAR-003',
+        capa: 'barreras_plastico',
+        nombre: 'Biobarda de AMSA en el Villalobos',
+        precision: 'aproximada',
+        fuente_ids: [],
+        mediciones: undefined,
+        atributos: { Opera: 'AMSA' },
+        enlaces: [{ texto: 'La Hora (7 de julio de 2024)', url: 'https://lahora.gt/nacionales/ejemplo/' }],
+      },
+    }
+    render(<DetailPanel sitio={barrera} capa={{ ...capa, id: 'barreras_plastico', archivo: 'capas/barreras_plastico.geojson' }} catalogo={[fuente]} onClose={vi.fn()} onAbrirFuente={vi.fn()} />)
+    expect(screen.getByText('Ubicación aproximada')).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: /La Hora \(7 de julio de 2024\)/ })).toHaveAttribute('href', 'https://lahora.gt/nacionales/ejemplo/')
+  })
+
   it('enlaza a la fuente del catálogo y a la fuente oficial', () => {
     const abrir = vi.fn()
     render(<DetailPanel sitio={sitio} capa={capa} catalogo={[fuente]} onClose={vi.fn()} onAbrirFuente={abrir} />)

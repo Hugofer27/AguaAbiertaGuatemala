@@ -43,7 +43,7 @@ CODEX = FUENTES / "codex"
 ANTIGRAVITY = FUENTES / "antigravity"
 PIPELINE = Path(__file__).resolve().parent
 
-VERSION = "1.1.0"
+VERSION = "1.2.0"
 FECHA_CORTE = "2026-10-22"
 
 # ---------------------------------------------------------------------------
@@ -681,6 +681,7 @@ PRECISION = {
     "homonimo": "Coordenada del punto INSIVUMEH con el mismo nombre y municipio",
     "transcrita": "Coordenada transcrita de un documento (verificar contra el original)",
     "modelada": "Ubicación de un modelo o celda de cálculo, no de una estación en terreno",
+    "aproximada": "Ubicación aproximada: la fuente describe el lugar (aldea, embalse o desembocadura) pero no publica la coordenada",
 }
 
 
@@ -1070,6 +1071,32 @@ class Constructor:
             "fuente_ids": [fuente], "visible": False,
         }, features)
 
+    def barreras_plastico(self) -> None:
+        """Barreras que retienen basura en ríos y lagos. Curadas a mano en pipeline/barreras_plastico.csv desde notas
+        de prensa y comunicados; ninguna fuente publica coordenadas, así que la ubicación es aproximada."""
+        features = []
+        for fila in leer_csv(PIPELINE / "barreras_plastico.csv"):
+            enlaces = []
+            for parte in filter(None, (x.strip() for x in fila["enlaces"].split(" | "))):
+                texto, _, url = parte.rpartition(": ")
+                enlaces.append({"texto": texto, "url": url})
+            atributos = {"Tipo": fila["tipo"], "Opera": fila["operador"], "Desde": fila["desde"] or "Sin fecha en la fuente",
+                         "Estado": fila["estado"], "Cómo se ubicó": fila["referencia_ubicacion"]}
+            sitio = self.sitio_base(
+                "barreras_plastico", fila["id"], fila["nombre"], tipo="Barrera de retención de basura", institucion=fila["operador"],
+                cuerpo_agua=fila["cuerpo_agua"], departamento=fila["departamento"], municipio=fila["municipio"],
+                fecha=fila["desde"], tipo_dato="Reportado", precision="aproximada", fuente_ids=[],
+                advertencia="Ubicación aproximada y estado reportado por la prensa o el operador; puede haber cambiado. Confirme con el MARN, AMSA o The Ocean Cleanup antes de planificar una limpieza.",
+                atributos=atributos, enlaces=enlaces,
+            )
+            features.append(self.feature(sitio, float(fila["longitud"]), float(fila["latitud"])))
+        self.agregar_capa("barreras_plastico", {
+            "titulo": "Barreras de plástico (ubicación aproximada)",
+            "descripcion": "Barreras y biobardas que retienen basura en ríos y lagos, según el MARN, AMSA y The Ocean Cleanup. La ubicación es aproximada y el estado de cada barrera puede haber cambiado.",
+            "grupo": "Presiones e infraestructura", "geometria": "punto", "tipo_dato": "Reportado", "precision": "aproximada",
+            "fuente_ids": [], "visible": False,
+        }, features)
+
     # -- clima --------------------------------------------------------------
     def clima(self) -> None:
         features = []
@@ -1393,6 +1420,7 @@ def main() -> None:
     constructor.ptar_hydrowaste()
     constructor.wpdx()
     constructor.plasticos()
+    constructor.barreras_plastico()
     constructor.clima()
     constructor.gemstat()
     constructor.controlar_oxigeno()
@@ -1466,10 +1494,11 @@ def main() -> None:
                 "cuenca_oficial": p.get("cuenca_oficial", ""), "departamento": p.get("departamento", ""),
                 "municipio": p.get("municipio", ""), "fecha": p.get("fecha", ""), "tipo_dato": p.get("tipo_dato", ""),
                 "fuente_ids": p.get("fuente_ids", []),
+                "enlaces": " | ".join(e["url"] for e in p.get("enlaces", [])),
             })
     escribir_csv(destino / "mediciones" / "sitios.csv", sitios,
                  ["sitio_id", "capa", "nombre", "tipo", "longitud", "latitud", "precision", "institucion", "cuenca_oficial",
-                  "departamento", "municipio", "fecha", "tipo_dato", "fuente_ids"])
+                  "departamento", "municipio", "fecha", "tipo_dato", "fuente_ids", "enlaces"])
     escribir_csv(destino / "mediciones" / "mediciones.csv", constructor.mediciones, COLUMNAS_MEDICIONES)
     usados = Counter(m["codigo"] for m in constructor.mediciones)
     escribir_csv(destino / "mediciones" / "parametros.csv",

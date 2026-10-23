@@ -9,7 +9,7 @@ Catálogo y atlas abierto de los datos públicos sobre el agua en Guatemala: qui
 | Fuentes | 643 conjuntos de datos, documentos y portales de 85 instituciones |
 | Publicaciones | 1 494 artículos, tesis e informes (1 199 de acceso abierto) |
 | Datos faltantes | 42 registros con el motivo y cómo pedirlos por la LAIP |
-| Mapa | 14 capas y 796 puntos, cada uno con la precisión de su ubicación |
+| Mapa | 15 capas y 799 puntos, cada uno con la precisión de su ubicación |
 | Mediciones | 3 632 valores de 39 parámetros, con unidad, fecha y fuente |
 | Originales | 342 archivos (~2 GB) verificados con SHA-256 |
 
@@ -63,6 +63,7 @@ pipeline/     Python sin dependencias externas
   verificar_datos.py       controles de calidad (los corre la publicación)
   empaquetar_originales.py arma el paquete de archivos originales para Drive
   equivalencias.csv        equivalencias de IDs revisadas a mano
+  barreras_plastico.csv    barreras de basura en ríos y lagos, curadas a mano
 src/          Aplicación web (React + TypeScript + MapLibre)
   capas.ts                 colores, grupos y enfoques del mapa
   textos.ts                textos compartidos de la interfaz
